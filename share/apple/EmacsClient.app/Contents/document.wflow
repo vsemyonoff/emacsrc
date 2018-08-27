@@ -60,7 +60,7 @@
 				<dict>
 					<key>COMMAND_STRING</key>
 					<string>export PATH="/usr/local/bin:${PATH}"
-exec "${HOME}/Documents/Dropbox/emacs.d/bin/emcl" "${@}"</string>
+exec "${HOME}/.emacs.d/bin/emcl" "${@}"</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>

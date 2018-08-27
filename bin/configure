@@ -68,7 +68,7 @@ ${PRETEND} mkdir -p "${DATA_DIR}" && ${PRETEND} ln -sv "${HOME}/.emacs.d/share" 
 # Install MacOS 'emacsclient' wrapper
 if [[ "${SYSTEM}" == "Darwin" ]]; then
     APP_DIR="${HOME}/Applications"
-    ${PRETEND} mkdir -p "${APP_DIR}" && ${PRETEND} cp -fr "${EMACS_D}/share/apple/EmacsClient.app" "${APP_DIR}"
+    ${PRETEND} mkdir -p "${APP_DIR}" && ${PRETEND} cp -frv "${EMACS_D}/share/apple/EmacsClient.app" "${APP_DIR}"
 fi
 
 # Set environment vars
