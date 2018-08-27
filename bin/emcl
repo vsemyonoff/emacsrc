@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+# Check for visible frame
+FRAME_EXISTS=$(emacsclient -e '(<= 2 (length (visible-frame-list)))' 2>/dev/null)
+[[ "${FRAME_EXISTS}" != "t" ]] && CREATE_FRAME="--create-frame"
+
+# No wait for client exit by default
+NO_WAIT="--no-wait"
+
+# Parse arguments
+args=()
+for arg in "${@}"; do
+    case "${arg}" in
+        -c|--create-frame)
+            CREATE_FRAME="--create-frame"
+            ;;
+        --no-fork)
+            ## Use separate frame with --no-fork
+            #CREATE_FRAME="${CREATE_FRAME:---create-frame}"
+            unset NO_WAIT
+            ;;
+        -n|--no-wait)
+            ;;
+        -t|-nw|--tty)
+            CREATE_FRAME="--tty"
+            unset NO_WAIT
+            ;;
+        *)
+            args+=("${arg}")
+            ;;
+    esac
+done
+set -- "${args[@]}"
+
+# Drop all output if not in terminal mode
+[[ "${CREATE_FRAME}" != "--tty" ]] && exec >/dev/null 2>&1
+
+# Start daemon (if needed), create frame (if needed) and open file(s) (if any) in there
+emacsclient --alternate-editor= ${NO_WAIT} ${CREATE_FRAME} "${@}"
+
+# Switch to frame if not in terminal mode
+if [[ "${CREATE_FRAME}" != "--tty" ]]; then
+    case "$(uname -s)" in
+        Darwin)
+            ${PRETEND} osascript -e 'tell application "Emacs" to activate'
+            ;;
+        Linux)
+            # TODO: switch to frame in linux
+            ;;
+        *)
+            # No-op
+            ;;
+    esac
+fi

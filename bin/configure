@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+
+# Detect OS
+SYSTEM="$(uname -s)"
+
+# Common packages
+COMM_PACKAGES=(
+    hunspell
+    the_silver_searcher
+)
+# Arch packages
+ARCH_PACKAGES=(
+    "${COMM_PACKAGES[@]}"
+    emacs
+)
+# Homebrew packages
+BREW_PACKAGES=(
+    "${COMM_PACKAGES[@]}"
+    caskroom/cask/emacs
+    gnu-tar
+    terminal-notifier
+)
+
+# Pretend run: just print all commands without execution
+[[ ${1} == "-p" ]] && PRETEND="echo"
+
+case "${SYSTEM}" in
+    Darwin)
+        [[ -z "$(which brew)" ]] && ${PRETEND} /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        for i in ${!BREW_PACKAGES[@]}; do
+            if [[ "${BREW_PACKAGES[i]}" =~ ^caskroom/.* ]]; then
+                BREW="brew install --force"
+            else
+                BREW="brew reinstall"
+            fi
+            ${PRETEND} ${BREW} ${BREW_PACKAGES[i]}
+        done
+        ;;
+
+    Linux)
+        [[ -z "$(which pacman)" ]] && echo "'pacman' not instaled, exiting..." && exit 1
+        [[ ${ARCH_PACKAGES} ]] && ${PRETEND} sudo pacman -Sy --needed --noconfirm ${ARCH_PACKAGES[@]}
+        ;;
+    *)
+        echo "error: unsupported system ${SYSTEM}"
+        ;;
+esac
+
+# Configure symlinks
+EMACS_D="$(cd $(dirname $(test -L ${0} && readlink ${0} || echo ${0}))/.. && pwd)"
+if [[ "${EMACS_D}" != "${HOME}/.emacs.d" ]]; then
+    if [[ -h "${HOME}/.emacs.d" ]]; then
+        ${PRETEND} rm -f "${HOME}/.emacs.d"
+    elif [[ -d "${HOME}/.emacs.d" ]]; then
+        ${PRETEND} mv -v  "${HOME}/.emacs.d" "${HOME}/.emacs.d.save"
+    fi
+    ${PRETEND} ln -sv "${EMACS_D}" "${HOME}/.emacs.d"
+fi
+
+BIN_DIR="${HOME}/.bin"
+[[ -h "${BIN_DIR}/emcl" ]] && rm -f "${BIN_DIR}/emcl"
+${PRETEND} mkdir -p "${BIN_DIR}" && ${PRETEND} ln -sv "${HOME}/.emacs.d/bin/emcl" "${BIN_DIR}/emcl"
+
+DATA_DIR="${XDG_DATA_HOME:-${HOME}/.local/share}"
+[[ -h "${DATA_DIR}/emacs" ]] && rm -f "${DATA_DIR}/emacs"
+${PRETEND} mkdir -p "${DATA_DIR}" && ${PRETEND} ln -sv "${HOME}/.emacs.d/share" "${DATA_DIR}/emacs"
+
+# Install MacOS 'emacsclient' wrapper
+if [[ "${SYSTEM}" == "Darwin" ]]; then
+    APP_DIR="${HOME}/Applications"
+    ${PRETEND} mkdir -p "${APP_DIR}" && ${PRETEND} cp -fr "${EMACS_D}/share/apple/EmacsClient.app" "${APP_DIR}"
+fi
+
+# Set environment vars
+cat << EOF > "${HOME}/.profile.d/editor.sh"
+# Set 'emacsclient' as default editor
+EDITOR="emcl"
+GIT_EDITOR="\${EDITOR} --no-fork"
+SUDO_EDITOR="\${EDITOR} --no-fork"
+
+export EDITOR GIT_EDITOR SUDO_EDITOR
+EOF
