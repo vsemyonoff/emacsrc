@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 (use-package winner
+  :commands winner-mode
   :hook (vs-emacs-config . winner-mode))
 
 (provide 'use-winner)

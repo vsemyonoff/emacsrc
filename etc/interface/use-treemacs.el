@@ -24,16 +24,13 @@
         (let ((name (file-name-nondirectory (directory-file-name path))))
           (treemacs-do-add-project-to-workspace path name))))
 
-    (defun vs//treemacs-no-fringes ()
+    (defun vs|treemacs-no-fringes ()
       (when (display-graphic-p)
         (set-window-fringes nil 0 0)))
 
-    (defun vs//treemacs-setup (&rest _)
+    (defun vs|treemacs-setup (&rest _)
       (setq line-spacing 1
             tab-width    1))
-
-    ;;(defun vs//treemacs-hide-modeline ()
-    ;;  (setq mode-line-format nil))
 
     (defun vs//treemacs-variable-pitch-labels (&rest _)
       (dolist (face '(treemacs-root-face
@@ -59,12 +56,11 @@
       ;; Silence plistp error with all-the-icons
       (advice-add #'treemacs--pulse-png-advice :override #'ignore)
 
-      (add-hook 'treemacs-mode-hook #'vs//treemacs-setup)
-      ;;(add-hook 'treemacs-mode-hook #'vs//treemacs-hide-modeline)
+      (add-hook 'treemacs-mode-hook #'vs|treemacs-setup)
 
       ;; no fringes in treemacs window
-      (add-hook 'treemacs-mode-hook #'vs//treemacs-no-fringes)
-      (advice-add #'treemacs-select-window :after #'vs//treemacs-no-fringes)
+      (add-hook 'treemacs-mode-hook #'vs|treemacs-no-fringes)
+      (advice-add #'treemacs-select-window :after #'vs|treemacs-no-fringes)
 
       ;; variable-pitch labels for files/folders
       (vs//treemacs-variable-pitch-labels)

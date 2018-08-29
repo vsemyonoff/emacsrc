@@ -6,10 +6,7 @@
   :init
   (progn
     (defun vs//enable-theme ()
-      (enable-theme 'spacemacs-dark))
-
-    (load-theme 'spacemacs-dark t t)))
-
+      (load-theme 'spacemacs-dark t))))
 
 (provide 'use-spacemacs-theme)
 ;;; use-spacemacs-theme.el ends here

@@ -12,7 +12,7 @@
 
     (setq speck-doublets                         t
           speck-engine                           'Hunspell
-          ;;speck-multi                            t
+
           ;; Hunspell engine settings
           speck-hunspell-coding-system           'utf-8
           speck-hunspell-default-dictionary-name "en,ru"
@@ -25,9 +25,10 @@
 
     (defun vs|speck-prog-mode-on ()
       (set (make-local-variable 'speck-syntactic) t)
-      (speck-mode +1)))
+      (vs|speck-mode-on)))
 
   :hook ((text-mode . vs|speck-mode-on     )
+         (conf-mode . vs|speck-prog-mode-on)
          (prog-mode . vs|speck-prog-mode-on)))
 
 

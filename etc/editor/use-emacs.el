@@ -45,6 +45,8 @@
     (line-number-mode                 t) ; disable line numbers in mode line
     (size-indication-mode             t) ; show size indicator in mode line
 
+    (electric-pair-mode               t) ; auto close parens
+
     (defun vs|minibuffer-setup-gc ()
       (setq gc-cons-percentage-save gc-cons-percentage
             gc-cons-threshold-save gc-cons-threshold
