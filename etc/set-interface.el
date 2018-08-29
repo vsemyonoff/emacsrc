@@ -1,8 +1,7 @@
 ;;; set-interface.el --- interface settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(setq blink-matching-paren          'jump
-      frame-inhibit-implied-resize  t
+(setq frame-inhibit-implied-resize  t
       highlight-nonselected-windows nil
       inhibit-default-init          t     ; do not load default faces library
       mode-line-default-help-echo   nil   ; disable mode-line mouseovers
@@ -15,7 +14,7 @@
       visible-cursor                nil
       x-stretch-cursor              nil  )
 
-(vs//require-dir (expand-file-name "interface" vs-config-dir))
+(vs//require-dir (expand-file-name "interface" vs-emacs-config-dir))
 
 (provide 'set-interface)
 ;;; set-interface.el ends here

@@ -2,8 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 (use-package tramp
-  :config (setq tramp-default-method "ssh")
-  )
+  :config (setq tramp-default-method "ssh"))
 
 (provide 'use-tramp)
 ;;; set-tramp.el ends here

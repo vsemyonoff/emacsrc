@@ -2,8 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 (use-package windmove
-  :config (windmove-default-keybindings 'meta)
-  )
+  :config (windmove-default-keybindings 'meta))
 
 (provide 'use-windmove)
 ;;; set-windmove.el ends here

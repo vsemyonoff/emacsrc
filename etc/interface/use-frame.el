@@ -5,8 +5,7 @@
   :config (setq window-divider-default-places t
                 window-divider-default-bottom-width 0
                 window-divider-default-right-width 1)
-  :hook (vs-config-ui . window-divider-mode)
-  )
+  :hook (vs-emacs-config-gui . window-divider-mode))
 
 (provide 'use-frame)
 ;;; use-frame.el ends here

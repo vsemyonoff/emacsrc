@@ -5,7 +5,7 @@
 ;; TODO: move some stuff to correcponding `use-package'
 ;; bookmarks
 (require 'bookmark)
-(setq bookmark-default-file (expand-file-name "bookmarks.el" vs-cache-dir)
+(setq bookmark-default-file (expand-file-name "bookmarks.el" vs-emacs-cache-dir)
       bookmark-save-flag    1)
 
 ;; dired - reuse current buffer by pressing 'a'
@@ -31,23 +31,14 @@
 (add-hook 'after-save-hook
           'executable-make-buffer-file-executable-if-script-p)
 
-;; whitespace-mode config
-(require 'whitespace)
-(setq whitespace-line-column 120) ;; limit line length
-(setq whitespace-style '(face tabs empty trailing lines-tail))
-(add-hook 'before-save-hook #'delete-trailing-whitespace)
-(add-hook 'conf-mode-hook #'whitespace-mode)
-(add-hook 'prog-mode-hook #'whitespace-mode)
-(add-hook 'text-mode-hook #'whitespace-mode)
-
 ;; saner regex syntax
 (require 're-builder)
 (setq reb-re-syntax 'string)
 
 (require 'eshell)
-(setq eshell-directory-name (expand-file-name "eshell" vs-cache-dir))
+(setq eshell-directory-name (expand-file-name "eshell" vs-emacs-cache-dir))
 
-(vs//require-dir (expand-file-name "editor" vs-config-dir))
+(vs//require-dir (expand-file-name "editor" vs-emacs-config-dir))
 
 (provide 'set-editor)
 ;;; set-editor.el ends here

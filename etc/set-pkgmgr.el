@@ -14,7 +14,7 @@
         ("melpa"        . 30)
         ("org"          . 15)
         ("elpa"         . 0)))
-(setq package-user-dir (expand-file-name "packages" vs-cache-dir)
+(setq package-user-dir (expand-file-name "packages" vs-emacs-cache-dir)
       package-gnupghome-dir (expand-file-name "gnupg" package-user-dir))
 
 ;; Init package manager
@@ -41,7 +41,7 @@
 (require 'quelpa-use-package)
 
 ;; Install other package-related stuff
-(vs//require-dir (expand-file-name "pkgmgr" vs-config-dir))
+(vs//require-dir (expand-file-name "pkgmgr" vs-emacs-config-dir))
 
 (provide 'set-pkgmgr)
 ;;; set-pkgmgr.el ends here

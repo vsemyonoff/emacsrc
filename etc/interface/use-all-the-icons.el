@@ -5,6 +5,7 @@
   :commands (all-the-icons-octicon all-the-icons-faicon all-the-icons-fileicon
              all-the-icons-wicon all-the-icons-material all-the-icons-alltheicon
              all-the-icons-install-fonts)
+  ;;:config (setq inhibit-compacting-font-caches t)
   ;; :init
   ;; (defun vs|disable-all-the-icons-in-tty (orig-fn &rest args)
   ;;   (when (or (not (daemonp)) (display-graphic-p))

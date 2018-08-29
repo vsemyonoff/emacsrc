@@ -4,9 +4,8 @@
 (use-package savehist
   :config (setq savehist-additional-variables '(search-ring regexp-search-ring)
                 savehist-autosave-interval 60
-                savehist-file (expand-file-name "history.el" vs-cache-dir))
-  :hook (vs-config . savehist-mode)
-  )
+                savehist-file (expand-file-name "history.el" vs-emacs-cache-dir))
+  :hook (vs-emacs-config . savehist-mode))
 
 (provide 'use-savehist)
 ;;; use-savehist.el ends here

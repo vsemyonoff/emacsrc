@@ -28,7 +28,7 @@
 (defun vs/byte-compile-init ()
   "Byte-compile all your dotfiles again."
   (interactive)
-  (byte-recompile-directory vs-config-dir 0))
+  (byte-recompile-directory vs-emacs-home-dir 0))
 
 (defadvice exchange-point-and-mark (before deactivate-mark activate compile)
   "When called with no active region, do not activate mark."
