@@ -1,7 +1,7 @@
 ;;; use-undo-tree.el ---  more natural `undo' behavior. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(use-package undo-tree :delight
+(use-package undo-tree :delight :pin melpa :disabled
   :config
   (progn
     (let ((undo-tree-dir

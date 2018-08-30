@@ -38,7 +38,8 @@
       quelpa-checkout-melpa-p nil
       quelpa-update-melpa-p nil
       use-package-always-ensure t)
-(require 'quelpa-use-package)
+(eval-when-compile
+  (require 'quelpa-use-package))
 
 ;; Install other package-related stuff
 (vs//require-dir (expand-file-name "pkgmgr" vs-emacs-config-dir))
