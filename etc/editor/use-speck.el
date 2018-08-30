@@ -1,11 +1,7 @@
 ;;; use-speck.el ---  speck mode (spellchecker) settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(use-package speck
-  :quelpa (speck
-           :fetcher github
-           :repo "ahungry/emacswiki-mirror"
-           :files ("speck.el"))
+(use-package speck :ensure quelpa
   :config
   (progn
     (setenv "DICPATH" (expand-file-name "dictionaries" vs-emacs-data-dir))
@@ -29,8 +25,9 @@
 
   :hook ((text-mode . vs|speck-mode-on     )
          (conf-mode . vs|speck-prog-mode-on)
-         (prog-mode . vs|speck-prog-mode-on)))
+         (prog-mode . vs|speck-prog-mode-on))
 
+  :quelpa (speck :fetcher github :repo "ahungry/emacswiki-mirror" :files ("speck.el")))
 
 (provide 'use-speck)
 ;;; use-speck.el ends here

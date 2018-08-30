@@ -14,7 +14,8 @@
       (setq ivy-height-alist `((t . ,(floor (frame-height frame) 3)))))
     (add-hook 'window-size-change-functions #'vs|set-ivy-height))
 
-  :hook (vs-emacs-config . ivy-mode))
+  :hook ((vs-emacs-config     . ivy-mode         )
+         (vs-emacs-config-gui . vs|set-ivy-height)))
 
 (use-package counsel :delight
   :hook (vs-emacs-config . counsel-mode))

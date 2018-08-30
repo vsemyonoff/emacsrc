@@ -18,7 +18,5 @@
        (lambda (&optional done)
          (alert done))))))
 
-  ;;:general (:prefix "C-x" "u" 'vs/packages-upgrade-async))
-
 (provide 'use-package-utils)
 ;;; use-package-utils.el ends here
