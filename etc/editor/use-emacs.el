@@ -9,8 +9,6 @@
                   display-line-numbers-width        3
                   fill-column                       120
                   indent-tabs-mode                  nil
-                  indicate-buffer-boundaries        t
-                  indicate-empty-lines              t
                   require-final-newline             t
                   tab-width                         4  )
 
