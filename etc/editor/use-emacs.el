@@ -16,7 +16,6 @@
 
     (setq ad-redefinition-action                    'warn
           apropos-do-all                            t
-          browse-url-browser-function               'xwidget-webkit-browse-url
           create-lockfiles                          nil
           enable-recursive-minibuffers              nil
           history-length                            500

@@ -11,8 +11,6 @@
 (set-terminal-coding-system             'utf-8  )
 (setq-default buffer-file-coding-system 'utf-8  )
 
-;; TODO: rename vs-emacs-home-dir, vs-emacs-{config,cache,data}-dir
-;; vs-user-{config,home}-dir
 ;; Constants
 (defconst vs-emacs-home-dir (file-name-directory (or load-file-name (buffer-file-name)))
   "Top-level Emacs folder.")

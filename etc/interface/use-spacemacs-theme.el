@@ -1,7 +1,7 @@
 ;;; use-spacemacs-theme.el ---  theme settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(use-package spacemacs-theme :defer t
+(use-package spacemacs-theme :defer t :disabled
   :hook (vs-emacs-config-gui . vs//enable-theme)
   :init
   (progn
