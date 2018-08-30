@@ -4,18 +4,27 @@
 (use-package ivy :delight
   :config
   (progn
-    (setq ivy-count-format        "%d/%d ==> "
+    (setq ivy-count-format        "[%d/%d] "
           ivy-extra-directories   nil
+          ivy-format-function     'vs//ivy-format-function
           ivy-re-builders-alist   '((t . ivy--regex-ignore-order))
           ivy-use-virtual-buffers t
           ivy-virtual-abbreviate  'full)
 
-    (defun vs|set-ivy-height (&optional frame)
-      (setq ivy-height-alist `((t . ,(floor (frame-height frame) 3)))))
-    (add-hook 'window-size-change-functions #'vs|set-ivy-height))
+    (defun vs//ivy-format-function (cands)
+      (ivy--format-function-generic
+       (lambda (str)
+         (concat " => " (ivy--add-face str 'ivy-current-match)))
+       (lambda (str)
+         (concat "    " str))
+       cands
+       "\n"))
 
-  :hook ((vs-emacs-config     . ivy-mode         )
-         (vs-emacs-config-gui . vs|set-ivy-height)))
+    (defun vs|set-ivy-height ()
+      (setq ivy-height `,(floor (frame-height) 3))))
+
+  :hook ((vs-emacs-config             . ivy-mode         )
+         (window-configuration-change . vs|set-ivy-height)))
 
 (use-package counsel :delight
   :hook (vs-emacs-config . counsel-mode))

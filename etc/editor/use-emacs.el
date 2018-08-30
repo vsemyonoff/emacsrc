@@ -32,15 +32,15 @@
 
     (fset 'yes-or-no-p        'y-or-n-p) ; y/n (or SPS/DEL) against yes/no
 
-    (blink-cursor-mode               -1) ; disable cursor blinking
-    (menu-bar-mode                   -1) ; disable menu bar
-    (scroll-bar-mode                 -1) ; disable scroll bar
-    (tool-bar-mode                   -1) ; disable tool bar
-    (tooltip-mode                    -1) ; disable tool tops
+    (blink-cursor-mode               -1) ; cursor blinking
+    (menu-bar-mode                   -1) ; menu bar
+    (scroll-bar-mode                 -1) ; scroll bar
+    (tool-bar-mode                   -1) ; tool bar
+    (tooltip-mode                    -1) ; tool tops
 
-    (column-number-mode               t) ; show column number in mode line
-    (line-number-mode                 t) ; disable line numbers in mode line
-    (size-indication-mode             t) ; show size indicator in mode line
+    (column-number-mode              -1) ; column number in mode line
+    (line-number-mode                -1) ; line numbers in mode line
+    (size-indication-mode            -1) ; size indicator in mode line
 
     (electric-pair-mode               t) ; auto close parens
 
