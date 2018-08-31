@@ -1,6 +1,8 @@
 ;;; use-ivy.el ---  helper framework. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
+(use-package hydra)
+
 (use-package ivy :delight
   :config
   (progn
@@ -26,7 +28,14 @@
   :hook ((vs-emacs-config             . ivy-mode         )
          (window-configuration-change . vs|set-ivy-height)))
 
+(use-package ivy-hydra
+  :after (hydra ivy))
+
+(use-package swiper
+  :after ivy)
+
 (use-package counsel :delight
+  :after swiper
   :hook (vs-emacs-config . counsel-mode))
 
 (use-package counsel-projectile
