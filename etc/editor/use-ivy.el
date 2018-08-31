@@ -32,10 +32,10 @@
   :after (hydra ivy))
 
 (use-package swiper
-  :after ivy)
+  :after ivy
+  :bind ("C-s" . swiper))
 
 (use-package counsel :delight
-  :after swiper
   :hook (vs-emacs-config . counsel-mode))
 
 (use-package counsel-projectile

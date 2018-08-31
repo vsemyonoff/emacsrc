@@ -8,20 +8,21 @@
 (setq bookmark-default-file (expand-file-name "bookmarks.el" vs-emacs-cache-dir)
       bookmark-save-flag    1)
 
+(require 'dired)
+(setq dired-dwim-target       t
+      dired-recursive-copies  'always
+      dired-recursive-deletes 'top)
 ;; dired - reuse current buffer by pressing 'a'
-;(put 'dired-find-alternate-file 'disabled nil)
-;(setq dired-recursive-deletes 'always)
-;(setq dired-recursive-copies 'always)
-;(setq dired-dwim-target t)
-;(require 'dired-x)
+(put 'dired-find-alternate-file 'disabled nil)
+(require 'dired-x)
 
 ;; ediff - don't start another frame
-;(require 'ediff)
-;(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(require 'ediff)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 ;; cleanup old buffers
-;(require 'midnight)
-;(midnight-mode t)
+(require 'midnight)
+(midnight-mode t)
 
 (require 'tabify)
 (with-region-or-buffer indent-region)

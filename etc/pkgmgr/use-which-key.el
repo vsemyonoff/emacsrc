@@ -2,11 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 (use-package which-key :delight
-  :config (setq which-key-sort-order 'which-key-key-order-alpha
-                which-key-side-window-max-width 0.33
-                which-key-idle-delay 0.5)
-  :hook ((vs-emacs-config . which-key-mode            )
-         (vs-emacs-config . which-key-setup-minibuffer)))
+  :config (setq which-key-popup-type  'minibuffer
+                which-key-show-prefix 'top
+                which-key-sort-order  'which-key-prefix-then-key-order-reverse)
+  :hook (vs-emacs-config . which-key-mode))
 
 (provide 'use-which-key)
 ;;; use-which-key.el ends here
