@@ -71,13 +71,14 @@
       (vs//require-dir
        vs-user-config-dir)))) ; private settings (passwords, accounts etc)
 
-;; Apply hooks
-(if (daemonp)
-    (add-hook 'after-make-frame-functions (lambda (&optional frame)
-                                            (select-frame frame)
-                                            (run-hooks 'vs-emacs-config-gui-hook)))
-  (add-hook 'vs-emacs-config-hook (lambda ()
-                                    (run-hooks 'vs-emacs-config-gui-hook))))
-
+;; Editor config
 (add-hook 'emacs-startup-hook (lambda () (run-hooks 'vs-emacs-config-hook)))
+
+;; Delayed GUI config
+(add-hook (if (daemonp) 'after-make-frame-functions
+            'window-setup-hook)
+          (lambda (&optional frame)
+            (when frame (select-frame frame))
+            (run-hooks 'vs-emacs-config-gui-hook)))
+
 ;;; init.el ends here
