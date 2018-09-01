@@ -2,7 +2,12 @@
 ;;; Commentary:
 ;;; Code:
 (use-package tramp
-  :config (setq tramp-default-method "ssh"))
+  :init (mapc (lambda (word)
+                (add-to-list 'password-word-equivalents word))
+              '("code" "key" "token"))
+  :config (setq tramp-default-method        "ssh"
+                tramp-persistency-file-name (expand-file-name "tramp.el"
+                                                              vs-emacs-cache-dir)))
 
 (provide 'use-tramp)
 ;;; set-tramp.el ends here
