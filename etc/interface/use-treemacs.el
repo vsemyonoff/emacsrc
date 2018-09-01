@@ -18,11 +18,14 @@
 
     (defun vs//treemacs-add-project (&optional path)
       "Add project from `PATH' to `treemacs'."
-      (let ((path (or path user-home-dir)))
+      (let* ((path (or path vs-user-home-dir))
+             (name (file-name-nondirectory
+                    (directory-file-name (if (file-remote-p path)
+                                             (car (last (split-string path ":")))
+                                           path)))))
         (unless (treemacs-current-workspace)
           (treemacs--find-workspace))
-        (let ((name (file-name-nondirectory (directory-file-name path))))
-          (treemacs-do-add-project-to-workspace path name))))
+        (treemacs-do-add-project-to-workspace path name)))
 
     (defun vs|treemacs-no-fringes ()
       (when (display-graphic-p)
@@ -117,7 +120,7 @@
   :hook (vs-emacs-config-gui . vs|treemacs-config))
 
 (use-package treemacs-projectile
-  :after projectile
+  :after (treemacs projectile)
   :bind (:map global-map ([C-tab] . vs/treemacs-open))
   :config
   (progn
