@@ -10,11 +10,11 @@
     ;; Autosave
     (let ((auto-save-dir
            (expand-file-name
-            (convert-standard-filename "autosave/") vs-emacs-cache-dir)))
+            (convert-standard-filename "auto-save/") vs-emacs-cache-dir)))
       (setq auto-save-default              t
             auto-save-file-name-transforms `((".*" ,auto-save-dir t))
             auto-save-interval             300
-            auto-save-list-file-name       (expand-file-name "autosave.el" vs-emacs-cache-dir)
+            auto-save-list-file-name       (expand-file-name "auto-save.el" vs-emacs-cache-dir)
             auto-save-timeout              30)
       (unless (file-exists-p auto-save-dir)
         (make-directory auto-save-dir))))

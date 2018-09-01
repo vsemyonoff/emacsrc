@@ -6,7 +6,7 @@
   (progn
     (let ((undo-tree-dir
            (expand-file-name
-            (convert-standard-filename "undosave/") vs-emacs-cache-dir)))
+            (convert-standard-filename "auto-save/undo/") vs-emacs-cache-dir)))
       (setq undo-tree-auto-save-history       t
             undo-tree-history-directory-alist `((".*" . ,undo-tree-dir)))
 

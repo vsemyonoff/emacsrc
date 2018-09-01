@@ -12,6 +12,7 @@
             projectile-globally-ignored-files         '(".DS_Store" "Icon" "TAGS")
             projectile-indexing-method                'alien
             projectile-known-projects-file            (expand-file-name "projects.el" projectile-cache-dir)
+            projectile-mode-line                      nil
             projectile-require-project-root           nil
             projectile-globally-ignored-directories   (append projectile-globally-ignored-directories
                                                               (list (abbreviate-file-name vs-emacs-cache-dir) ".sync"))
