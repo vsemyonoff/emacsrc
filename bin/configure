@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Detect OS
-SYSTEM="$(uname -s)"
+# Homebrew install URL
+BREW_INSTALL_URL="https://raw.githubusercontent.com/Homebrew/install/master/install"
 
 # Common packages
 COMM_PACKAGES=(
@@ -21,12 +21,15 @@ BREW_PACKAGES=(
     terminal-notifier
 )
 
+# Detect OS
+SYSTEM="$(uname -s)"
+
 # Pretend run: just print all commands without execution
 [[ ${1} == "-p" ]] && PRETEND="echo"
 
 case "${SYSTEM}" in
     Darwin)
-        [[ -z "$(which brew)" ]] && ${PRETEND} /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        [[ -z "$(which brew)" ]] && ${PRETEND} /usr/bin/ruby -e "$(curl -fsSL ${BREW_INSTALL_URL})"
         for i in ${!BREW_PACKAGES[@]}; do
             if [[ "${BREW_PACKAGES[i]}" =~ ^caskroom/.* ]]; then
                 BREW="brew install --force"
@@ -47,28 +50,32 @@ case "${SYSTEM}" in
 esac
 
 # Configure symlinks
-EMACS_D="$(cd $(dirname $(test -L ${0} && readlink ${0} || echo ${0}))/.. && pwd)"
-if [[ "${EMACS_D}" != "${HOME}/.emacs.d" ]]; then
-    if [[ -h "${HOME}/.emacs.d" ]]; then
-        ${PRETEND} rm -f "${HOME}/.emacs.d"
-    elif [[ -d "${HOME}/.emacs.d" ]]; then
-        ${PRETEND} mv -v  "${HOME}/.emacs.d" "${HOME}/.emacs.d.save"
+EMACS_D="${HOME}/.emacs.d"
+EMACS_D_SRC="$(cd $(dirname $(test -L ${0} && readlink ${0} || echo ${0}))/.. && pwd)"
+if [[ "${EMACS_D_SRC}" != "${EMACS_D}" ]]; then
+    if [[ -h "${EMACS_D}" ]]; then
+        ${PRETEND} rm -f "${EMACS_D}"
+    elif [[ -d "${EMACS_D}" ]]; then
+        ${PRETEND} mv -v  "${EMACS_D}" "${EMACS_D}.save"
     fi
-    ${PRETEND} ln -sv "${EMACS_D}" "${HOME}/.emacs.d"
+    ${PRETEND} ln -sv "${EMACS_D_SRC}" "${EMACS_D}"
 fi
 
 BIN_DIR="${HOME}/.bin"
-[[ -h "${BIN_DIR}/emcl" ]] && rm -f "${BIN_DIR}/emcl"
-${PRETEND} mkdir -p "${BIN_DIR}" && ${PRETEND} ln -sv "${HOME}/.emacs.d/bin/emcl" "${BIN_DIR}/emcl"
+[[ -h "${BIN_DIR}/emcl" ]] && ${PRETEND} rm -f "${BIN_DIR}/emcl"
+${PRETEND} mkdir -p "${BIN_DIR}" && ${PRETEND} ln -sv "${EMACS_D}/bin/emcl" "${BIN_DIR}/emcl"
 
 DATA_DIR="${XDG_DATA_HOME:-${HOME}/.local/share}"
-[[ -h "${DATA_DIR}/emacs" ]] && rm -f "${DATA_DIR}/emacs"
-${PRETEND} mkdir -p "${DATA_DIR}" && ${PRETEND} ln -sv "${HOME}/.emacs.d/share" "${DATA_DIR}/emacs"
+[[ -h "${DATA_DIR}/emacs" ]] && ${PRETEND} rm -f "${DATA_DIR}/emacs"
+${PRETEND} mkdir -p "${DATA_DIR}" && ${PRETEND} ln -sv "${EMACS_D}/share" "${DATA_DIR}/emacs"
 
 # Install MacOS 'emacsclient' wrapper
 if [[ "${SYSTEM}" == "Darwin" ]]; then
     APP_DIR="${HOME}/Applications"
-    ${PRETEND} mkdir -p "${APP_DIR}" && ${PRETEND} cp -frv "${EMACS_D}/share/apple/EmacsClient.app" "${APP_DIR}"
+    DST_APP="${APP_DIR}/EmacsClient.app"
+    SRC_APP="${EMACS_D}/share/apple/EmacsClient.app"
+    [[ -h "${DST_APP}" ]] && ${PRETEND} rm -f "${DST_APP}"
+    ${PRETEND} mkdir -p "${APP_DIR}" && ${PRETEND} ln -sv "${SRC_APP}" "${DST_APP}"
 fi
 
 # Set environment vars

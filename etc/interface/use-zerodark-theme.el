@@ -1,7 +1,7 @@
 ;;; use-zerodark-theme.el ---  theme settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(use-package zerodark-theme
+(use-package zerodark-theme :defer t
   :hook (vs-emacs-config-gui . vs//enable-theme)
   :init
   (progn
