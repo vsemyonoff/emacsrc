@@ -24,7 +24,7 @@
                                                                 ("styl" . ("css")))))
 
       (unless (file-exists-p projectile-cache-dir)
-        (make-directory projectile-cache-dir)))
+        (make-directory projectile-cache-dir t)))
 
     (push ".project" projectile-project-root-files-bottom-up)
 

@@ -4,6 +4,8 @@
 (use-package emacs
   :config
   (progn
+    (advice-add #'display-startup-echo-area-message :override #'ignore)
+
     (setq-default bidi-display-reordering           nil
                   cursor-in-non-selected-windows    nil
                   display-line-numbers-width        3
@@ -17,6 +19,7 @@
           create-lockfiles                          nil
           enable-recursive-minibuffers              nil
           history-length                            500
+          inhibit-startup-echo-area-message         user-login-name
           inhibit-startup-message                   t
           initial-scratch-message                   nil
           load-prefer-newer                         t
@@ -27,6 +30,7 @@
                                                       minibuffer-avoid-prompt
                                                       face
                                                       minibuffer-prompt)
+          mode-line-format                          nil
           resize-mini-windows                       'grow-only
           tab-always-indent                         t  )
 

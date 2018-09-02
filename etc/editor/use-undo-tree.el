@@ -11,7 +11,7 @@
             undo-tree-history-directory-alist `((".*" . ,undo-tree-dir)))
 
       (unless (file-exists-p undo-tree-dir)
-        (make-directory undo-tree-dir))))
+        (make-directory undo-tree-dir t))))
 
   :hook ((vs-emacs-config  . global-undo-tree-mode      )
          (find-file        . undo-tree-load-history-hook)

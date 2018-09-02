@@ -7,6 +7,14 @@
     (setq confirm-nonexistent-file-or-buffer t    ; ask for new buffers
           make-backup-files                  nil) ; disable backup files
 
+    ;; Create nonexistent directories while creating file
+    (defadvice find-file (before make-directory-maybe (filename &optional wildcards) activate)
+      "Create parent directory if not exists while visiting file."
+      (unless (file-exists-p filename)
+        (let ((dir (file-name-directory filename)))
+          (unless (file-exists-p dir)
+            (make-directory dir t)))))
+
     ;; Autosave
     (let ((auto-save-dir
            (expand-file-name
@@ -17,7 +25,7 @@
             auto-save-list-file-name       (expand-file-name "auto-save.el" vs-emacs-cache-dir)
             auto-save-timeout              30)
       (unless (file-exists-p auto-save-dir)
-        (make-directory auto-save-dir))))
+        (make-directory auto-save-dir t))))
 
   :hook (focus-out . do-auto-save))
 
