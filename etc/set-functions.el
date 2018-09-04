@@ -69,7 +69,7 @@
      (lambda (face)
        (let ((bg (face-attribute face :background))
              (fg (face-attribute face :foreground)))
-         (message "background: '%s', foreground: '%s'" bg fg)
+         ;;(message "background: '%s', foreground: '%s'" bg fg)
          (unless (string= bg "unspecified")
            (let ((rgb (color-name-to-rgb bg)))
              (setq value-limit (min value-limit
@@ -79,9 +79,9 @@
              (setq valie-limit (min value-limit
                                     (abs (vs::color::scale-limit rgb value))))))))
      face-list)
-    (message "scale value: '%f', scale value limit: '%f'" value value-limit)
+    ;;(message "scale value: '%f', scale value limit: '%f'" value value-limit)
     (setq value (* (if (< factor 0) -1 1) (min value value-limit)))
-    (message "calculated scale value: '%f' for factor: '%d'" value factor)
+    ;;(message "calculated scale value: '%f' for factor: '%d'" value factor)
     (mapc
      (lambda (face)
        (let ((bg (face-attribute face :background))
