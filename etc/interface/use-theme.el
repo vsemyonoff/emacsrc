@@ -1,4 +1,4 @@
-;;; use-zerodark-theme.el ---  theme settings. -*- lexical-binding: t; -*-
+;;; use-theme.el ---  theme settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 (use-package zerodark-theme :defer t
@@ -51,5 +51,5 @@
                         :foreground (face-attribute 'font-lock-string-face
                                                     :foreground))))
 
-(provide 'use-zerodark-theme)
-;;; use-zerodark-theme.el ends here
+(provide 'use-theme)
+;;; use-theme.el ends here
