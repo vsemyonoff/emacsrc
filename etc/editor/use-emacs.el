@@ -48,6 +48,12 @@
 
     (electric-pair-mode               t) ; auto close parens
 
+    (defadvice quit-window (before quit-window-always-kill)
+      "When running `quit-window', always kill the buffer."
+      (when (called-interactively-p 'interactive)
+        (ad-set-arg 0 t)))
+    (ad-activate 'quit-window)
+
     (defun vs|minibuffer-setup-gc ()
       (setq gc-cons-percentage-save gc-cons-percentage
             gc-cons-threshold-save gc-cons-threshold
