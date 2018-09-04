@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 (use-package treemacs
+  :bind (:map global-map
+              ("C-x 1"  . treemacs-delete-other-windows))
+
   :config
   (progn
     (setq treemacs-collapse-dirs            3
