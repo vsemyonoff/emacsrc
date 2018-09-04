@@ -28,7 +28,7 @@
 
     (defun vs|swiper-recenter (&rest args)
       "Recenter display after `swiper'."
-      (recenter))
+      (recenter)))
     ;;(advice-add 'swiper :after #'vs|swiper-recenter))
 
   :hook ((vs-emacs-config             . ivy-mode         )
