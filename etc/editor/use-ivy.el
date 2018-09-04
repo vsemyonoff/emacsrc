@@ -6,12 +6,13 @@
 (use-package ivy :delight
   :config
   (progn
-    (setq ivy-count-format        "[%d/%d] "
-          ivy-extra-directories   nil
-          ivy-format-function     'vs|ivy-format
-          ivy-re-builders-alist   '((t . ivy--regex-ignore-order))
-          ivy-use-virtual-buffers t
-          ivy-virtual-abbreviate  'full)
+    (setq ivy-count-format            "[%d/%d] "
+          ivy-extra-directories       nil
+          ivy-fixed-height-minibuffer t
+          ivy-format-function         'vs|ivy-format
+          ivy-re-builders-alist       '((t . ivy--regex-ignore-order))
+          ivy-use-virtual-buffers     t
+          ivy-virtual-abbreviate      'abbreviate)
 
     (defun vs|ivy-format (cands)
       (ivy--format-function-generic
@@ -28,7 +29,7 @@
     (defun vs|swiper-recenter (&rest args)
       "Recenter display after `swiper'."
       (recenter))
-    (advice-add 'swiper :after #'vs|swiper-recenter))
+    ;;(advice-add 'swiper :after #'vs|swiper-recenter))
 
   :hook ((vs-emacs-config             . ivy-mode         )
          (window-configuration-change . vs|set-ivy-height)))
