@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 (use-package projectile :delight
-  :bind-keymap ("C-c p" . projectile-command-map)
+  :bind-keymap ("M-p" . projectile-command-map)
   :config
   (progn
     (let ((projectile-cache-dir (expand-file-name "projectile" vs-emacs-cache-dir)))
@@ -28,19 +28,13 @@
 
     (push ".project" projectile-project-root-files-bottom-up)
 
-    (defun vs|projectile-locate-dominating-file (orig-fn &rest args)
-      "Don't traverse the file system if on a remote connection."
-      (unless (file-remote-p default-directory)
-        (apply orig-fn args)))
-    (advice-add #'projectile-locate-dominating-file :around #'vs|projectile-locate-dominating-file)
-
     (defun vs|projectile-cache-current-file (orig-fun &rest args)
       "Don't cache ignored files."
       (unless (cl-loop for path in (projectile-ignored-directories)
                        if (string-prefix-p buffer-file-name (expand-file-name path))
                        return t)
         (apply orig-fun args)))
-    (advice-add #'projectile-cache-current-file :around #'vs|projectile-cache-current-file))
+    (advice-add 'projectile-cache-current-file :around 'vs|projectile-cache-current-file))
 
   :hook ((dired-before-readin . projectile-track-known-projects-find-file-hook)
          (vs-emacs-config     . projectile-global-mode                        )))
