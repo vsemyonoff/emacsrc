@@ -47,11 +47,14 @@
     (size-indication-mode            -1) ; size indicator in mode line
 
     (electric-pair-mode               t) ; auto close parens
+    (global-prettify-symbols-mode     t) ; replace some symbols
 
     (defadvice quit-window (before quit-window-always-kill)
       "When running `quit-window', always kill the buffer."
       (when (called-interactively-p 'interactive)
-        (ad-set-arg 0 t)))
+        (unless (delq (selected-window)
+                      (get-buffer-window-list nil nil t))
+          (ad-set-arg 0 t))))
     (ad-activate 'quit-window)
 
     (defun vs|minibuffer-setup-gc ()
