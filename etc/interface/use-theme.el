@@ -2,7 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 (use-package zerodark-theme :defer t
-  :hook (vs-emacs-config-gui . vs//enable-theme)
+  :hook ((vs-emacs-config     . zerodark-setup-modeline-format)
+         (vs-emacs-config-gui . vs//enable-theme              ))
   :init
   (defun vs//enable-theme ()
     ;; Load theme
