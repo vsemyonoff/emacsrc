@@ -6,7 +6,6 @@ BREW_INSTALL_URL="https://raw.githubusercontent.com/Homebrew/install/master/inst
 # Common packages
 COMM_PACKAGES=(
     hunspell
-    python
     the_silver_searcher
 )
 # Arch packages
