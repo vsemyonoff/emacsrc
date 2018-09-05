@@ -11,8 +11,9 @@
           ivy-fixed-height-minibuffer t
           ivy-format-function         'vs|ivy-format
           ivy-re-builders-alist       '((t . ivy--regex-ignore-order))
+          ivy-use-selectable-prompt   t
           ivy-use-virtual-buffers     t
-          ivy-virtual-abbreviate      'abbreviate)
+          ivy-virtual-abbreviate      'full)
 
     (defun vs|ivy-format (cands)
       (ivy--format-function-generic
