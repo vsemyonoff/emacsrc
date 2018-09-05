@@ -45,6 +45,9 @@
 (defvar vs-emacs-config-gui-hook nil
   "Hook called after frame creation is done.")
 
+(defvar vs-emacs-config-finish-hook nil
+  "Final hook called before configuration ends.")
+
 ;; Create cache folder
 (unless (file-exists-p vs-emacs-cache-dir)
   (make-directory vs-emacs-cache-dir t))
@@ -81,4 +84,7 @@
             (when frame (select-frame frame))
             (run-hooks 'vs-emacs-config-gui-hook)))
 
-;;; init.el ends here
+;; Final hook
+(add-hook 'emacs-startup-hook (lambda () (run-hooks 'vs-emacs-config-final-hook)))
+
+;;; init.el ends herey
