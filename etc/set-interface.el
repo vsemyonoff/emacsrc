@@ -14,6 +14,10 @@
       visible-cursor                nil
       x-stretch-cursor              nil  )
 
+(use-package highlight-numbers
+  :commands highlight-numbers-mode
+  :hook (prog-mode . highlight-numbers-mode))
+
 (vs//require-dir (expand-file-name "interface" vs-emacs-config-dir))
 
 (provide 'set-interface)
