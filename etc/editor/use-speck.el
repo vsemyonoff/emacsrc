@@ -16,16 +16,16 @@
           speck-hunspell-language-options        '(("en,ru" utf-8 nil nil nil))
           speck-hunspell-library-directory       "")
 
-    (defun vs|speck-mode-on()
+    (defun vs|speck/mode-on()
       (speck-mode +1))
 
-    (defun vs|speck-prog-mode-on ()
+    (defun vs|speck/prog-mode-on ()
       (set (make-local-variable 'speck-syntactic) t)
-      (vs|speck-mode-on)))
+      (vs|speck/mode-on)))
 
-  :hook ((text-mode . vs|speck-mode-on     )
-         (conf-mode . vs|speck-prog-mode-on)
-         (prog-mode . vs|speck-prog-mode-on))
+  :hook ((text-mode . vs|speck/mode-on     )
+         (conf-mode . vs|speck/prog-mode-on)
+         (prog-mode . vs|speck/prog-mode-on))
 
   :quelpa (speck :fetcher github :repo "ahungry/emacswiki-mirror" :files ("speck.el")))
 

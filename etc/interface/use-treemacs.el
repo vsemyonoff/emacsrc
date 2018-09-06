@@ -2,9 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 (use-package treemacs
-  :bind (:map global-map
-              ("C-x 1"  . treemacs-delete-other-windows))
-
   :config
   (progn
     (setq treemacs-collapse-dirs            3
@@ -22,7 +19,7 @@
     (treemacs-follow-mode                   t)
     (treemacs-git-mode                      'simple)
 
-    (defun vs|treemacs//add-project (&optional path)
+    (defun vs|treemacs/add-project (&optional path)
       "Add project from `PATH' to `treemacs'."
       (let* ((path (or path vs-user-home-dir))
              (name (file-name-nondirectory
@@ -33,14 +30,14 @@
           (treemacs--find-workspace))
         (treemacs-do-add-project-to-workspace path name)))
 
-    (defun vs|treemacs|mode-setup ()
+    (defun vs|treemacs/mode-setup ()
       "Set `treemacs' mode local variables."
       (setq indicate-buffer-boundaries nil
             indicate-empty-lines       nil
             line-spacing               1
             tab-width                  1  ))
 
-    (defun vs|treemacs|icons-setup ()
+    (defun vs|treemacs/icons-setup ()
       (unless (require 'all-the-icons nil t)
         (error "all-the-icons isn't installed"))
 
@@ -89,21 +86,21 @@
         (treemacs-define-custom-icon (all-the-icons-octicon "file-code" :height 1.2)
                                      "json" "xml" "ini" "tpl" "mk"))))
 
-  :hook ((treemacs-mode       . vs|treemacs|mode-setup )
-         (vs-emacs-config-gui . vs|treemacs|icons-setup)))
+  :general ("C-x 1" 'treemacs-delete-other-windows)
+
+  :hook ((treemacs-mode       . vs|treemacs/mode-setup )
+         (vs-emacs-config-gui . vs|treemacs/icons-setup)))
 
 (use-package treemacs-projectile
   :after (treemacs projectile)
-  :bind (:map global-map ([C-tab] . vs|treemacs|open))
-  :config
-  (progn
-    (defun vs|treemacs|open ()
-      "Add project for current file and open `treemacs' buffer."
-      (interactive)
-      (vs|treemacs//add-project (condition-case _
-                                    (expand-file-name (projectile-project-root))
-                                  (error (expand-file-name default-directory))))
-      (treemacs-select-window))))
+  :config (defun vs|treemacs|open ()
+            "Add project for current file and open `treemacs' buffer."
+            (interactive)
+            (vs|treemacs/add-project (condition-case _
+                                         (expand-file-name (projectile-project-root))
+                                       (error (expand-file-name default-directory))))
+            (treemacs-select-window))
+  :general ("<C-tab>" 'vs|treemacs|open))
 
 (provide 'use-treemacs)
 ;;; use-treemacs.el ends here

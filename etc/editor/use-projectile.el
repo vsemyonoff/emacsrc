@@ -2,10 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 (use-package projectile :delight
-  :bind-keymap ("M-p" . projectile-command-map)
   :config
   (progn
-    (let ((projectile-cache-dir (expand-file-name "projectile" vs-emacs-cache-dir)))
+    (let ((projectile-cache-dir                       (expand-file-name "projectile" vs-emacs-cache-dir)))
       (setq projectile-cache-file                     (expand-file-name "cache.el" projectile-cache-dir)
             projectile-enable-caching                 (not noninteractive)
             projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o")
@@ -28,16 +27,17 @@
 
     (push ".project" projectile-project-root-files-bottom-up)
 
-    (defun vs|projectile-cache-current-file (orig-fun &rest args)
+    (defun vs|projectile/cache-filter (orig-fun &rest args)
       "Don't cache ignored files."
       (unless (cl-loop for path in (projectile-ignored-directories)
                        if (string-prefix-p buffer-file-name (expand-file-name path))
                        return t)
         (apply orig-fun args)))
-    (advice-add 'projectile-cache-current-file :around 'vs|projectile-cache-current-file))
+    (advice-add 'projectile-cache-current-file :around 'vs|projectile/cache-filter))
 
-  :hook ((dired-before-readin . projectile-track-known-projects-find-file-hook)
-         (vs-emacs-config     . projectile-global-mode                        )))
+  :general ("M-p" '(projectile-command-map :which-key "Projectile"))
+
+  :hook (vs-emacs-config . projectile-global-mode))
 
 (provide 'use-projectile)
 ;;; use-projectile.el ends here

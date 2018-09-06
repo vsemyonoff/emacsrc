@@ -16,11 +16,11 @@
                                                  vc-ignore-dir-regexp
                                                  tramp-file-name-regexp))
 
-    (defun vs|no-authinfo-for-tramp (orig-fn &rest args)
+    (defun vs|tramp/read-password-filter (orig-fn &rest args)
       "Don't look into .authinfo for local sudo TRAMP buffers."
       (let ((auth-sources (if (equal tramp-current-method "sudo") nil auth-sources)))
         (apply orig-fn args)))
-    (advice-add #'tramp-read-passwd :around #'vs|no-authinfo-for-tramp)))
+    (advice-add 'tramp-read-passwd :around 'vs|tramp/read-password-filter)))
 
 (provide 'use-tramp)
 ;;; set-tramp.el ends here

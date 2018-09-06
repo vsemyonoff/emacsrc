@@ -8,14 +8,13 @@
   (progn
     (setq ivy-count-format            "[%d/%d] "
           ivy-extra-directories       nil
-          ivy-fixed-height-minibuffer t
-          ivy-format-function         'vs:ivy:format
+          ivy-format-function         'vs|ivy/custom-format
           ivy-re-builders-alist       '((t . ivy--regex-ignore-order))
           ivy-use-selectable-prompt   t
           ivy-use-virtual-buffers     t
           ivy-virtual-abbreviate      'full)
 
-    (defun vs:ivy:format (cands)
+    (defun vs|ivy/custom-format (cands)
       (ivy--format-function-generic
        (lambda (str)
          (concat " => " (ivy--add-face str 'ivy-current-match)))
@@ -24,17 +23,17 @@
        cands
        "\n"))
 
-    (defun vs:ivy:set-height ()
+    (defun vs|ivy/update-window-height ()
       (setq ivy-height `,(floor (frame-height) 3))))
 
   :hook ((vs-emacs-config             . ivy-mode         )
-         (window-configuration-change . vs:ivy:set-height)))
+         (window-configuration-change . vs|ivy/update-window-height)))
 
 (use-package ivy-hydra
   :after (hydra ivy))
 
 (use-package swiper
-  :bind ("C-s" . swiper))
+  :general ("C-s" 'swiper))
 
 (use-package counsel :delight
   :hook (vs-emacs-config . counsel-mode))

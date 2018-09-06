@@ -62,17 +62,17 @@
         (gc-cons-percentage 0.6))
     (add-to-list 'load-path vs-emacs-config-dir)
 
-    (require 'set-functions)  ; useful functions
-    (require 'set-pkgmgr)     ; package manager settings
-    (require 'set-utilities)  ; common utilities
-    (require 'set-ostweaks)   ; linux/mac specific tweaks
+    (require 'set-functions)   ; useful functions
+    (require 'set-pkgmgr)      ; package manager settings
+    (require 'set-utilities)   ; common utilities
+    (require 'set-ostweaks)    ; linux/mac specific tweaks
 
     (unless noninteractive
-      (require 'set-editor)   ; editor behavior
-      (require 'set-interface); interface settings
-      (require 'set-tools)    ; browser/email/messengers settings
-      (vs//require-dir
-       vs-user-config-dir)))) ; private settings (passwords, accounts etc)
+      (require 'set-editor)    ; editor behavior
+      (require 'set-interface) ; interface settings
+      (require 'set-tools)     ; browser/email/messengers settings
+      (vs|emacs/require-dir
+       vs-user-config-dir))))  ; private settings (passwords, accounts etc)
 
 ;; Editor config
 (add-hook 'emacs-startup-hook (lambda () (run-hooks 'vs-emacs-config-hook)))

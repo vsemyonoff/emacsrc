@@ -18,7 +18,7 @@
       (running-on-linux
        (setq x-gtk-use-system-tooltips nil)))
 
-(vs//require-dir (expand-file-name "ostweaks" vs-emacs-config-dir))
+(vs|emacs/require-dir (expand-file-name "ostweaks" vs-emacs-config-dir))
 
 (provide 'set-ostweaks)
 ;;; set-ostweakss.el ends here

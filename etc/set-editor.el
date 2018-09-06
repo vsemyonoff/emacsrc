@@ -17,8 +17,8 @@
 (midnight-mode t)
 
 (require 'tabify)
-(with-region-or-buffer indent-region)
-(with-region-or-buffer untabify)
+(vs|emacs/with-region-or-buffer indent-region)
+(vs|emacs/with-region-or-buffer untabify)
 
 ;; saner regex syntax
 (require 're-builder)
@@ -27,7 +27,7 @@
 (require 'eshell)
 (setq eshell-directory-name (expand-file-name "eshell" vs-emacs-cache-dir))
 
-(vs//require-dir (expand-file-name "editor" vs-emacs-config-dir))
+(vs|emacs/require-dir (expand-file-name "editor" vs-emacs-config-dir))
 
 ;; make a shell script executable automatically on save
 (add-hook 'after-save-hook

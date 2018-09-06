@@ -3,32 +3,32 @@
 ;;; Code:
 (use-package zerodark-theme :defer t
   :hook ((vs-emacs-config     . zerodark-setup-modeline-format)
-         (vs-emacs-config-gui . vs//enable-theme              ))
+         (vs-emacs-config-gui . vs|emacs/enable-theme         ))
   :init
-  (defun vs//enable-theme ()
+  (defun vs|emacs/enable-theme ()
     ;; Load theme
     (load-theme 'zerodark t)
     ;; Set font
     (set-face-attribute 'default nil :font "Source Code Pro-12")
     ;; Increase some faces color saturation
-    (vs::face::scale-color '( ;; Font lock faces
-                             font-lock-builtin-face
-                             font-lock-comment-face
-                             font-lock-constant-face
-                             font-lock-doc-face
-                             font-lock-function-name-face
-                             font-lock-keyword-face
-                             font-lock-string-face
-                             font-lock-type-face
-                             font-lock-variable-name-face
-                             ;; Other
-                             error
-                             hl-line
-                             region
-                             show-paren-match
-                             success
-                             warning)
-                           10)
+    (vs|emacs/scale-face-color '( ;; Font lock faces
+                                 font-lock-builtin-face
+                                 font-lock-comment-face
+                                 font-lock-constant-face
+                                 font-lock-doc-face
+                                 font-lock-function-name-face
+                                 font-lock-keyword-face
+                                 font-lock-string-face
+                                 font-lock-type-face
+                                 font-lock-variable-name-face
+                                 ;; Other
+                                 error
+                                 hl-line
+                                 region
+                                 show-paren-match
+                                 success
+                                 warning)
+                               10)
     ;; Change colors
     (set-face-attribute 'default nil
                         :foreground "#f8f8f2")

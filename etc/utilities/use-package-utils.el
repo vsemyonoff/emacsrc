@@ -4,11 +4,11 @@
 (use-package package-utils
   :config
   (progn
-    (defun vs/packages-upgrade ()
+    (defun vs|package-utils|upgrade ()
       (interactive)
       (alert (package-utils-upgrade-all) :title "Upgrade"))
 
-    (defun vs/packages-upgrade-async ()
+    (defun vs|package-utils|upgrade-async ()
       (interactive)
       (async-start
        `(lambda ()
@@ -16,7 +16,7 @@
 	      (require 'package-utils)
 	      (package-utils-upgrade-all))
        (lambda (&optional done)
-         (alert done))))))
+         (alert done :title "Upgrade"))))))
 
 (provide 'use-package-utils)
 ;;; use-package-utils.el ends here

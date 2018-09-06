@@ -42,7 +42,7 @@
   (require 'quelpa-use-package))
 
 ;; Install other package-related stuff
-(vs//require-dir (expand-file-name "pkgmgr" vs-emacs-config-dir))
+(vs|emacs/require-dir (expand-file-name "pkgmgr" vs-emacs-config-dir))
 
 (provide 'set-pkgmgr)
 ;;; set-pkgmgr.el ends here

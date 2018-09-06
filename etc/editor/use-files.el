@@ -8,12 +8,13 @@
           make-backup-files                  nil) ; disable backup files
 
     ;; Create nonexistent directories while creating file
-    (defadvice find-file (before make-directory-maybe (filename &optional wildcards) activate)
+    (defun vs|emacs/find-file-create-parents (filename &optional _)
       "Create parent directory if not exists while visiting file."
       (unless (file-exists-p filename)
         (let ((dir (file-name-directory filename)))
           (unless (file-exists-p dir)
             (make-directory dir t)))))
+    (advice-add 'find-file :before 'vs|emacs/find-file-create-parents)
 
     ;; Autosave
     (let ((auto-save-dir
