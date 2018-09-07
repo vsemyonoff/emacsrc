@@ -14,5 +14,6 @@
 
   :hook ((conf-mode prog-mode text-mode) . hl-line-mode))
 
+
 (provide 'use-hl-line)
 ;;; use-hl-line.el ends here

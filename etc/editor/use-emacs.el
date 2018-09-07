@@ -102,23 +102,25 @@ With argument, do this that many times."
       (interactive "p")
       (vs|emacs|delete-word (- arg))))
 
-  :general ("<A-backspace>"   '(vs|emacs|backward-delete-word :which-key "backward delete word")
-            "<A-left>"        'left-word
-            "<A-right>"       'right-word
-            "<C-backspace>"   nil
-            "<C-S-backspace>" nil
-            "<C-left>"        nil
-            "<C-right>"       nil
-            "<M-backspace>"   '(vs|emacs|backward-delete-line :which-key "backward delete line"))
+  :general
+  ("<A-backspace>"   '(vs|emacs|backward-delete-word :which-key "backward delete word")
+   "<A-left>"        'left-word
+   "<A-right>"       'right-word
+   "<C-backspace>"   nil
+   "<C-S-backspace>" nil
+   "<C-left>"        nil
+   "<C-right>"       nil
+   "<M-backspace>"   '(vs|emacs|backward-delete-line :which-key "backward delete line"))
 
-  :hook ((conf-mode        . display-line-numbers-mode      )
-         (prog-mode        . display-line-numbers-mode      )
-         (text-mode        . display-line-numbers-mode      )
-         (isearch-mode     . vs|emacs/disable-ui-keystrokes )
-         (isearch-mode-end . vs|emacs/enable-ui-keystrokes  )
-         (minibuffer-setup . vs|emacs/minibuffer-setup-gc   )
-         (minibuffer-exit  . vs|emacs/minibuffer-reset-gc   )
-         (vs-emacs-config  . vs|emacs/enable-ui-keystrokes  )))
+  :hook
+  ((conf-mode        . display-line-numbers-mode      )
+   (prog-mode        . display-line-numbers-mode      )
+   (text-mode        . display-line-numbers-mode      )
+   (isearch-mode     . vs|emacs/disable-ui-keystrokes )
+   (isearch-mode-end . vs|emacs/enable-ui-keystrokes  )
+   (minibuffer-setup . vs|emacs/minibuffer-setup-gc   )
+   (minibuffer-exit  . vs|emacs/minibuffer-reset-gc   )
+   (vs-emacs-config  . vs|emacs/enable-ui-keystrokes  )))
 
 (provide 'use-emacs)
 ;;; use-emacs.el ends here

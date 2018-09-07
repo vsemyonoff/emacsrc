@@ -4,5 +4,6 @@
 (use-package delight
   :config (delight '((eldoc-mode nil eldoc))))
 
+
 (provide 'use-delight)
 ;;; use-delight.el ends here

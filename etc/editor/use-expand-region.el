@@ -7,5 +7,6 @@
     (global-set-key (kbd "C-M-=") 'er/contract-region)
     (global-set-key (kbd "C-=") 'er/expand-region)))
 
+
 (provide 'use-expand-region)
 ;;; use-expand-region.el ends here

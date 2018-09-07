@@ -9,13 +9,13 @@
             (convert-standard-filename "auto-save/undo/") vs-emacs-cache-dir)))
       (setq undo-tree-auto-save-history       t
             undo-tree-history-directory-alist `((".*" . ,undo-tree-dir)))
-
       (unless (file-exists-p undo-tree-dir)
         (make-directory undo-tree-dir t))))
 
-  :hook ((vs-emacs-config  . global-undo-tree-mode      )
-         (find-file        . undo-tree-load-history-hook)
-         (write-file       . undo-tree-save-history-hook))
+  :hook
+  ((vs-emacs-config  . global-undo-tree-mode      )
+   (find-file        . undo-tree-load-history-hook)
+   (write-file       . undo-tree-save-history-hook))
 
   :quelpa (undo-tree :fetcher git :url "http://www.dr-qubit.org/git/undo-tree.git"))
 

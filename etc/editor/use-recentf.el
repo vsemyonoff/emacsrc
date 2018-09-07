@@ -14,5 +14,6 @@
 
   :hook (vs-emacs-config . recentf-mode))
 
+
 (provide 'use-recentf)
 ;;; use-recentf.el ends here

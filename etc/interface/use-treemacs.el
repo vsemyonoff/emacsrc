@@ -88,19 +88,25 @@
 
   :general ("C-x 1" 'treemacs-delete-other-windows)
 
-  :hook ((treemacs-mode       . vs|treemacs/mode-setup )
-         (vs-emacs-config-gui . vs|treemacs/icons-setup)))
+  :hook
+  ((treemacs-mode       . vs|treemacs/mode-setup )
+   (vs-emacs-config-gui . vs|treemacs/icons-setup)))
+
 
 (use-package treemacs-projectile
   :after (treemacs projectile)
-  :config (defun vs|treemacs|open ()
-            "Add project for current file and open `treemacs' buffer."
-            (interactive)
-            (vs|treemacs/add-project (condition-case _
-                                         (expand-file-name (projectile-project-root))
-                                       (error (expand-file-name default-directory))))
-            (treemacs-select-window))
+
+  :config
+  (defun vs|treemacs|open ()
+    "Add project for current file and open `treemacs' buffer."
+    (interactive)
+    (vs|treemacs/add-project (condition-case _
+                                 (expand-file-name (projectile-project-root))
+                               (error (expand-file-name default-directory))))
+    (treemacs-select-window))
+
   :general ("<C-tab>" 'vs|treemacs|open))
+
 
 (provide 'use-treemacs)
 ;;; use-treemacs.el ends here

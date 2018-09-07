@@ -11,5 +11,6 @@
           jit-lock-stealth-time       0.2
           jit-lock-stealth-verbose    nil)))
 
+
 (provide 'use-jit-lock)
 ;;; use-jit-lock.el ends here

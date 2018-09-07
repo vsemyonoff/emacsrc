@@ -2,8 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 (use-package zerodark-theme :defer t
-  :hook ((vs-emacs-config     . zerodark-setup-modeline-format)
-         (vs-emacs-config-gui . vs|emacs/enable-theme         ))
+  :hook
+  ((vs-emacs-config     . zerodark-setup-modeline-format)
+   (vs-emacs-config-gui . vs|emacs/enable-theme         ))
+
   :init
   (defun vs|emacs/enable-theme ()
     ;; Load theme
@@ -51,6 +53,7 @@
     (set-face-attribute 'company-tooltip-common-selection nil
                         :foreground (face-attribute 'font-lock-string-face
                                                     :foreground))))
+
 
 (provide 'use-theme)
 ;;; use-theme.el ends here

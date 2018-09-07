@@ -4,5 +4,6 @@
 (use-package highlight-escape-sequences
   :hook ((conf-mode prog-mode) . hes-mode))
 
+
 (provide 'use-hes)
 ;;; use-hes.el ends here

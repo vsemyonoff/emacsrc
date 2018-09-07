@@ -3,6 +3,7 @@
 ;;; Code:
 (use-package hydra)
 
+
 (use-package ivy :delight
   :config
   (progn
@@ -26,20 +27,26 @@
     (defun vs|ivy/update-window-height ()
       (setq ivy-height `,(floor (frame-height) 3))))
 
-  :hook ((vs-emacs-config             . ivy-mode         )
-         (window-configuration-change . vs|ivy/update-window-height)))
+  :hook
+  ((vs-emacs-config             . ivy-mode         )
+   (window-configuration-change . vs|ivy/update-window-height)))
+
 
 (use-package ivy-hydra
   :after (hydra ivy))
 
+
 (use-package swiper
   :general ("C-s" 'swiper))
+
 
 (use-package counsel :delight
   :hook (vs-emacs-config . counsel-mode))
 
+
 (use-package counsel-projectile
   :hook (vs-emacs-config . counsel-projectile-mode))
+
 
 (provide 'use-ivy)
 ;;; use-ivy.el ends here

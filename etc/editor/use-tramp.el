@@ -2,9 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 (use-package tramp
-  :init (mapc (lambda (word)
-                (add-to-list 'password-word-equivalents word))
-              '("code" "key" "token"))
   :config
   (progn
     (setq remote-file-name-inhibit-cache nil
@@ -21,6 +18,12 @@
       (let ((auth-sources (if (equal tramp-current-method "sudo") nil auth-sources)))
         (apply orig-fn args)))
     (advice-add 'tramp-read-passwd :around 'vs|tramp/read-password-filter)))
+
+  :init
+  (mapc (lambda (word)
+          (add-to-list 'password-word-equivalents word))
+        '("code" "key" "token"))
+
 
 (provide 'use-tramp)
 ;;; set-tramp.el ends here

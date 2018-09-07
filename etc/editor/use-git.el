@@ -36,10 +36,7 @@
       "....XXXX")
     (fringe-helper-define 'git-gutter-fr:modified '(center repeated)
       "....XXXX")
-    (fringe-helper-define 'git-gutter-fr:deleted 'bottom
-      ".......X"
-      "......XX"
-      ".....XXX"
+    (fringe-helper-define 'git-gutter-fr:deleted '(center repeated)
       "....XXXX"))
 
   :hook ((vs-emacs-config-gui  . vs|git-gutter/fringe-on))

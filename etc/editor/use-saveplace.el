@@ -2,8 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 (use-package saveplace
-  :config (setq save-place-file (expand-file-name "places.el" vs-emacs-cache-dir))
+  :config (setq save-place-file (expand-file-name "places.el"
+                                                  vs-emacs-cache-dir))
+
   :hook (vs-emacs-config . save-place-mode))
+
 
 (provide 'use-saveplace)
 ;;; use-saveplace.el ends here

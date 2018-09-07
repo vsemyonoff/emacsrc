@@ -39,5 +39,6 @@
 
   :hook (vs-emacs-config . projectile-global-mode))
 
+
 (provide 'use-projectile)
 ;;; use-projectile.el ends here

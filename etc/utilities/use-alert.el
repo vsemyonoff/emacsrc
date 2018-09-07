@@ -3,6 +3,7 @@
 ;;; Code:
 (use-package alert
   :commands alert
+
   :config
   (progn
     (defun vs|alert/custom-notifier (info)
@@ -26,6 +27,7 @@
                                     'notifications)
                                 'mode-line)
           alert-fade-time     1)))
+
 
 (provide 'use-alert)
 ;;; use-alert.el ends here

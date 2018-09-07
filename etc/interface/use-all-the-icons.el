@@ -6,5 +6,6 @@
              all-the-icons-wicon all-the-icons-material all-the-icons-alltheicon
              all-the-icons-install-fonts))
 
+
 (provide 'use-all-the-icons)
 ;;; use-all-the-icons.el ends here

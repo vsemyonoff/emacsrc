@@ -5,5 +5,6 @@
   :commands winner-mode
   :hook (vs-emacs-config . winner-mode))
 
+
 (provide 'use-winner)
 ;;; use-winner.el ends here

@@ -17,5 +17,6 @@
 
   :hook (compilation-filter . vs|compile/colorize))
 
+
 (provide 'use-compile)
 ;;; use-compile.el ends here

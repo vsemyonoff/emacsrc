@@ -23,11 +23,13 @@
       (set (make-local-variable 'speck-syntactic) t)
       (vs|speck/mode-on)))
 
-  :hook ((text-mode . vs|speck/mode-on     )
-         (conf-mode . vs|speck/prog-mode-on)
-         (prog-mode . vs|speck/prog-mode-on))
+  :hook
+  ((text-mode . vs|speck/mode-on     )
+   (conf-mode . vs|speck/prog-mode-on)
+   (prog-mode . vs|speck/prog-mode-on))
 
   :quelpa (speck :fetcher github :repo "ahungry/emacswiki-mirror" :files ("speck.el")))
+
 
 (provide 'use-speck)
 ;;; use-speck.el ends here
