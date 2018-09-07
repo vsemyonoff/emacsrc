@@ -87,4 +87,4 @@
 ;; Final hook
 (add-hook 'emacs-startup-hook (lambda () (run-hooks 'vs-emacs-config-final-hook)))
 
-;;; init.el ends herey
+;;; init.el ends here

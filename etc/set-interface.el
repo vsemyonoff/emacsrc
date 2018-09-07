@@ -18,6 +18,10 @@
   :commands highlight-numbers-mode
   :hook (prog-mode . highlight-numbers-mode))
 
+(use-package pos-tip
+  :config (setq pos-tip-internal-border-width 6
+                pos-tip-border-width          1))
+
 (vs|emacs/require-dir (expand-file-name "interface" vs-emacs-config-dir))
 
 (provide 'set-interface)
