@@ -3,12 +3,26 @@
 ;;; Code:
 (use-package fringe :ensure nil
   :commands fringe-mode
-  :hook ((vs-emacs-config  . (lambda () (fringe-mode '(nil . 0))))
-         (minibuffer-setup . (lambda () (set-window-fringes (minibuffer-window) 0 0 nil))))
-  :init (setq-default indicate-buffer-boundaries t
-                      indicate-empty-lines       t
-                      fringe-indicator-alist     (delq (assq 'continuation fringe-indicator-alist)
-                                                       fringe-indicator-alist)))
+
+  :hook
+  ((vs-emacs-config  . (lambda () (fringe-mode '(nil . 0))))
+   (minibuffer-setup . (lambda () (set-window-fringes (minibuffer-window) 0 0 nil))))
+
+  :init
+  (setq-default fringe-indicator-alist     (delq (assq 'continuation fringe-indicator-alist)
+                                                 fringe-indicator-alist)
+                fringes-outside-margins    t
+                indicate-buffer-boundaries t
+                indicate-empty-lines       t))
+
+
+(use-package fringe-helper
+  :commands (fringe-helper-define fringe-helper-convert)
+
+  :init
+  (unless (fboundp 'define-fringe-bitmap)
+    (defun define-fringe-bitmap (&rest _))))
+
 
 (provide 'use-fringe)
 ;;; use-fringe.el ends here
