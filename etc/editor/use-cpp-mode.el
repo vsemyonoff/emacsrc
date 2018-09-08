@@ -69,7 +69,15 @@
 
 (use-package cmake-ide
   :commands cmake-ide-setup
-  :hook (c-initialization . cmake-ide-setup))
+
+  :config
+  (defun vs|cmake-ide/set-build-dir ()
+    (setq cmake-ide-build-dir (expand-file-name "build/release"
+                                                (projectile-project-root))))
+
+  :hook
+  ((c-initialization                . cmake-ide-setup           )
+   (projectile-after-switch-project . vs|cmake-ide/set-build-dir)))
 
 
 (use-package modern-cpp-font-lock :delight
