@@ -73,9 +73,10 @@
   :config
   (defun vs|cmake-ide/set-build-dir ()
     (setq cmake-ide-build-dir (condition-case _
-                                  (expand-file-name "build/release"
+                                  (expand-file-name "build/profile"
                                                     (projectile-project-root))
-                                (error nil))))
+                                (error nil))
+          cmake-ide-cmake-opts "-DCMAKE_BUILD_TYPE=RelWithDebInfo"))
   (vs|cmake-ide/set-build-dir)
 
   :hook
