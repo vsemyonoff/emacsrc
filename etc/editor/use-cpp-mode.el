@@ -3,7 +3,6 @@
 ;;; Code:
 (use-package irony
   :commands (irony-cdb-autosetup-compile-options irony-mode)
-
   :config
   (let ((irony-dir (expand-file-name (convert-standard-filename "irony/")
                                      vs-emacs-cache-dir)))
@@ -29,7 +28,14 @@
   :commands company-irony
   :config (defun vs|company/setup-irony ()
             (add-to-list 'company-backends 'company-irony))
-  :hook (company-mode . vs|company/setup-irony))
+  :hook (irony-mode . vs|company/setup-irony))
+
+
+(use-package company-irony-c-headers :disabled
+  :after company-irony
+  :config (defun vs|company/setup-irony-c-headers ()
+            (add-to-list 'company-backends 'company-irony-c-headers))
+  :hook (irony-mode . vs|company/setup-irony-c-headrs))
 
 
 (use-package flycheck-irony
@@ -37,7 +43,7 @@
   :commands flycheck-irony-setup
   :hook
   ((c-mode-common . flycheck-mode       )
-   (flycheck-mode . flycheck-irony-setup)))
+   (irony-mode    . flycheck-irony-setup)))
 
 
 (use-package rtags :disabled
@@ -69,7 +75,6 @@
 
 (use-package cmake-ide
   :commands cmake-ide-setup
-
   :config
   (defun vs|cmake-ide/set-build-dir ()
     (setq cmake-ide-build-dir (condition-case _
