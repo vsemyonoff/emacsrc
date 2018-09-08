@@ -40,7 +40,7 @@
    (flycheck-mode . flycheck-irony-setup)))
 
 
-(use-package rtags
+(use-package rtags :disabled
   :config
   (defun vs|rtags/setup ()
     (unless (rtags-executable-find "rc")
@@ -60,7 +60,7 @@
          (kill-emacs       . rtags-quit-rdm)))
 
 
-(use-package company-rtags
+(use-package company-rtags :disabled
   :after (company rtags)
   :config (defun vs|company/rtags-setup ()
             (add-to-list 'company-backends 'company-rtags))
@@ -72,8 +72,11 @@
 
   :config
   (defun vs|cmake-ide/set-build-dir ()
-    (setq cmake-ide-build-dir (expand-file-name "build/release"
-                                                (projectile-project-root))))
+    (setq cmake-ide-build-dir (condition-case _
+                                  (expand-file-name "build/release"
+                                                    (projectile-project-root))
+                                (error nil))))
+  (vs|cmake-ide/set-build-dir)
 
   :hook
   ((c-initialization                . cmake-ide-setup           )
