@@ -7,6 +7,7 @@
     (advice-add 'display-startup-echo-area-message :override 'ignore)
 
     (setq-default bidi-display-reordering           nil
+                  c-basic-offset                    4
                   cursor-in-non-selected-windows    nil
                   display-line-numbers-width        3
                   fill-column                       120
@@ -120,7 +121,10 @@ With argument, do this that many times."
    (isearch-mode-end . vs|emacs/enable-ui-keystrokes  )
    (minibuffer-setup . vs|emacs/minibuffer-setup-gc   )
    (minibuffer-exit  . vs|emacs/minibuffer-reset-gc   )
-   (vs-emacs-config  . vs|emacs/enable-ui-keystrokes  )))
+   (vs-emacs-config  . vs|emacs/enable-ui-keystrokes  ))
+
+  :mode ("\\.h\\(pp\\|xx\\)?\\'"   . c++-mode))
+
 
 (provide 'use-emacs)
 ;;; use-emacs.el ends here

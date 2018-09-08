@@ -5,7 +5,9 @@ BREW_INSTALL_URL="https://raw.githubusercontent.com/Homebrew/install/master/inst
 
 # Common packages
 COMM_PACKAGES=(
+    cmake
     hunspell
+    llvm
     the_silver_searcher
 )
 # Arch packages
@@ -17,7 +19,6 @@ ARCH_PACKAGES=(
 BREW_PACKAGES=(
     "${COMM_PACKAGES[@]}"
     caskroom/cask/emacs
-    gnu-tar
     terminal-notifier
 )
 

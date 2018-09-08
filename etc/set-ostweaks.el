@@ -4,10 +4,15 @@
 (defconst running-on-macos (eq system-type 'darwin))
 (defconst running-on-linux (eq system-type 'gnu/linux))
 
+(add-to-list 'exec-path (expand-file-name "bin"
+                                          (expand-file-name  ".local"
+                                                             vs-user-home-dir)))
+(add-to-list 'exec-path (expand-file-name ".bin"
+                                          vs-user-home-dir))
+
 (cond (running-on-macos
        (add-to-list 'default-frame-alist      '(fullscreen . fullboth)                 )
        (add-to-list 'exec-path                "/usr/local/bin"                         )
-       (add-to-list 'exec-path                (expand-file-name ".bin" vs-user-home-dir))
 
        (setq mac-command-modifier             'meta
              mac-option-modifier              'alt
