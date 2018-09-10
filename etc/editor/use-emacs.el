@@ -59,14 +59,16 @@
     (advice-add 'quit-window :filter-args 'vs|emacs/quit-window-kills-buffer)
 
     (defun vs|emacs/minibuffer-setup-gc ()
-      (setq gc-cons-percentage-save gc-cons-percentage
-            gc-cons-threshold-save gc-cons-threshold
-            gc-cons-percentage 0.6
-            gc-cons-threshold most-positive-fixnum))
+      (setq gc-cons-percentage--save gc-cons-percentage
+            gc-cons-threshold--save  gc-cons-threshold
+            gc-cons-percentage       (* gc-cons-percentage 6)
+            gc-cons-threshold        most-positive-fixnum   ))
 
     (defun vs|emacs/minibuffer-reset-gc ()
-      (setq gc-cons-percentage gc-cons-percentage-save
-            gc-cons-threshold gc-cons-threshold-save))
+      (setq gc-cons-percentage       gc-cons-percentage--save
+            gc-cons-threshold        gc-cons-threshold--save
+            gc-cons-percentage--save nil
+            gc-cons-threshold--save  nil                    ))
 
     (defun vs|emacs/enable-ui-keystrokes ()
       (setq echo-keystrokes 0.02))
@@ -137,7 +139,8 @@ With argument, do this that many times."
    "<C-left>"                     'move-beginning-of-line
    "<C-right>"                    'move-end-of-line
    "<M-backspace>"                '(vs|emacs|backward-delete-line :which-key
-                                                                  "backward delete line"))
+                                                                  "backward delete line")
+   "<M-f4>"                       'kill-this-buffer)
 
   :hook
   ((conf-mode        . display-line-numbers-mode      )

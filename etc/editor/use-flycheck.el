@@ -3,8 +3,9 @@
 ;;; Code:
 (use-package flycheck :delight
   :commands (flycheck-mode flycheck-list-errors flycheck-buffer)
-  :config (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  :hook (emacs-lisp-mode . flycheck-mode))
+  ;;:config (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  :hook ((c-mode-common   . flycheck-mode)
+         (emacs-lisp-mode . flycheck-mode)))
 
 
 (use-package flycheck-pos-tip

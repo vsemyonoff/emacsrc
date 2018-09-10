@@ -20,11 +20,6 @@
 ;; Init package manager
 (package-initialize)
 
-;; Set proper certificate for "gnutls" in MacOS
-(when (eq system-type 'darwin)
-  (with-eval-after-load 'gnutls
-    (add-to-list 'gnutls-trustfiles "/private/etc/ssl/cert.pem")))
-
 ;; Refresh packages cache
 (unless package-archive-contents
   (package-refresh-contents))

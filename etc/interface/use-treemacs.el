@@ -97,15 +97,26 @@
   :after (treemacs projectile)
 
   :config
-  (defun vs|treemacs|open ()
-    "Add project for current file and open `treemacs' buffer."
+  (defun vs|treemacs|add-current-project ()
+    "Add `projectile-project-root' or `default-directory' to `treemacs'."
     (interactive)
-    (vs|treemacs/add-project (condition-case _
-                                 (expand-file-name (projectile-project-root))
-                               (error (expand-file-name default-directory))))
+    (vs|treemacs/add-project (expand-file-name (condition-case nil
+                                                   (projectile-project-root)
+                                                 (error default-directory)))))
+
+  (defun vs|treemacs|open ()
+    "Add default project (if needed) and open `treemacs' window."
+    (interactive)
+    (unless (treemacs-current-workspace)
+      (treemacs--find-workspace))
+    (when (treemacs-workspace->is-empty?)
+      (vs|treemacs|add-current-project))
     (treemacs-select-window))
 
-  :general ("<C-tab>" 'vs|treemacs|open))
+  :general ("<C-tab>" 'vs|treemacs|open
+            "<f12>"   'vs|treemacs|add-current-project)
+
+  :hook (projectile-after-switch-project . vs|treemacs|add-current-project))
 
 
 (provide 'use-treemacs)

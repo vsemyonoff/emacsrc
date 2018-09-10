@@ -4,26 +4,25 @@
 (defconst running-on-macos (eq system-type 'darwin))
 (defconst running-on-linux (eq system-type 'gnu/linux))
 
-(add-to-list 'exec-path (expand-file-name "bin"
-                                          (expand-file-name  ".local"
-                                                             vs-user-home-dir)))
-(add-to-list 'exec-path (expand-file-name ".bin"
-                                          vs-user-home-dir))
-
 (cond (running-on-macos
-       (add-to-list 'default-frame-alist      '(fullscreen . fullboth)                 )
-       (add-to-list 'exec-path                "/usr/local/bin"                         )
+       ;; Maximize frames on MacOS
+       (add-to-list 'default-frame-alist '(fullscreen . fullboth                  ))
+
+       ;; Extend `exec-path'
+       (add-to-list 'exec-path           "/usr/local/bin"                         )
+       (add-to-list 'exec-path           (expand-file-name "bin"  vs-xdg-local-dir))
+       (add-to-list 'exec-path           (expand-file-name ".bin" vs-user-home-dir))
+
+       ;; Set proper certificate for 'gnutls' in MacOS
+       (with-eval-after-load 'gnutls
+         (add-to-list 'gnutls-trustfiles "/private/etc/ssl/cert.pem"))
 
        (setq mac-command-modifier             'meta
              mac-option-modifier              'alt
-             mac-mouse-wheel-smooth-scroll    nil
-             mac-redisplay-dont-reset-vscroll t
              ns-pop-up-frames                 nil))
 
       (running-on-linux
        (setq x-gtk-use-system-tooltips nil)))
-
-(vs|emacs/require-dir (expand-file-name "ostweaks" vs-emacs-config-dir))
 
 (provide 'set-ostweaks)
 ;;; set-ostweakss.el ends here
