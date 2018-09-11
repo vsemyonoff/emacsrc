@@ -34,22 +34,22 @@
 
 
 (defun vs|emacs/scale-color-limit (rgb value)
-  "Calculate maximum available difference of '(R G B) channels."
+  "Calculate maximum difference VALUE for RGB channels."
   (unless (listp rgb)
-    (error "Wrong type argument: listp, `RGB'"))
+    (error "Wrong type argument: listp, RGB"))
   (unless (and (floatp value) (>= value -1.0) (<= value 1.0))
-    (error "Wrong type argument: floatp, -1.0 <= `VALUE' <= 1.0"))
+    (error "Wrong type argument: floatp, -1.0 <= VALUE <= 1.0"))
   (let* ((r (nth 0 rgb)) (g (nth 1 rgb)) (b (nth 2 rgb))
          (value-limit (if (> value 0) (- 1 (max r g b)) (min r g b))))
     (* (if (< value 0) -1 1) (min value-limit (abs value)))))
 
 
 (defun vs|emacs/scale-color (color value)
-  "Try to increase or decrease `COLOR' saturation on `VALUE'."
+  "Try to increase or decrease COLOR saturation on VALUE."
   (unless (stringp color)
-    (error "Wrong type argument: stringp, `COLOR' with format '#(abc|aabbcc|aaaabbbbcccc|color-name)'"))
+    (error "Wrong type argument: stringp, COLOR with format '#(abc|aabbcc|aaaabbbbcccc|color-name)'"))
   (unless (and (floatp value) (>= value -1.0) (<= value 1.0))
-    (error "Wrong type argument: floatp, -1.0 <= `VALUE' <= 1.0"))
+    (error "Wrong type argument: floatp, -1.0 <= VALUE <= 1.0"))
   (let* ((rgb (color-name-to-rgb color))
          (value (vs|emacs/scale-color-limit rgb value))
          (r (nth 0 rgb)) (g (nth 1 rgb)) (b (nth 2 rgb)))
@@ -57,12 +57,12 @@
 
 
 (defun vs|emacs/scale-face-color (face-list factor)
-  "Increase `FACE-LIST' background and foreground color saturation to `FACTOR' percents."
+  "Increase FACE-LIST background and foreground color saturation to FACTOR percents."
   (unless (listp face-list)
-    (error "Wrong type argument: listp, `FACE-LIST'"))
+    (error "Wrong type argument: listp, FACE-LIST"))
   (unless (and (integerp factor)
                (and (>= factor -100) (<= factor 100)))
-    (error "Wrong type argument: integerp, -100 <= `FACTOR' <= 100"))
+    (error "Wrong type argument: integerp, -100 <= FACTOR <= 100"))
   (let ((value (* 0.01 factor))
         (value-limit 1.0))
     (mapc
@@ -100,13 +100,11 @@
    (list (not (region-active-p)))))
 
 
-(defmacro vs|emacs/with-region-or-buffer (func)
-  "When called with no active region, call FUNC on current buffer."
-  `(defadvice ,func (before vs|emacs/with-region-or-buffer activate compile)
-     (interactive
-      (if mark-active
-          (list (region-beginning) (region-end))
-        (list (point-min) (point-max))))))
+(defun vs|emacs|apply-dir-locals ()
+  "Apply directory local variables to buffer."
+  (interactive)
+  (let ((enable-local-variables :all))
+    (hack-dir-local-variables-non-file-buffer)))
 
 
 (provide 'set-functions)

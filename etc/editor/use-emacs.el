@@ -18,6 +18,7 @@
     (setq ad-redefinition-action                    'warn
           apropos-do-all                            t
           create-lockfiles                          nil
+          enable-local-variables                    nil
           enable-recursive-minibuffers              nil
           history-length                            500
           inhibit-startup-echo-area-message         user-login-name
@@ -48,6 +49,10 @@
     (electric-pair-mode               t) ; auto close parens
     (global-auto-revert-mode          t) ; revert file if changed externally
     (global-prettify-symbols-mode     t) ; replace some symbols with shortcuts
+
+    ;; make a shell script executable automatically on save
+    (add-hook 'after-save-hook
+              'executable-make-buffer-file-executable-if-script-p)
 
     (defun vs|emacs/quit-window-kills-buffer (&optional kill window)
       "When running `quit-window' always kill underlying buffer."

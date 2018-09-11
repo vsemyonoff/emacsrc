@@ -10,4 +10,4 @@
 
 
 (provide 'use-vtl)
-;;; set-vtl.el ends here
+;;; use-vtl.el ends here

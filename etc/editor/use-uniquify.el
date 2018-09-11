@@ -6,4 +6,4 @@
 
 
 (provide 'use-uniquify)
-;;; set-uniquify.el ends here
+;;; use-uniquify.el ends here

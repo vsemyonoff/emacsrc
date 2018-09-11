@@ -26,4 +26,4 @@
 
 
 (provide 'use-tramp)
-;;; set-tramp.el ends here
+;;; use-tramp.el ends here

@@ -27,9 +27,7 @@
 ;; Install quelpa-use-package
 (unless (package-installed-p 'quelpa-use-package)
   (package-install 'quelpa-use-package))
-(setq quelpa-dir (expand-file-name
-                  (convert-standard-filename "archives/quelpa")
-                  package-user-dir)
+(setq quelpa-dir (expand-file-name "archives/quelpa" package-user-dir)
       quelpa-checkout-melpa-p nil
       quelpa-update-melpa-p nil
       use-package-always-ensure t)

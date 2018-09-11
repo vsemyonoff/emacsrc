@@ -7,4 +7,4 @@
 
 
 (provide 'use-windmove)
-;;; set-windmove.el ends here
+;;; use-windmove.el ends here

@@ -60,4 +60,4 @@
 
 
 (provide 'use-git)
-;;; set-git.el ends here
+;;; use-git.el ends here

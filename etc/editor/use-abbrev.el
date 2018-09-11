@@ -10,4 +10,4 @@
 
 
 (provide 'use-abbrev)
-;;; set-abbrev.el ends here
+;;; use-abbrev.el ends here

@@ -20,4 +20,4 @@
 
 
 (provide 'use-dired)
-;;; set-dired.el ends here
+;;; use-dired.el ends here
