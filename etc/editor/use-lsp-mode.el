@@ -1,88 +1,134 @@
 ;;; use-lsp-mode.el ---  C/C++/Java modes settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
+(defvar vs-cmake-build-dir "build"
+  "`cmake' out of source build path relative to project's root.")
+
+(defvar vs-cmake-build-type "Debug"
+  "`cmake' projects build type.")
+
+(defvar vs-java-projects (list)
+  "Java projects to add in workspace.")
+
+
 (use-package cmake-ide
   :after use-projectile
-  :commands (cmake-ide-compile cmake-ide-maybe-run-cmake cmake-ide-run-cmake cmake-ide-setup)
+  :commands cmake-ide-setup
   :config
   (progn
-    (require 'projectile)
-    (defun vs|cmake-ide/set-build-dir ()
-      (setq cmake-ide-build-dir (condition-case nil
-                                    (expand-file-name "build/debug"
-                                                      (projectile-project-root))
-                                  (error nil))
-            cmake-ide-cmake-opts "-DCMAKE_BUILD_TYPE=Debug"))
-    (advice-add 'cmake-ide-compile :before 'vs|cmake-ide/set-build-dir)
-    (advice-add 'cmake-ide-maybe-run-cmake :before 'vs|cmake-ide/set-build-dir)
-    (advice-add 'cmake-ide-run-cmake :before 'vs|cmake-ide/set-build-dir)
-    (advice-add 'cmake-ide-setup :after 'vs|cmake-ide/set-build-dir))
+    (defun vs|cmake-ide/prepare-symlink ()
+      "Create symlink for 'compile_commands.json' in top-level build directory."
+      (let* ((src-json (expand-file-name "compile_commands.json" cmake-ide-build-dir))
+             (build-dir (file-name-directory cmake-ide-build-dir))
+             (dst-json (expand-file-name "compile_commands.json" build-dir)))
+        (unless (string= src-json dst-json)
+          (unless (file-exists-p build-dir)
+            (make-directory build-dir t))
+          (when (file-exists-p dst-json)
+            (delete-file dst-json))
+          (make-symbolic-link src-json dst-json)
+          (message "===> Cmake IDE: %s -> %s" src-json dst-json))))
 
-  :hook
-  ((c-initialization                . cmake-ide-setup            )
-   (projectile-after-switch-project . vs|cmake-ide/set-build-dir)))
+    (defun vs|cmake-ide/before-maybe-run-cmake()
+      "Set `cmake' build configuration from `.dir-locals.el'."
+      (when (string= (projectile-project-type) "cmake")
+        (vs|emacs|apply-dir-locals)
+        (let ((build-dir (format "%s/%s" vs-cmake-build-dir (downcase vs-cmake-build-type))))
+          (setq cmake-ide-project-dir (directory-file-name (projectile-project-root))
+                cmake-ide-build-dir   (expand-file-name build-dir
+                                                        cmake-ide-project-dir)
+                cmake-ide-cmake-opts  (concat "-DCMAKE_BUILD_TYPE="
+                                              vs-cmake-build-type))
+          (message "===> Cmake IDE: %s[%s] %s" cmake-ide-project-dir build-dir cmake-ide-cmake-opts))
+        (vs|cmake-ide/prepare-symlink)))
+
+    (advice-add 'cmake-ide-maybe-run-cmake :before 'vs|cmake-ide/before-maybe-run-cmake))
+
+  :hook (c-initialization . cmake-ide-setup))
 
 
 (use-package lsp-mode
   :after cmake-ide
-
   :config
   (progn
     (setq lsp-eldoc-render-all          nil
           lsp-highlight-symbol-at-point nil
-          lsp-inhibit-message           t  )
+          lsp-inhibit-message           nil)
 
-    (lsp-define-stdio-client lsp-clangd-c++
-                             "cpp"
+    (defun vs|lsp-mode/language-id (buffer)
+      "Return language ID string accordingly to buffer's file name."
+      (if (string-match "\\.\\([ch]\\(pp\\|xx\\|\\+\\+\\)\\)\\|\\(cc\\|hh\\)\\|\\(CC?\\|HH?\\)\\$"
+                        (buffer-file-name buffer))
+          "cpp"
+        "c"))
+
+    (defun vs|lsp-mode/clangd-options ()
+      "Generate `clangd' options."
+      (let ((clang-path (if running-on-macos
+                            "/usr/local/opt/llvm/bin/clangd"
+                          "clangd"))
+            (clang-opts "-compile-commands-dir=%s"))
+        (vs|emacs|apply-dir-locals)
+        (list clang-path (format clang-opts
+                                 (expand-file-name vs-cmake-build-dir
+                                                   (projectile-project-root))))))
+
+    (lsp-define-stdio-client lsp-clangd
+                             nil
                              'projectile-project-root
                              nil
-                             :ignore-regexps
-                             '("^Error -[0-9]+: .+$")
-                             :command-fn
-                             (lambda ()
-                               (list (if running-on-macos "/usr/local/opt/llvm/bin/clangd" "clangd")
-                                     (concat "--compile-commands-dir=" (or cmake-ide-build-dir
-                                                                           cmake-ide-build-pool-dir))))))
+                             :ignore-regexps '("^Error -[0-9]+: .+$")
+                             :command-fn     'vs|lsp-mode/clangd-options
+                             :language-id-fn 'vs|lsp-mode/language-id))
 
-  :hook (c++-mode . lsp-clangd-c++-enable))
+  :hook ((c-mode   . lsp-clangd-enable)
+         (c++-mode . lsp-clangd-enable)))
 
 
 (use-package lsp-java
   :config
-  (setq lsp-java--workspace-folders (list "~/Sources/pinch")
-        lsp-java-server-install-dir (expand-file-name "eclipse.jdt.ls/" vs-xdg-data-dir)
-        lsp-java-workspace-cache-dir (expand-file-name "eclipse.jdt.ls/" vs-xdg-cache-dir)
-        lsp-java-workspace-dir (expand-file-name "Documents/Eclipse/" vs-user-home-dir))
+  (progn
+    (defun vs|lsp-java/before-enable ()
+      "Populate `lsp-java' workspace with projects from `.dir-locals.el'."
+      (vs|emacs|apply-dir-locals)
+      (let ((projects ""))
+        (mapc
+         (lambda (element)
+           (let ((project (expand-file-name element (projectile-project-root))))
+             (when (file-exists-p project)
+               (add-to-list 'lsp-java--workspace-folders project)
+               (setq projects (concat projects " " project)))))
+         vs-java-projects)
+        (message "===> Java projects added:%s" projects)))
+    (advice-add 'lsp-java-enable :before 'vs|lsp-java/before-enable)
+
+    ;; ((java-mode . ((vs-java-projects . ("project1" "project2")))))
+    (setq lsp-java-server-install-dir (expand-file-name "eclipse.jdt.ls/" vs-xdg-data-dir)
+          lsp-java-workspace-cache-dir (expand-file-name "eclipse.jdt.ls/" vs-xdg-cache-dir)
+          lsp-java-workspace-dir (expand-file-name "eclipse.jdt.ls/" vs-xdg-config-dir)))
 
   :hook (java-mode . lsp-java-enable))
 
 
 (use-package lsp-ui
   :config
-  (progn
-    (setq lsp-ui-doc-enable                 nil
-          lsp-ui-sideline-ignore-duplicate  t
-          lsp-ui-sideline-show-code-actions t
-          lsp-ui-sideline-show-flycheck     t
-          lsp-ui-sideline-show-hover        nil
-          lsp-ui-sideline-show-symbol       t
-          lsp-ui-sideline-update-mode       'point)
-
-    (defun vs|lsp-ui/eldoc-disable ()
-      (eldoc-mode -1)))
+  (setq lsp-ui-doc-enable                 nil
+        lsp-ui-sideline-ignore-duplicate  t
+        lsp-ui-sideline-show-code-actions t
+        lsp-ui-sideline-show-flycheck     t
+        lsp-ui-sideline-show-hover        nil
+        lsp-ui-sideline-show-symbol       t
+        lsp-ui-sideline-update-mode       'point)
 
   :general
   (lsp-ui-mode-map [remap xref-find-definitions] 'lsp-ui-peek-find-definitions
                    [remap xref-find-references]  'lsp-ui-peek-find-references )
 
-  :hook
-  ((lsp-mode . lsp-ui-mode            )
-   (c++-mode . vs|lsp-ui/eldoc-disable)))
+  :hook (lsp-mode . lsp-ui-mode))
 
 
 (use-package company-lsp
   :after company
-
   :config
   (progn
     (setq company-lsp-enable-snippet   t
@@ -92,7 +138,6 @@
       (add-to-list 'company-backends 'company-lsp)))
 
   :hook (lsp-mode . vs|company/lsp-setup))
-
 
 
 (use-package modern-cpp-font-lock :delight

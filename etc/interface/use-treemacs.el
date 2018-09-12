@@ -8,7 +8,7 @@
           treemacs-follow-after-init        t
           treemacs-indentation-string       "  "
           treemacs-indentation              1
-          treemacs-is-never-other-window    t
+          treemacs-is-never-other-window    nil
           treemacs-persist-file             (expand-file-name "treemacs.el" vs-emacs-cache-dir)
           treemacs-show-hidden-files        nil
           treemacs-silent-refresh           t
@@ -17,7 +17,7 @@
 
     (treemacs-filewatch-mode                t)
     (treemacs-follow-mode                   t)
-    (treemacs-git-mode                      'simple)
+    (treemacs-git-mode                      'extended)
 
     (defun vs|treemacs/add-project (&optional path)
       "Add project from `PATH' to `treemacs'."
@@ -39,7 +39,7 @@
 
     (defun vs|treemacs/icons-setup ()
       (unless (require 'all-the-icons nil t)
-        (error "all-the-icons isn't installed"))
+        (error "Error: all-the-icons is not installed"))
 
       ;; Silence plistp error with all-the-icons
       (advice-add 'treemacs--pulse-png-advice :override 'ignore)
@@ -95,7 +95,6 @@
 
 (use-package treemacs-projectile
   :after (treemacs projectile)
-
   :config
   (defun vs|treemacs|add-current-project ()
     "Add `projectile-project-root' or `default-directory' to `treemacs'."

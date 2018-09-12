@@ -10,11 +10,13 @@
     (setq ivy-count-format            "[%d/%d] "
           ivy-extra-directories       nil
           ivy-format-function         'vs|ivy/custom-format
+          ivy-ignore-buffers          '("\\`\\( \\|\\*lsp\\|treemacs\\)")
           ivy-re-builders-alist       '((t . ivy--regex-ignore-order))
           ivy-use-selectable-prompt   t
           ivy-use-virtual-buffers     t
           ivy-virtual-abbreviate      'full)
 
+    (add-to-list 'ivy-ignore-buffers "\\*lsp")
     (defun vs|ivy/custom-format (cands)
       (ivy--format-function-generic
        (lambda (str)

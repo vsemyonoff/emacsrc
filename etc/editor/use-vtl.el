@@ -5,8 +5,8 @@
   :load-path (lambda ()
                (expand-file-name "site-lisp"
                                  vs-emacs-data-dir))
-
-  :mode ("\\.tpl\\'" . turn-on-vtl-mode))
+  :after nginx-mode
+  :hook (nginx-mode . turn-on-vtl-mode))
 
 
 (provide 'use-vtl)

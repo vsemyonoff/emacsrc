@@ -7,18 +7,20 @@ BREW_INSTALL_URL="https://raw.githubusercontent.com/Homebrew/install/master/inst
 COMM_PACKAGES=(
     cmake
     hunspell
-    llvm
+    python
     the_silver_searcher
 )
 # Arch packages
 ARCH_PACKAGES=(
     "${COMM_PACKAGES[@]}"
     emacs
+    llvm
 )
 # Homebrew packages
 BREW_PACKAGES=(
     "${COMM_PACKAGES[@]}"
     caskroom/cask/emacs
+    llvm --HEAD
     terminal-notifier
 )
 
@@ -39,16 +41,24 @@ case "${SYSTEM}" in
             fi
             ${PRETEND} ${BREW} ${BREW_PACKAGES[i]}
         done
+        # Make python3 default for current user
+        ${PRETEND} ln -sf /usr/local/bin/python3 ~/.bin/python
+        ${PRETEND} ln -sf /usr/local/bin/pip3 ~/.bin/pip
         ;;
 
     Linux)
         [[ -z "$(which pacman)" ]] && echo "'pacman' not instaled, exiting..." && exit 1
         [[ ${ARCH_PACKAGES} ]] && ${PRETEND} sudo pacman -Sy --needed --noconfirm ${ARCH_PACKAGES[@]}
         ;;
+
     *)
         echo "error: unsupported system ${SYSTEM}"
         ;;
 esac
+
+# C/C++ 'compile_commands.json' generator:
+#     intercept-build --cdb build/compile_commands.json make -j9
+${PRETEND} pip3 install scan-build
 
 # Configure symlinks
 EMACS_D="${HOME}/.emacs.d"

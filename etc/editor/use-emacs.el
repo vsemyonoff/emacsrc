@@ -157,7 +157,7 @@ With argument, do this that many times."
    (minibuffer-exit  . vs|emacs/minibuffer-reset-gc   )
    (vs-emacs-config  . vs|emacs/enable-ui-keystrokes  ))
 
-  :mode ("\\.h\\(pp\\|xx\\)?\\'"   . c++-mode))
+  :mode ("\\.h\\(h\\|pp\\|xx\\)\\'" . c++-mode))
 
 
 (provide 'use-emacs)
