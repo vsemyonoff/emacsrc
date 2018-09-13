@@ -12,15 +12,14 @@
 
 (use-package git-gutter
   :commands git-gutter-mode
-
   :hook
   ((focus-in  . git-gutter:update-all-windows)
-   (conf-mode . vs|git-gutter/mode-on        )
-   (prog-mode . vs|git-gutter/mode-on        )
-   (text-mode . vs|git-gutter/mode-on        ))
+   (conf-mode . vs|git-gutter/enable         )
+   (prog-mode . vs|git-gutter/enable         )
+   (text-mode . vs|git-gutter/enable         ))
 
   :init
-  (defun vs|git-gutter/mode-on ()
+  (defun vs|git-gutter/enable ()
     "Enable `git-gutter-mode' in non-remote buffers."
     (when (and (buffer-file-name)
                (not (file-remote-p (buffer-file-name))))
@@ -39,10 +38,10 @@
     (fringe-helper-define 'git-gutter-fr:deleted '(center repeated)
       "....XXXX"))
 
-  :hook ((vs-emacs-config-gui  . vs|git-gutter/fringe-on))
+  :hook ((vs-emacs-config-gui  . vs|git-gutter-fringe/enable))
 
   :init
-  (defun vs|git-gutter/fringe-on ()
+  (defun vs|git-gutter-fringe/enable ()
     (when (display-graphic-p)
       (require 'git-gutter-fringe))))
 
@@ -52,7 +51,8 @@
 
 
 (use-package magit
-  :commands (magit-status magit-blame))
+  :commands (magit-status magit-blame)
+  :general ("C-x g" 'magit-status))
 
 
 (use-package git-link

@@ -3,7 +3,7 @@
 ;;; Code:
 (use-package zerodark-theme :defer t
   :hook
-  ((vs-emacs-config     . zerodark-setup-modeline-format)
+  (;(vs-emacs-config     . zerodark-setup-modeline-format)
    (vs-emacs-config-gui . vs|emacs/enable-theme         ))
 
   :init
@@ -53,6 +53,28 @@
     (set-face-attribute 'company-tooltip-common-selection nil
                         :foreground (face-attribute 'font-lock-string-face
                                                     :foreground))))
+
+
+(use-package telephone-line
+  :config (setq telephone-line-primary-left-separator 'telephone-line-gradient
+                telephone-line-secondary-left-separator 'telephone-line-nil
+                telephone-line-primary-right-separator 'telephone-line-gradient
+                telephone-line-secondary-right-separator 'telephone-line-nil
+
+                telephone-line-height 20
+
+                telephone-line-lhs
+                '((evil   . (telephone-line-simple-major-mode-segment))
+                  (accent . (telephone-line-simple-minor-mode-segment
+                             telephone-line-vc-segment))
+                  (nil    . (telephone-line-buffer-segment
+                             telephone-line-process-segment)))
+                telephone-line-rhs
+                '((nil    . (telephone-line-flycheck-segment))
+                  (accent . (telephone-line-misc-info-segment))
+                  (evil   . (telephone-line-airline-position-segment))))
+
+  :hook (vs-emacs-config-gui . telephone-line-mode))
 
 
 (provide 'use-theme)

@@ -39,7 +39,7 @@ set -- "${args[@]}"
 emacsclient --alternate-editor= ${NO_WAIT} ${CREATE_FRAME} "${@}"
 
 # Switch to frame if not in terminal mode
-if [[ "${CREATE_FRAME}" != "--tty" ]]; then
+if [[ "${CREATE_FRAME}" != "--tty" ]] && [[ -n "${NO_WAIT}" ]]; then
     case "$(uname -s)" in
         Darwin)
             ${PRETEND} osascript -e 'tell application "Emacs" to activate'

@@ -1,7 +1,7 @@
 ;;; use-speck.el ---  speck mode (spellchecker) settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(use-package speck :ensure quelpa
+(use-package speck :ensure quelpa :disabled
   :config
   (progn
     (setenv "DICPATH" (expand-file-name "dictionaries" vs-emacs-data-dir))

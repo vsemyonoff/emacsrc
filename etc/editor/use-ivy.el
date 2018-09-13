@@ -16,7 +16,6 @@
           ivy-use-virtual-buffers     t
           ivy-virtual-abbreviate      'full)
 
-    (add-to-list 'ivy-ignore-buffers "\\*lsp")
     (defun vs|ivy/custom-format (cands)
       (ivy--format-function-generic
        (lambda (str)

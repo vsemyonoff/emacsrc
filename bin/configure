@@ -21,6 +21,7 @@ BREW_PACKAGES=(
     "${COMM_PACKAGES[@]}"
     caskroom/cask/emacs
     llvm --HEAD
+    node
     terminal-notifier
 )
 
@@ -58,7 +59,12 @@ esac
 
 # C/C++ 'compile_commands.json' generator:
 #     intercept-build --cdb build/compile_commands.json make -j9
-${PRETEND} pip3 install scan-build
+${PRETEND} pip install scan-build
+# Python language server
+${PRETEND} pip install 'python-language-server[all]'
+
+# HTML language server
+${PRETEND} npm i -g vscode-html-languageserver-bin
 
 # Configure symlinks
 EMACS_D="${HOME}/.emacs.d"

@@ -25,4 +25,4 @@
        (setq x-gtk-use-system-tooltips nil)))
 
 (provide 'set-ostweaks)
-;;; set-ostweakss.el ends here
+;;; set-ostweaks.el ends here

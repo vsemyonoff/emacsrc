@@ -1,14 +1,25 @@
-;;; use-lsp-mode.el ---  C/C++/Java modes settings. -*- lexical-binding: t; -*-
+;;; use-lsp-mode.el ---  C/C++/HTML/Java/Python modes settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(defvar vs-cmake-build-dir "build"
-  "`cmake' out of source build path relative to project's root.")
+(defvar-local vs-cmake-build-dir "build"
+  "`cmake' out of source build path relative to project's root.
 
-(defvar vs-cmake-build-type "Debug"
-  "`cmake' projects build type.")
+Can be changed using `.dir-locals.el' like that:
+\t((c-mode . ((vs-cmake-build-dir . \"../build\"))))")
 
-(defvar vs-java-projects (list)
-  "Java projects to add in workspace.")
+
+(defvar-local vs-cmake-build-type "Debug"
+  "`cmake' project build type: Debug, Release, RelWithDebInfo.
+
+Can be changed using `.dir-locals.el' like that:
+\t((c-mode . ((vs-cmake-build-type . \"Release\"))))")
+
+
+(defvar-local vs-java-projects (list)
+  "Java projects to add in workspace.
+
+Should be populated using `.dir-locals.el' like that:
+\t((java-mode . ((vs-java-projects . (\"project1\" \"project2\")))))")
 
 
 (use-package cmake-ide
@@ -85,9 +96,19 @@
          (c++-mode . lsp-clangd-enable)))
 
 
+(use-package lsp-html
+  :after lsp-mode
+  :hook (html-mode  . lsp-html-enable))
+
+
 (use-package lsp-java
+  :after lsp-mode
   :config
   (progn
+    (setq lsp-java-server-install-dir (expand-file-name "eclipse.jdt.ls/" vs-xdg-data-dir)
+          lsp-java-workspace-cache-dir (expand-file-name "eclipse.jdt.ls/" vs-xdg-cache-dir)
+          lsp-java-workspace-dir (expand-file-name "eclipse.jdt.ls/" vs-xdg-config-dir))
+
     (defun vs|lsp-java/before-enable ()
       "Populate `lsp-java' workspace with projects from `.dir-locals.el'."
       (vs|emacs|apply-dir-locals)
@@ -100,19 +121,20 @@
                (setq projects (concat projects " " project)))))
          vs-java-projects)
         (message "===> Java projects added:%s" projects)))
-    (advice-add 'lsp-java-enable :before 'vs|lsp-java/before-enable)
-
-    ;; ((java-mode . ((vs-java-projects . ("project1" "project2")))))
-    (setq lsp-java-server-install-dir (expand-file-name "eclipse.jdt.ls/" vs-xdg-data-dir)
-          lsp-java-workspace-cache-dir (expand-file-name "eclipse.jdt.ls/" vs-xdg-cache-dir)
-          lsp-java-workspace-dir (expand-file-name "eclipse.jdt.ls/" vs-xdg-config-dir)))
+    (advice-add 'lsp-java-enable :before 'vs|lsp-java/before-enable))
 
   :hook (java-mode . lsp-java-enable))
 
 
+(use-package lsp-python
+  :after lsp-mode
+  :hook (python-mode . lsp-python-enable))
+
+
 (use-package lsp-ui
+  :after lsp-mode
   :config
-  (setq lsp-ui-doc-enable                 nil
+  (setq lsp-ui-doc-use-childframe         nil
         lsp-ui-sideline-ignore-duplicate  t
         lsp-ui-sideline-show-code-actions t
         lsp-ui-sideline-show-flycheck     t
@@ -128,16 +150,16 @@
 
 
 (use-package company-lsp
-  :after company
+  :after (company lsp-mode)
   :config
   (progn
     (setq company-lsp-enable-snippet   t
           company-lsp-cache-candidates t)
 
-    (defun vs|company/lsp-setup()
+    (defun vs|company-lsp/enable()
       (add-to-list 'company-backends 'company-lsp)))
 
-  :hook (lsp-mode . vs|company/lsp-setup))
+  :hook (lsp-mode . vs|company-lsp/enable))
 
 
 (use-package modern-cpp-font-lock :delight
