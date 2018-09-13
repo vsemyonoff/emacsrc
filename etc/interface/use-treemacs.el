@@ -30,14 +30,14 @@
           (treemacs--find-workspace))
         (treemacs-do-add-project-to-workspace path name)))
 
-    (defun vs|treemacs/mode-setup ()
+    (defun vs|treemacs/setup ()
       "Set `treemacs' mode local variables."
       (setq indicate-buffer-boundaries nil
             indicate-empty-lines       nil
             line-spacing               1
             tab-width                  1  ))
 
-    (defun vs|treemacs/icons-setup ()
+    (defun vs|treemacs/setup-icons ()
       (unless (require 'all-the-icons nil t)
         (error "Error: all-the-icons is not installed"))
 
@@ -89,33 +89,33 @@
   :general ("C-x 1" 'treemacs-delete-other-windows)
 
   :hook
-  ((treemacs-mode       . vs|treemacs/mode-setup )
-   (vs-emacs-config-gui . vs|treemacs/icons-setup)))
+  ((treemacs-mode       . vs|treemacs/setup      )
+   (vs-emacs-config-gui . vs|treemacs/setup-icons)))
 
 
 (use-package treemacs-projectile
   :after (treemacs projectile)
   :config
-  (defun vs|treemacs|add-current-project ()
+  (defun vs|treemacs-projectile|add-current-project ()
     "Add `projectile-project-root' or `default-directory' to `treemacs'."
     (interactive)
     (vs|treemacs/add-project (expand-file-name (condition-case nil
                                                    (projectile-project-root)
                                                  (error default-directory)))))
 
-  (defun vs|treemacs|open ()
+  (defun vs|treemacs-projectile|open ()
     "Add default project (if needed) and open `treemacs' window."
     (interactive)
     (unless (treemacs-current-workspace)
       (treemacs--find-workspace))
     (when (treemacs-workspace->is-empty?)
-      (vs|treemacs|add-current-project))
+      (vs|treemacs-projectile|add-current-project))
     (treemacs-select-window))
 
-  :general ("<C-tab>" 'vs|treemacs|open
-            "<f12>"   'vs|treemacs|add-current-project)
+  :general ("<C-tab>" 'vs|treemacs-projectile|open
+            "<f12>"   'vs|treemacs-projectile|add-current-project)
 
-  :hook (projectile-after-switch-project . vs|treemacs|add-current-project))
+  :hook (projectile-after-switch-project . vs|treemacs-projectile|add-current-project))
 
 
 (provide 'use-treemacs)
