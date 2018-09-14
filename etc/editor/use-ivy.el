@@ -38,15 +38,23 @@
 
 
 (use-package swiper
+  :after (ivy)
   :general ("C-s" 'swiper))
 
 
 (use-package counsel :delight
-  :hook (vs-emacs-config . counsel-mode))
+  :after (ivy)
+  :hook (ivy-mode . counsel-mode))
 
 
 (use-package counsel-projectile
-  :hook (vs-emacs-config . counsel-projectile-mode))
+  :after (counsel projectile)
+  :hook (counsel-mode . counsel-projectile-mode))
+
+
+(use-package ivy-rich
+  :after (counsel)
+  :hook (counsel-mode . ivy-rich-mode))
 
 
 (provide 'use-ivy)

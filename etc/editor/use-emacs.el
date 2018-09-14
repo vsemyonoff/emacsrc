@@ -9,11 +9,13 @@
     (setq-default bidi-display-reordering           nil
                   c-basic-offset                    4
                   cursor-in-non-selected-windows    nil
+                  ;;debug-on-error                    t
                   display-line-numbers-width        3
                   fill-column                       120
                   indent-tabs-mode                  nil
                   require-final-newline             t
-                  tab-width                         4  )
+                  tab-width                         4
+                  truncate-lines                    t  )
 
     (setq ad-redefinition-action                    'warn
           apropos-do-all                            t
