@@ -42,6 +42,13 @@
 (defconst vs-user-home-dir (expand-file-name "~")
   "User's home folder.")
 
+;; Garbage collector defaults
+(defvar gc-cons-percentage--default gc-cons-percentage
+  "Default garbage collector percentage value.")
+
+(defvar gc-cons-threshold--default gc-cons-threshold
+  "Default garbage collector threshold value.")
+
 ;; Hook variables
 (defvar vs-emacs-config-hook nil
   "Hook called after Emacs init and command line parsing is done.")
@@ -51,6 +58,14 @@
 
 (defvar vs-emacs-config-finish-hook nil
   "Final hook called before configuration ends.")
+
+(defvar vs-emacs-theme-enabled-hook nil
+  "Hook called after Emacs theme is enabled.")
+(advice-add 'enable-theme :after (lambda (&optional _) (run-hooks 'vs-emacs-theme-enabled-hook)))
+
+(defvar vs-emacs-theme-loaded-hook nil
+  "Hook called after Emacs theme is loaded.")
+(advice-add 'load-theme :after (lambda (&optiuonal _) (run-hooks 'vs-emacs-theme-loaded-hook)))
 
 ;; Create cache folder
 (unless (file-exists-p vs-emacs-cache-dir)
@@ -62,8 +77,8 @@
 
 ;; Main stuff
 (eval-and-compile
-  (let ((gc-cons-threshold   most-positive-fixnum    )
-        (gc-cons-percentage  (* gc-cons-percentage 6)))
+  (let ((gc-cons-percentage (* gc-cons-percentage--default 6.0))
+        (gc-cons-threshold  most-positive-fixnum               ))
 
     (add-to-list 'load-path vs-emacs-config-dir)
 

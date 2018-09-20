@@ -1,7 +1,7 @@
 ;;; use-which-key.el --- "use-package" extension. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(use-package which-key :delight :disabled
+(use-package which-key :delight
   :config
   (setq which-key-popup-type  'minibuffer
         which-key-show-prefix 'top

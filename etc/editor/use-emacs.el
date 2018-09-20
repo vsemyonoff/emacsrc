@@ -66,16 +66,12 @@
     (advice-add 'quit-window :filter-args 'vs|emacs/quit-window-kills-buffer)
 
     (defun vs|emacs/minibuffer-setup-gc ()
-      (setq gc-cons-percentage--save gc-cons-percentage
-            gc-cons-threshold--save  gc-cons-threshold
-            gc-cons-percentage       (* gc-cons-percentage 6)
-            gc-cons-threshold        most-positive-fixnum   ))
+      (setq gc-cons-percentage (* gc-cons-percentage--default 6.0)
+            gc-cons-threshold  most-positive-fixnum))
 
     (defun vs|emacs/minibuffer-reset-gc ()
-      (setq gc-cons-percentage       gc-cons-percentage--save
-            gc-cons-threshold        gc-cons-threshold--save
-            gc-cons-percentage--save nil
-            gc-cons-threshold--save  nil                    ))
+      (setq gc-cons-percentage gc-cons-percentage--default
+            gc-cons-threshold  gc-cons-threshold--default))
 
     (defun vs|emacs/enable-ui-keystrokes ()
       (setq echo-keystrokes 0.02))
