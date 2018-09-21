@@ -20,7 +20,7 @@
     (treemacs-git-mode                      'extended)
 
     (defun vs|treemacs/add-project (&optional path)
-      "Add project from `PATH' to `treemacs'."
+      "Add project from PATH to `treemacs'."
       (let* ((path (or path vs-user-home-dir))
              (name (file-name-nondirectory
                     (directory-file-name (if (file-remote-p path)
@@ -35,6 +35,7 @@
       (setq indicate-buffer-boundaries nil
             indicate-empty-lines       nil
             line-spacing               1
+            mode-line-format           t
             tab-width                  1  ))
 
     (defun vs|treemacs/setup-icons ()

@@ -61,11 +61,17 @@
 
 (defvar vs-emacs-theme-enabled-hook nil
   "Hook called after Emacs theme is enabled.")
-(advice-add 'enable-theme :after (lambda (&optional _) (run-hooks 'vs-emacs-theme-enabled-hook)))
+(advice-add 'enable-theme :after
+            (lambda (&rest _)
+              "Run `vs-emacs-theme-enabled-hook' hook."
+              (run-hooks 'vs-emacs-theme-enabled-hook)))
 
 (defvar vs-emacs-theme-loaded-hook nil
   "Hook called after Emacs theme is loaded.")
-(advice-add 'load-theme :after (lambda (&optiuonal _) (run-hooks 'vs-emacs-theme-loaded-hook)))
+(advice-add 'load-theme :after
+            (lambda (&rest _)
+              "Run `vs-emacs-theme-loaded-hook' hook."
+              (run-hooks 'vs-emacs-theme-loaded-hook)))
 
 ;; Create cache folder
 (unless (file-exists-p vs-emacs-cache-dir)
