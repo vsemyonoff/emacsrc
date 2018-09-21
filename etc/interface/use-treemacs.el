@@ -5,7 +5,6 @@
   :config
   (progn
     (setq treemacs-collapse-dirs            3
-          treemacs-follow-after-init        t
           treemacs-indentation-string       "  "
           treemacs-indentation              1
           treemacs-is-never-other-window    nil
@@ -13,11 +12,12 @@
           treemacs-show-hidden-files        nil
           treemacs-silent-refresh           t
           treemacs-space-between-root-nodes nil
+          treemacs-tag-follow-delay         1
           treemacs-width                    40)
 
     (treemacs-filewatch-mode                t)
-    (treemacs-follow-mode                   t)
     (treemacs-git-mode                      'extended)
+    (treemacs-tag-follow-mode               t)
 
     (defun vs|treemacs/add-project (&optional path)
       "Add project from PATH to `treemacs'."
