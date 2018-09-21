@@ -30,30 +30,16 @@
                                  show-paren-match
                                  success
                                  warning)
-                               10)
+                               20)
 
     ;; Change colors
-    (set-face-attribute 'default nil
-                        :foreground "#f8f8f2")
-    (set-face-attribute 'show-paren-match nil
-                        :underline t)
-    (set-face-attribute 'ivy-current-match nil
-                        :background (face-attribute 'hl-line
-                                                    :background)
-                        :foreground (face-attribute 'default
-                                                    :foreground))
-    (set-face-attribute 'ivy-subdir nil
-                        :foreground (face-attribute 'font-lock-builtin-face
-                                                    :foreground))
-    (set-face-attribute 'company-preview-common nil
-                        :foreground (face-attribute 'font-lock-string-face
-                                                    :foreground))
-    (set-face-attribute 'company-tooltip-common nil
-                        :foreground (face-attribute 'font-lock-string-face
-                                                    :foreground))
-    (set-face-attribute 'company-tooltip-common-selection nil
-                        :foreground (face-attribute 'font-lock-string-face
-                                                    :foreground))))
+    (set-face-attribute 'default nil :foreground "#f8f8f2")
+    (set-face-attribute 'company-preview-common nil :inherit 'font-lock-string-face :foreground nil)
+    (set-face-attribute 'company-tooltip-common nil :inherit 'font-lock-string-face :foreground nil)
+    (set-face-attribute 'company-tooltip-common-selection nil :inherit 'font-lock-string-face :foreground nil)
+    (set-face-attribute 'ivy-current-match nil :inherit 'hl-line :background nil :foreground nil)
+    (set-face-attribute 'ivy-subdir nil :inherit 'font-lock-builtin-face :foreground nil)
+    (set-face-attribute 'show-paren-match nil :inherit 'error :background nil :foreground nil :underline t)))
 
 
 (use-package telephone-line
