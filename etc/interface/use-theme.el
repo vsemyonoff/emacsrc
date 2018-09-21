@@ -2,16 +2,16 @@
 ;;; Commentary:
 ;;; Code:
 (use-package zerodark-theme :defer t
-  :hook
-  (;(vs-emacs-config     . zerodark-setup-modeline-format)
-   (vs-emacs-config-gui . vs|emacs/enable-theme         ))
-
+  :hook (vs-emacs-config-gui . vs|theme/enable)
   :init
-  (defun vs|emacs/enable-theme ()
+  (defun vs|theme/enable ()
     ;; Load theme
-    (load-theme 'zerodark t)
+    (load-theme 'zerodark t t)
+    (enable-theme 'zerodark)
+
     ;; Set font
     (set-face-attribute 'default nil :font "Source Code Pro-12")
+
     ;; Increase some faces color saturation
     (vs|emacs/scale-face-color '( ;; Font lock faces
                                  font-lock-builtin-face
@@ -31,6 +31,7 @@
                                  success
                                  warning)
                                10)
+
     ;; Change colors
     (set-face-attribute 'default nil
                         :foreground "#f8f8f2")
@@ -56,25 +57,25 @@
 
 
 (use-package telephone-line
-  :config (setq telephone-line-primary-left-separator 'telephone-line-gradient
-                telephone-line-secondary-left-separator 'telephone-line-nil
-                telephone-line-primary-right-separator 'telephone-line-gradient
-                telephone-line-secondary-right-separator 'telephone-line-nil
+  :config
+  (setq vs-mode-separator (make-instance 'telephone-line-unicode-separator :char #xe905))
+  (setq telephone-line-primary-left-separator    'vs-mode-separator
+        telephone-line-secondary-left-separator  'vs-mode-separator
+        telephone-line-primary-right-separator   'vs-mode-separator
+        telephone-line-secondary-right-separator 'vs-mode-separator
 
-                telephone-line-height 20
+        telephone-line-height 18
 
-                telephone-line-lhs
-                '((evil   . (telephone-line-simple-major-mode-segment))
-                  (accent . (telephone-line-simple-minor-mode-segment
-                             telephone-line-vc-segment))
-                  (nil    . (telephone-line-buffer-segment
-                             telephone-line-process-segment)))
-                telephone-line-rhs
-                '((nil    . (telephone-line-flycheck-segment))
-                  (accent . (telephone-line-misc-info-segment))
-                  (evil   . (telephone-line-airline-position-segment))))
+        telephone-line-lhs '((nil . (telephone-line-buffer-segment
+                                     telephone-line-simple-major-mode-segment
+                                     telephone-line-vc-segment
+                                     telephone-line-process-segment
+                                     telephone-line-flycheck-segment)))
 
-  :hook (vs-emacs-config-gui . telephone-line-mode))
+        telephone-line-rhs '((nil . (;;telephone-line-misc-info-segment
+                                     telephone-line-airline-position-segment))))
+
+  :hook (vs-emacs-config . telephone-line-mode))
 
 
 (provide 'use-theme)
