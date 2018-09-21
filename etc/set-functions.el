@@ -45,7 +45,7 @@
 
 
 (defun vs|emacs/scale-color (color value)
-  "Try to increase or decrease COLOR saturation on VALUE."
+  "Try to increase or decrease COLOR on VALUE."
   (unless (stringp color)
     (error "Wrong type argument: stringp, COLOR with format '#(abc|aabbcc|aaaabbbbcccc|color-name)'"))
   (unless (and (floatp value) (>= value -1.0) (<= value 1.0))
@@ -56,41 +56,36 @@
     (color-rgb-to-hex (+ r value) (+ g value) (+ b value) 2)))
 
 
-(defun vs|emacs/scale-face-color (face-list factor)
-  "Increase FACE-LIST background and foreground color saturation to FACTOR percents."
+(defun vs|emacs/scale-face-color (face-list factor &optional background)
+  "Proportionally increase FACE-LIST foreground colors to FACTOR percents.
+When BACKGROUND is t then scale background colors."
   (unless (listp face-list)
     (error "Wrong type argument: listp, FACE-LIST"))
   (unless (and (integerp factor)
                (and (>= factor -100) (<= factor 100)))
     (error "Wrong type argument: integerp, -100 <= FACTOR <= 100"))
-  (let ((value (* 0.01 factor))
+  (let ((property    (if background :background :foreground))
+        (value       (* 0.01 factor))
         (value-limit 1.0))
+    ;; Calculate value-limit for all faces
     (mapc
      (lambda (face)
-       (let ((bg (face-attribute face :background))
-             (fg (face-attribute face :foreground)))
-         ;;(message "background: '%s', foreground: '%s'" bg fg)
-         (unless (string= bg "unspecified")
-           (let ((rgb (color-name-to-rgb bg)))
-             (setq value-limit (min value-limit
-                                    (abs (vs|emacs/scale-color-limit rgb value))))))
-         (unless (string= fg "unspecified")
-           (let ((rgb (color-name-to-rgb fg)))
-             (setq valie-limit (min value-limit
-                                    (abs (vs|emacs/scale-color-limit rgb value))))))))
+       (let ((color (face-attribute face property)))
+         (unless (string= color "unspecified")
+           (setq value-limit (min value-limit
+                                  (abs (vs|emacs/scale-color-limit (color-name-to-rgb color)
+                                                                   value)))))))
      face-list)
-    ;;(message "scale value: '%f', scale value limit: '%f'" value value-limit)
-    (setq value (* (if (< factor 0) -1 1) (min value value-limit)))
-    ;;(message "calculated scale value: '%f' for factor: '%d'" value factor)
+    ;; Choose between value and value-limit
+    (setq value (* (if (< factor 0) -1 1) (min value-limit (abs value))))
+    ;; Apply result to all faces
     (mapc
      (lambda (face)
-       (let ((bg (face-attribute face :background))
-             (fg (face-attribute face :foreground)))
-         (unless (string= bg "unspecified")
-           (set-face-attribute face nil :background (vs|emacs/scale-color bg value)))
-         (unless (string= fg "unspecified")
-           (set-face-attribute face nil :foreground (vs|emacs/scale-color fg value)))))
+       (let ((color (face-attribute face property)))
+         (unless (string= color "unspecified")
+           (set-face-attribute face nil property (vs|emacs/scale-color color value)))))
      face-list)
+    ;; Return actula scale value
     value))
 
 
