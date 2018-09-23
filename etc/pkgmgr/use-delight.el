@@ -2,7 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 (use-package delight
-  :config (delight '((eldoc-mode nil eldoc))))
+  :config
+  (delight '((eldoc-mode            nil       eldoc     )
+             (emacs-lisp-mode       "ELisp"   elisp-mode)
+             (lisp-interaction-mode "<ELisp>" elisp-mode))))
 
 
 (provide 'use-delight)

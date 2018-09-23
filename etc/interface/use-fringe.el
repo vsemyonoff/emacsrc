@@ -5,8 +5,12 @@
   :commands fringe-mode
 
   :hook
-  ((vs-emacs-config  . (lambda () (fringe-mode '(nil . 0))))
-   (minibuffer-setup . (lambda () (set-window-fringes (minibuffer-window) 0 0 nil))))
+  ((vs-emacs-config  . (lambda ()
+                         "Set defautl fringes size."
+                         (fringe-mode '(nil . 0))))
+   (minibuffer-setup . (lambda ()
+                         "Disable fringes in `minibuffer' window."
+                         (set-window-fringes (minibuffer-window) 0 0 nil))))
 
   :init
   (setq-default fringe-indicator-alist     (delq (assq 'continuation fringe-indicator-alist)
@@ -14,6 +18,10 @@
                 fringes-outside-margins    t
                 indicate-buffer-boundaries t
                 indicate-empty-lines       t))
+
+
+(use-package fringe-current-line
+  :hook (vs-emacs-config . global-fringe-current-line-mode))
 
 
 (use-package fringe-helper

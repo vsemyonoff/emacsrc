@@ -10,30 +10,21 @@
     (enable-theme 'zerodark)
 
     ;; Set font
-    (set-face-attribute 'default nil :font "Source Code Pro-12")
+    (set-face-attribute 'default nil :font "Source Code Pro-12" :foreground "#f8f8f2")
 
-    ;; Increase some faces color saturation
-    (vs|emacs/scale-face-color '( ;; Font lock faces
-                                 font-lock-builtin-face
-                                 font-lock-comment-face
-                                 font-lock-constant-face
-                                 font-lock-doc-face
-                                 font-lock-function-name-face
-                                 font-lock-keyword-face
-                                 font-lock-string-face
-                                 font-lock-type-face
-                                 font-lock-variable-name-face
-                                 ;; Other
-                                 error
-                                 hl-line
-                                 region
-                                 show-paren-match
-                                 success
-                                 warning)
-                               20)
+    ;; Increase faces background
+    (let ((faces '(error hl-line region success warning)))
+      (vs|emacs/scale-face-color faces 10 t))
+
+    ;; Increase face foreground
+    (let ((faces '(font-lock-builtin-face font-lock-comment-face
+                   font-lock-constant-face font-lock-doc-face
+                   font-lock-function-name-face font-lock-keyword-face
+                   font-lock-string-face font-lock-type-face
+                   font-lock-variable-name-face)))
+      (vs|emacs/scale-face-color faces 20))
 
     ;; Change colors
-    (set-face-attribute 'default nil :foreground "#f8f8f2")
     (set-face-attribute 'company-preview-common nil :inherit 'font-lock-string-face :foreground nil)
     (set-face-attribute 'company-tooltip-common nil :inherit 'font-lock-string-face :foreground nil)
     (set-face-attribute 'company-tooltip-common-selection nil :inherit 'font-lock-string-face :foreground nil)

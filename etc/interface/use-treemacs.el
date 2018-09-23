@@ -12,12 +12,7 @@
           treemacs-show-hidden-files        nil
           treemacs-silent-refresh           t
           treemacs-space-between-root-nodes nil
-          treemacs-tag-follow-delay         1
           treemacs-width                    40)
-
-    (treemacs-filewatch-mode                t)
-    (treemacs-git-mode                      'extended)
-    (treemacs-tag-follow-mode               t)
 
     (defun vs|treemacs/add-project (&optional path)
       "Add project from PATH to `treemacs'."
@@ -36,14 +31,21 @@
             indicate-empty-lines       nil
             line-spacing               1
             mode-line-format           t
-            tab-width                  1  ))
+            tab-width                  1       )
+      (treemacs-git-mode              'extended)
+      (treemacs-filewatch-mode         t       )
+      (treemacs-follow-mode           -1       )
+      (treemacs-fringe-indicator-mode -1       )
+      (treemacs-tag-follow-mode       -1       ))
 
     (defun vs|treemacs/setup-icons ()
+      "Setup `treemacs' file icons."
+
       (unless (require 'all-the-icons nil t)
         (error "Error: all-the-icons is not installed"))
 
-      ;; Silence plistp error with all-the-icons
-      (advice-add 'treemacs--pulse-png-advice :override 'ignore)
+      (set-face-attribute 'treemacs-directory-collapsed-face nil :bold    t        :italic       t)
+      (set-face-attribute 'treemacs-directory-face           nil :bold    t                       )
 
       (let ((all-the-icons-default-adjust 0))
         ;; Folders

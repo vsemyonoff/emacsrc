@@ -7,7 +7,7 @@
 (use-package ivy :delight
   :config
   (progn
-    (setq ivy-count-format            "[%d/%d] "
+    (setq ivy-count-format            "[%d/%d]: "
           ivy-extra-directories       nil
           ivy-format-function         'vs|ivy/custom-format
           ivy-ignore-buffers          '("\\`\\( \\|\\*lsp\\|treemacs\\)")
@@ -17,6 +17,7 @@
           ivy-virtual-abbreviate      'full)
 
     (defun vs|ivy/custom-format (cands)
+      "Set custom `ivy' format."
       (ivy--format-function-generic
        (lambda (str)
          (concat " => " (ivy--add-face str 'ivy-current-match)))
@@ -26,7 +27,8 @@
        "\n"))
 
     (defun vs|ivy/update-window-height ()
-      (setq ivy-height `,(floor (frame-height) 3))))
+      "Set `ivy' window height to 25% from current frame height."
+      (setq ivy-height `,(floor (frame-height) 4))))
 
   :hook
   ((vs-emacs-config             . ivy-mode         )
@@ -54,7 +56,8 @@
 
 (use-package ivy-rich
   :after (counsel)
-  :hook (counsel-mode . ivy-rich-mode))
+  :hook (counsel-mode . ivy-rich-mode)
+  :config (setq ivy-rich-path-style 'full))
 
 
 (provide 'use-ivy)

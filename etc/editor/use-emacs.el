@@ -10,7 +10,7 @@
                   c-basic-offset                    4
                   cursor-in-non-selected-windows    nil
                   ;;debug-on-error                    t
-                  display-line-numbers-width        3
+                  display-line-numbers-width        4
                   fill-column                       120
                   indent-tabs-mode                  nil
                   require-final-newline             t
@@ -20,20 +20,21 @@
     (setq ad-redefinition-action                    'warn
           apropos-do-all                            t
           create-lockfiles                          nil
-          enable-local-variables                    nil
+          enable-dir-local-variables                nil
+          ;;enable-local-variables                    nil
           enable-recursive-minibuffers              nil
+          help-window-select                        t
           history-length                            500
           inhibit-startup-echo-area-message         user-login-name
           inhibit-startup-message                   t
           initial-scratch-message                   nil
           load-prefer-newer                         t
-          max-mini-window-height                    0.3
           minibuffer-prompt-properties              '(cursor-intangible t
                                                       face minibuffer-prompt
                                                       point-entered minibuffer-avoid-prompt
                                                       read-only t)
           mode-line-format                          nil
-          resize-mini-windows                       'grow-only
+          resize-mini-windows                       t ; 'grow-only
           tab-always-indent                         t  )
 
     (fset 'yes-or-no-p        'y-or-n-p) ; y/n (or SPS/DEL) against yes/no
@@ -66,10 +67,12 @@
     (advice-add 'quit-window :filter-args 'vs|emacs/quit-window-kills-buffer)
 
     (defun vs|emacs/minibuffer-setup-gc ()
+      "Increase `GC' percantage and threshold."
       (setq gc-cons-percentage (* gc-cons-percentage--default 6.0)
             gc-cons-threshold  most-positive-fixnum))
 
     (defun vs|emacs/minibuffer-reset-gc ()
+      "Restore `GC' settings to default values."
       (setq gc-cons-percentage gc-cons-percentage--default
             gc-cons-threshold  gc-cons-threshold--default))
 
