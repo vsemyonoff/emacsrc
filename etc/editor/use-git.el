@@ -10,7 +10,7 @@
   :mode "/\\.gitignore$")
 
 
-(use-package git-gutter
+(use-package git-gutter :delight
   :commands git-gutter-mode
   :hook
   ((focus-in  . git-gutter:update-all-windows)

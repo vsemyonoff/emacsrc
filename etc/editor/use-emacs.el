@@ -4,22 +4,19 @@
 (use-package emacs
   :config
   (progn
-    (advice-add 'display-startup-echo-area-message :override 'ignore)
-
     (setq-default bidi-display-reordering           nil
-                  c-basic-offset                    4
                   cursor-in-non-selected-windows    nil
-                  ;;debug-on-error                    t
                   display-line-numbers-width        4
                   fill-column                       120
                   indent-tabs-mode                  nil
+                  mode-line-format                  nil
                   require-final-newline             t
-                  tab-width                         4
-                  truncate-lines                    t  )
+                  tab-width                         4  )
 
     (setq ad-redefinition-action                    'warn
           apropos-do-all                            t
           create-lockfiles                          nil
+          ;;debug-on-error                            t
           enable-dir-local-variables                nil
           ;;enable-local-variables                    nil
           enable-recursive-minibuffers              nil
@@ -33,8 +30,6 @@
                                                       face minibuffer-prompt
                                                       point-entered minibuffer-avoid-prompt
                                                       read-only t)
-          mode-line-format                          nil
-          resize-mini-windows                       t ; 'grow-only
           tab-always-indent                         t  )
 
     (fset 'yes-or-no-p        'y-or-n-p) ; y/n (or SPS/DEL) against yes/no
@@ -65,6 +60,15 @@
               t)
             window))
     (advice-add 'quit-window :filter-args 'vs|emacs/quit-window-kills-buffer)
+
+    (defun vs|emacs/c-mode-setup ()
+      "Common settings for C -based modes."
+      (setq c-basic-offset 4))
+
+    (defun vs|emacs/prog-mode-setup ()
+      "Common settings for ALL programming modes."
+      (setq truncate-lines       t)
+      (display-line-numbers-mode t))
 
     (defun vs|emacs/minibuffer-setup-gc ()
       "Increase `GC' percantage and threshold."
@@ -134,6 +138,11 @@ With argument, do this that many times."
       (interactive "p")
       (vs|emacs|delete-word (- arg))))
 
+  :delight
+  (eldoc-mode                    )
+  (emacs-lisp-mode       "ELisp" )
+  (lisp-interaction-mode "IELisp")
+
   :general
   ([remap move-beginning-of-line] 'vs|emacs|smart-move-beginning-of-line
    "<A-backspace>"                '(vs|emacs|backward-delete-word :which-key
@@ -150,15 +159,14 @@ With argument, do this that many times."
 
   :hook
   ((conf-mode        . display-line-numbers-mode      )
-   (prog-mode        . display-line-numbers-mode      )
    (text-mode        . display-line-numbers-mode      )
+   (c-mode-common    . vs|emacs/c-mode-setup          )
    (isearch-mode     . vs|emacs/disable-ui-keystrokes )
    (isearch-mode-end . vs|emacs/enable-ui-keystrokes  )
    (minibuffer-setup . vs|emacs/minibuffer-setup-gc   )
    (minibuffer-exit  . vs|emacs/minibuffer-reset-gc   )
-   (vs-emacs-config  . vs|emacs/enable-ui-keystrokes  ))
-
-  :mode ("\\.h\\(h\\|pp\\|xx\\)\\'" . c++-mode))
+   (prog-mode        . vs|emacs/prog-mode-setup       )
+   (vs-emacs-config  . vs|emacs/enable-ui-keystrokes  )))
 
 
 (provide 'use-emacs)

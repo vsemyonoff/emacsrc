@@ -43,10 +43,10 @@
   "User's home folder.")
 
 ;; Garbage collector defaults
-(defvar gc-cons-percentage--default gc-cons-percentage
+(defconst gc-cons-percentage--default gc-cons-percentage
   "Default garbage collector percentage value.")
 
-(defvar gc-cons-threshold--default gc-cons-threshold
+(defconst gc-cons-threshold--default gc-cons-threshold
   "Default garbage collector threshold value.")
 
 ;; Hook variables
@@ -56,7 +56,7 @@
 (defvar vs-emacs-config-gui-hook nil
   "Hook called after frame creation is done.")
 
-(defvar vs-emacs-config-finish-hook nil
+(defvar vs-emacs-config-final-hook nil
   "Final hook called before configuration ends.")
 
 (defvar vs-emacs-theme-enabled-hook nil
@@ -112,5 +112,4 @@
 
 ;; Final hook
 (add-hook 'emacs-startup-hook (lambda () (run-hooks 'vs-emacs-config-final-hook)))
-
 ;;; init.el ends here
