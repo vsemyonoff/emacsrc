@@ -3,35 +3,6 @@
 ;;; Code:
 (use-package emacs
   :config
-  (setq-default bidi-display-reordering           nil
-                cursor-in-non-selected-windows    nil
-                display-line-numbers-width        4
-                fill-column                       120
-                indent-tabs-mode                  nil
-                mode-line-format                  nil
-                require-final-newline             t
-                tab-width                         4  )
-
-  (setq ad-redefinition-action                    'warn
-        apropos-do-all                            t
-        create-lockfiles                          nil
-        ;;debug-on-error                            t
-        echo-keystrokes                           0.02
-        enable-dir-local-variables                nil
-        ;;enable-local-variables                    nil
-        enable-recursive-minibuffers              nil
-        help-window-select                        t
-        history-length                            500
-        inhibit-startup-echo-area-message         user-login-name
-        inhibit-startup-message                   t
-        initial-scratch-message                   nil
-        load-prefer-newer                         t
-        minibuffer-prompt-properties              '(cursor-intangible t
-                                                    face minibuffer-prompt
-                                                    point-entered minibuffer-avoid-prompt
-                                                    read-only t)
-        tab-always-indent                         'complete)
-
   (fset 'yes-or-no-p        'y-or-n-p) ; y/n (or SPS/DEL) against yes/no
 
   (blink-cursor-mode               -1) ; cursor blinking
@@ -51,6 +22,16 @@
   ;; make a shell script executable automatically on save
   (add-hook 'after-save-hook
             'executable-make-buffer-file-executable-if-script-p)
+
+  (defun vs|emacs/find-file-create-parents (filename &optional _)
+    "Create parent directory if not exists while visiting file."
+    (unless (file-exists-p filename)
+      (let ((dir (file-name-directory filename)))
+        (unless (file-exists-p dir)
+          (make-directory dir t)))))
+  (advice-add 'find-file :before 'vs|emacs/find-file-create-parents)
+
+  (warn "===> TODO: protect visible buffers from kill")
 
   (defun vs|emacs/quit-window-kills-buffer (&optional kill window)
     "When running `quit-window' always kill underlying buffer."

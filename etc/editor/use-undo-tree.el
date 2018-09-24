@@ -2,21 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 (use-package undo-tree :delight :ensure quelpa
-  :config
-  (progn
-    (let ((undo-tree-dir
-           (expand-file-name "auto-save/undo/" vs-emacs-cache-dir)))
-      (setq undo-tree-auto-save-history       t
-            undo-tree-history-directory-alist `((".*" . ,undo-tree-dir)))
-      (unless (file-exists-p undo-tree-dir)
-        (make-directory undo-tree-dir t))))
-
-  :hook
-  ((vs-emacs-config  . global-undo-tree-mode      )
-   (find-file        . undo-tree-load-history-hook)
-   (write-file       . undo-tree-save-history-hook))
-
+  :hook (vs-emacs-config  . global-undo-tree-mode)
   :quelpa (undo-tree :fetcher git :url "http://www.dr-qubit.org/git/undo-tree.git"))
+
 
 (provide 'use-undo-tree)
 ;;; use-undo-tree.el ends here

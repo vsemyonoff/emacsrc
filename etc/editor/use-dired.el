@@ -3,12 +3,11 @@
 ;;; Code:
 (use-package dired :ensure nil
   :config
-  (progn
-    (setq dired-dwim-target         t
-          dired-recursive-copies    'always
-          dired-recursive-deletes   'top   )
+  (setq dired-dwim-target         t
+        dired-recursive-copies    'always
+        dired-recursive-deletes   'top   )
 
-    (put 'dired-find-alternate-file 'disabled nil)))
+  (put 'dired-find-alternate-file 'disabled nil))
 
 
 (use-package dired+ :ensure quelpa

@@ -28,17 +28,14 @@
 
 (use-package git-gutter-fringe
   :config
-  (progn
-    (setq-default fringes-outside-margins t)
+  (fringe-helper-define 'git-gutter-fr:added '(center repeated)
+    "....XXXX")
+  (fringe-helper-define 'git-gutter-fr:modified '(center repeated)
+    "....XXXX")
+  (fringe-helper-define 'git-gutter-fr:deleted '(center repeated)
+    "....XXXX")
 
-    (fringe-helper-define 'git-gutter-fr:added '(center repeated)
-      "....XXXX")
-    (fringe-helper-define 'git-gutter-fr:modified '(center repeated)
-      "....XXXX")
-    (fringe-helper-define 'git-gutter-fr:deleted '(center repeated)
-      "....XXXX"))
-
-  :hook ((vs-emacs-config-gui  . vs|git-gutter-fringe/enable))
+  :hook (vs-emacs-config-gui  . vs|git-gutter-fringe/enable)
 
   :init
   (defun vs|git-gutter-fringe/enable ()
@@ -47,11 +44,13 @@
 
 
 (use-package git-timemachine
-  :commands (git-timemachine git-timemachine-toggle))
+  :commands (git-timemachine git-timemachine-toggle)
+  :config (warn "===> TODO: setup git-timemachine to show window title"))
 
 
 (use-package magit
   :commands (magit-status magit-blame magit-git-success)
+  :config (setq magit-ediff-dwim-show-on-hunks t)
   :general ("C-x g" 'magit-status))
 
 

@@ -3,7 +3,7 @@
 ;;; Code:
 (use-package fringe :ensure nil
   :commands fringe-mode
-
+  :config (warn "===> TODO: show unsaved changes in fringe")
   :hook
   ((vs-emacs-config  . (lambda ()
                          "Set defautl fringes size."
@@ -20,13 +20,8 @@
                 indicate-empty-lines       t))
 
 
-(use-package fringe-current-line
-  :hook (vs-emacs-config . global-fringe-current-line-mode))
-
-
 (use-package fringe-helper
   :commands (fringe-helper-define fringe-helper-convert)
-
   :init
   (unless (fboundp 'define-fringe-bitmap)
     (defun define-fringe-bitmap (&rest _))))

@@ -2,11 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 (use-package vtl
-  :load-path (lambda ()
-               (expand-file-name "site-lisp"
-                                 vs-emacs-data-dir))
   :after nginx-mode
-  :hook (nginx-mode . turn-on-vtl-mode))
+  :hook (nginx-mode . turn-on-vtl-mode)
+  :load-path (lambda () (expand-file-name "site-lisp" vs-emacs-data-dir)))
 
 
 (provide 'use-vtl)

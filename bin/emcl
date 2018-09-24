@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Check for visible frame
-FRAME_EXISTS=$(emacsclient -e '(<= 2 (length (visible-frame-list)))' 2>/dev/null)
+FRAME_EXISTS=$(emacsclient -e '(<= 1 (vs|emacs/gui-frames-count))' 2>/dev/null)
 [[ "${FRAME_EXISTS}" != "t" ]] && CREATE_FRAME="--create-frame"
 
 # No wait for client exit by default
@@ -12,11 +12,10 @@ args=()
 for arg in "${@}"; do
     case "${arg}" in
         -c|--create-frame)
-            CREATE_FRAME="--create-frame"
             ;;
         --no-fork)
-            ## Use separate frame with --no-fork
-            #CREATE_FRAME="${CREATE_FRAME:---create-frame}"
+            # Use separate frame with --no-fork
+            CREATE_FRAME="${CREATE_FRAME:---create-frame}"
             unset NO_WAIT
             ;;
         -n|--no-wait)
@@ -32,23 +31,15 @@ for arg in "${@}"; do
 done
 set -- "${args[@]}"
 
-# Drop all output if not in terminal mode
-[[ "${CREATE_FRAME}" != "--tty" ]] && exec >/dev/null 2>&1
+# Client log
+LOG_DIR="${XDG_CACHE_HOME:-${HOME}/.cache}/emacs"
+LOG_FILE="${LOG_DIR}/client.log"
 
-# Start daemon (if needed), create frame (if needed) and open file(s) (if any) in there
-emacsclient --alternate-editor= ${NO_WAIT} ${CREATE_FRAME} "${@}"
-
-# Switch to frame if not in terminal mode
-if [[ "${CREATE_FRAME}" != "--tty" ]] && [[ -n "${NO_WAIT}" ]]; then
-    case "$(uname -s)" in
-        Darwin)
-            ${PRETEND} osascript -e 'tell application "Emacs" to activate'
-            ;;
-        Linux)
-            # TODO: switch to frame in linux
-            ;;
-        *)
-            # No-op
-            ;;
-    esac
+# Redirect all output to file if not in terminal mode
+if [[ "${CREATE_FRAME}" != "--tty" ]]; then
+    mkdir -p "${LOG_DIR}"
+    exec >> "${LOG_FILE}" 2>&1
 fi
+
+# Start daemon, create frame and open file(s) in there
+exec emacsclient --alternate-editor= ${NO_WAIT} ${CREATE_FRAME} "${@}"

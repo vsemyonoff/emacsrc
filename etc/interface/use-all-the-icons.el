@@ -7,5 +7,9 @@
              all-the-icons-install-fonts))
 
 
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
+
+
 (provide 'use-all-the-icons)
 ;;; use-all-the-icons.el ends here

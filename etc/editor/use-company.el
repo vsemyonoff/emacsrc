@@ -3,7 +3,6 @@
 ;;; Code:
 (use-package company :delight
   :commands global-company-mode
-
   :config
   (setq company-dabbrev-code-ignore-case    t
         company-dabbrev-ignore-case         t

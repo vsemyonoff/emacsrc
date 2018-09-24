@@ -2,10 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 (use-package expand-region
-  :config
-  (progn
-    (global-set-key (kbd "C-M-=") 'er/contract-region)
-    (global-set-key (kbd "C-=") 'er/expand-region)))
+  :general
+  ("C-="   'er/expand-region
+   "C-M-=" 'er/contract-region))
 
 
 (provide 'use-expand-region)

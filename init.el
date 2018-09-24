@@ -104,10 +104,9 @@
 (add-hook 'emacs-startup-hook (lambda () (run-hooks 'vs-emacs-config-hook)))
 
 ;; Delayed GUI config
-(add-hook (if (daemonp) 'after-make-frame-functions
-            'window-setup-hook)
+(add-hook (if (daemonp) 'after-make-frame-functions 'window-setup-hook)
           (lambda (&optional frame)
-            (when frame (select-frame frame))
+            (when frame (select-frame-set-input-focus frame))
             (run-hooks 'vs-emacs-config-gui-hook)))
 
 ;; Final hook

@@ -162,5 +162,14 @@ With ARG, do this that many times."
   (vs|emacs|delete-word (- arg)))
 
 
+(defun vs|emacs/gui-frames-count ()
+  "Return count of visible non-terminal frames."
+  (let ((count 0))
+    (dolist (frame (visible-frame-list))
+      (unless (string= (framep frame) "t")
+        (setq count (1+ count))))
+    count))
+
+
 (provide 'set-functions)
 ;;; set-functions.el ends here
