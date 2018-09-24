@@ -50,6 +50,7 @@
     (error "Wrong type argument: stringp, COLOR with format '#(abc|aabbcc|aaaabbbbcccc|color-name)'"))
   (unless (and (floatp value) (>= value -1.0) (<= value 1.0))
     (error "Wrong type argument: floatp, -1.0 <= VALUE <= 1.0"))
+  (require 'color)
   (let* ((rgb (color-name-to-rgb color))
          (value (vs|emacs/scale-color-limit rgb value))
          (r (nth 0 rgb)) (g (nth 1 rgb)) (b (nth 2 rgb)))
@@ -89,10 +90,10 @@ When BACKGROUND is t then scale background colors."
     value))
 
 
-(defadvice vs|emacs/exchange-point-and-mark (before deactivate-mark activate compile)
-  "When called with no active region, do not activate mark."
-  (interactive
-   (list (not (region-active-p)))))
+;; (defadvice vs|emacs/exchange-point-and-mark (before deactivate-mark activate compile)
+;;   "When called with no active region, do not activate mark."
+;;   (interactive
+;;    (list (not (region-active-p)))))
 
 
 (defun vs|emacs|apply-dir-locals ()
@@ -100,6 +101,65 @@ When BACKGROUND is t then scale background colors."
   (interactive)
   (let ((enable-local-variables :all))
     (hack-dir-local-variables-non-file-buffer)))
+
+
+(defun vs|emacs|smart-move-beginning-of-line (arg)
+  "Move point back to indentation of beginning of line.
+
+Move point to the first non-whitespace character on this line.
+If point is already there, move to the beginning of the line.
+Effectively toggle between the first non-whitespace character and
+the beginning of the line.
+
+If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+point reaches the beginning or end of the buffer, stop there."
+  (interactive "^p")
+  (setq arg (or arg 1))
+
+  ;; Move lines first
+  (when (/= arg 1)
+    (let ((line-move-visual nil))
+      (forward-line (1- arg))))
+
+  (let ((orig-point (point)))
+    (back-to-indentation)
+    (when (= orig-point (point))
+      (move-beginning-of-line 1))))
+
+
+(defun vs|emacs|backward-delete-line ()
+  "Backward delete line from point till beginning."
+  (interactive)
+  (delete-region (point)
+                 (line-beginning-position)))
+
+
+(defun vs|emacs/kill-thing-at-point (thing)
+  "Kill the `thing-at-point' for the specified kind of THING."
+  (let ((bounds (bounds-of-thing-at-point thing)))
+    (if bounds
+        (kill-region (car bounds) (cdr bounds))
+      (error "No %s at point" thing))))
+
+
+(defun vs|emacs|kill-word-at-point ()
+  "Kill the word at point."
+  (interactive)
+  (vs|emacs/kill-thing-at-point 'word))
+
+
+(defun vs|emacs|delete-word (arg)
+  "Delete characters forward until encountering the end of a word.
+With ARG, do this that many times."
+  (interactive "p")
+  (delete-region (point) (progn (forward-word arg) (point))))
+
+
+(defun vs|emacs|backward-delete-word (arg)
+  "Delete characters backward until encountering the end of a word.
+With ARG, do this that many times."
+  (interactive "p")
+  (vs|emacs|delete-word (- arg)))
 
 
 (provide 'set-functions)

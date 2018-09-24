@@ -51,7 +51,7 @@
 
 
 (use-package magit
-  :commands (magit-status magit-blame)
+  :commands (magit-status magit-blame magit-git-success)
   :general ("C-x g" 'magit-status))
 
 

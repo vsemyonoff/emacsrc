@@ -41,7 +41,9 @@
 
 (use-package swiper
   :after (ivy)
-  :general ("C-s" 'swiper))
+  :general
+  ("C-r" 'swiper
+   "C-s" 'swiper))
 
 
 (use-package counsel :delight
