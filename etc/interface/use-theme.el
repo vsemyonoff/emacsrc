@@ -2,9 +2,38 @@
 ;;; Commentary:
 ;;; Code:
 (use-package zerodark-theme :defer t
-  :hook ((vs-emacs-config     . zerodark-setup-modeline-format)
-         (vs-emacs-config-gui . vs|theme/enable               ))
+  :hook ((vs-emacs-theme-loaded . vs|theme/mode-line-setup)
+         (vs-emacs-config-gui   . vs|theme/enable         ))
   :init
+  (defvar vs-mode-line-modes
+    (list '("" mode-name) '("" mode-line-process) '("" minor-mode-alist))
+    "Mode line construct for displaying major and minor modes.")
+
+  (defvar vs-mode-line-vc
+    '(vc-mode ((:eval (all-the-icons-faicon "code-fork"
+                                            :height 0.9
+                                            :v-adjust 0
+                                            :face (when (zerodark--active-window-p)
+                                                    (zerodark-git-face))))
+               " "
+               (:eval (let ((vc-mode (truncate-string-to-width vc-mode 100 nil nil "...")))
+                        (string-match "[-:@!?]\\(.+\\)$" vc-mode)
+                        (substring vc-mode (match-beginning 1)))))))
+
+  (defun vs|theme/mode-line-setup ()
+    "Mode line setup."
+    (setq-default mode-line-format
+                  `(;"%e "
+                    ,zerodark-modeline-ro " "
+                    ,zerodark-buffer-coding " "
+                    ,zerodark-modeline-modified " "
+                    ,zerodark-modeline-buffer-identification
+                    ,zerodark-modeline-position " ["
+                    vs-mode-line-modes "]   "
+                    ,vs-mode-line-vc "    "
+                    (:eval (zerodark-modeline-flycheck-status)) " "
+                    mode-line-misc-info mode-line-end-spaces)))
+
   (defun vs|theme/enable ()
     ;; Load theme
     (load-theme 'zerodark t t)
@@ -17,12 +46,10 @@
     (let ((faces '(error hl-line region success warning)))
       (vs|emacs/scale-face-color faces 10 t))
 
-    ;; Increase face foreground
-    (let ((faces '(font-lock-builtin-face font-lock-comment-face
-                   font-lock-constant-face font-lock-doc-face
-                   font-lock-function-name-face font-lock-keyword-face
-                   font-lock-string-face font-lock-type-face
-                   font-lock-variable-name-face)))
+    ;; Increase faces foreground
+    (let ((faces '(font-lock-builtin-face font-lock-comment-face font-lock-constant-face
+                   font-lock-doc-face font-lock-function-name-face font-lock-keyword-face
+                   font-lock-string-face font-lock-type-face font-lock-variable-name-face)))
       (vs|emacs/scale-face-color faces 20))
 
     ;; Change colors
