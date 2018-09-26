@@ -11,7 +11,7 @@
         treemacs-persist-file             (expand-file-name "treemacs.el" vs-emacs-cache-dir)
         treemacs-show-hidden-files        nil
         treemacs-silent-refresh           t
-        treemacs-space-between-root-nodes nil
+        treemacs-space-between-root-nodes t
         treemacs-width                    40)
 
   (add-to-list 'treemacs-pre-file-insert-predicates 'treemacs-is-file-git-ignored?)
@@ -59,6 +59,7 @@
           indicate-empty-lines       nil
           line-spacing               1
           mode-line-format           t
+          require-final-newline      nil
           tab-width                  1))
 
   :general

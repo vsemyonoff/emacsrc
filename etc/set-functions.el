@@ -99,7 +99,8 @@ When BACKGROUND is t then scale background colors."
 (defun vs|emacs|apply-dir-locals ()
   "Apply directory local variables to buffer."
   (interactive)
-  (let ((enable-local-variables :all))
+  (let ((enable-dir-local-variables t   )
+        (enable-local-variables     :all))
     (hack-dir-local-variables-non-file-buffer)))
 
 
