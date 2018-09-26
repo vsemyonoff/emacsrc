@@ -58,20 +58,22 @@ Should be populated using `.dir-locals.el' like that:
 
 
 (use-package lsp-mode
-  :after cmake-ide
   :config
   (setq lsp-eldoc-render-all          nil
         lsp-highlight-symbol-at-point nil
-        lsp-inhibit-message           nil)
+        lsp-inhibit-message           nil))
 
-  (defun vs|lsp-mode/language-id (buffer)
+
+(use-package lsp-cpp :ensure nil
+  :config
+  (defun vs|lsp-cpp/language-id (buffer)
     "Return language ID string accordingly to buffer's file name."
     (if (string-match "\\.\\([ch]\\(pp\\|xx\\|\\+\\+\\)\\)\\|\\(cc\\|hh\\)\\|\\(CC?\\|HH?\\)\\$"
                       (buffer-file-name buffer))
         "cpp"
       "c"))
 
-  (defun vs|lsp-mode/clangd-options ()
+  (defun vs|lsp-cpp/clangd-options ()
     "Generate `clangd' options."
     (let ((clang-path (if running-on-macos
                           "/usr/local/opt/llvm/bin/clangd"
@@ -82,25 +84,26 @@ Should be populated using `.dir-locals.el' like that:
                                (expand-file-name vs-cmake-build-dir
                                                  (projectile-project-root))))))
 
-  (lsp-define-stdio-client lsp-clangd
+  (lsp-define-stdio-client lsp-cpp
                            nil
                            'projectile-project-root
                            nil
                            :ignore-regexps '("^Error -[0-9]+: .+$")
-                           :command-fn     'vs|lsp-mode/clangd-options
-                           :language-id-fn 'vs|lsp-mode/language-id)
+                           :command-fn     'vs|lsp-cpp/clangd-options
+                           :language-id-fn 'vs|lsp-cpp/language-id)
 
-  :hook ((c-mode   . lsp-clangd-enable)
-         (c++-mode . lsp-clangd-enable)))
+  :hook ((c-mode   . lsp-cpp-enable)
+         (c++-mode . lsp-cpp-enable))
+
+  :requires (cmake-ide lsp-mode))
 
 
 (use-package lsp-html
-  :after lsp-mode
-  :hook (html-mode  . lsp-html-enable))
+  :hook (html-mode  . lsp-html-enable)
+  :requires lsp-mode)
 
 
 (use-package lsp-java
-  :after lsp-mode
   :config
   (setq lsp-java-server-install-dir (expand-file-name "eclipse.jdt.ls/" vs-xdg-data-dir)
         lsp-java-workspace-cache-dir (expand-file-name "eclipse.jdt.ls/" vs-xdg-cache-dir)
@@ -117,15 +120,16 @@ Should be populated using `.dir-locals.el' like that:
              (add-to-list 'lsp-java--workspace-folders project)
              (setq projects (concat projects " " project)))))
        vs-java-projects)
-      (message "===> Java projects added:%s" projects)))
+      (message "===> LSP Java: workspace projects:%s" projects)))
   (advice-add 'lsp-java-enable :before 'vs|lsp-java/before-enable)
 
-  :hook (java-mode . lsp-java-enable))
+  :hook (java-mode . lsp-java-enable)
+  :requires lsp-mode)
 
 
 (use-package lsp-python
-  :after lsp-mode
-  :hook (python-mode . lsp-python-enable))
+  :hook (python-mode . lsp-python-enable)
+  :requires lsp-mode)
 
 
 (use-package lsp-ui
