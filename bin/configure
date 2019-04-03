@@ -7,6 +7,7 @@ BREW_INSTALL_URL="https://raw.githubusercontent.com/Homebrew/install/master/inst
 COMM_PACKAGES=(
     cmake
     hunspell
+    llvm
     python
     the_silver_searcher
 )
@@ -14,13 +15,13 @@ COMM_PACKAGES=(
 ARCH_PACKAGES=(
     "${COMM_PACKAGES[@]}"
     emacs
-    llvm
+    npm
+    python-pip
 )
 # Homebrew packages
 BREW_PACKAGES=(
     "${COMM_PACKAGES[@]}"
     caskroom/cask/emacs
-    llvm --HEAD
     node
     terminal-notifier
 )
@@ -58,8 +59,9 @@ case "${SYSTEM}" in
 esac
 
 # C/C++ 'compile_commands.json' generator:
-#     intercept-build --cdb build/compile_commands.json make -j9
-${PRETEND} pip install scan-build
+#     make -j9 | compiledb
+${PRETEND} pip install compiledb
+
 # Python language server
 ${PRETEND} pip install 'python-language-server[all]'
 
@@ -67,36 +69,48 @@ ${PRETEND} pip install 'python-language-server[all]'
 ${PRETEND} npm i -g vscode-html-languageserver-bin
 
 # Configure symlinks
-EMACS_D="${HOME}/.emacs.d"
-EMACS_D_SRC="$(cd $(dirname $(test -L ${0} && readlink ${0} || echo ${0}))/.. && pwd)"
-if [[ "${EMACS_D_SRC}" != "${EMACS_D}" ]]; then
-    if [[ -h "${EMACS_D}" ]]; then
-        ${PRETEND} rm -f "${EMACS_D}"
-    elif [[ -d "${EMACS_D}" ]]; then
-        ${PRETEND} mv -v  "${EMACS_D}" "${EMACS_D}.save"
+SRC_DIR="$(cd $(dirname ${0})/.. && pwd)"
+function clean_dst() {
+    if [[ -e "${1}" ]]; then
+        if [[ -h "${1}" || -L "${1}" ]]; then
+            ${PRETEND} rm -v "${1}"
+        elif [[ -d "${1}" || -f "${1}" ]]; then
+            ${PRETEND} mv -v "${1}" "${1}.save"
+        fi
     fi
-    ${PRETEND} ln -sv "${EMACS_D_SRC}" "${EMACS_D}"
-fi
+}
 
-BIN_DIR="${HOME}/.bin"
-[[ -h "${BIN_DIR}/emcl" ]] && ${PRETEND} rm -f "${BIN_DIR}/emcl"
-${PRETEND} mkdir -p "${BIN_DIR}" && ${PRETEND} ln -sv "${EMACS_D}/bin/emcl" "${BIN_DIR}/emcl"
+# emcl
+BIN_DIR="${HOME}/.bin" && ${PRETEND} mkdir -p "${BIN_DIR}"
+clean_dst "${BIN_DIR}/emcl"
+${PRETEND} ln -sv "${SRC_DIR}/bin/emcl" "${BIN_DIR}/emcl"
 
-DATA_DIR="${XDG_DATA_HOME:-${HOME}/.local/share}"
-[[ -h "${DATA_DIR}/emacs" ]] && ${PRETEND} rm -f "${DATA_DIR}/emacs"
-${PRETEND} mkdir -p "${DATA_DIR}" && ${PRETEND} ln -sv "${EMACS_D}/share" "${DATA_DIR}/emacs"
+# init.el
+EMACS_EL="${HOME}/.emacs.el"
+clean_dst "${EMACS_EL}"
+${PRETEND} ln -sv "${SRC_DIR}/init.el" "${EMACS_EL}"
 
-# Install MacOS 'emacsclient' wrapper
+# configs
+CONFIG_DIR="${XDG_CONFIG_HOME:-${HOME}/.config}" && ${PRETEND} mkdir -p "${CONFIG_DIR}"
+clean_dst "${CONFIG_DIR}/emacs"
+${PRETEND} ln -sv "${SRC_DIR}/etc" "${CONFIG_DIR}/emacs"
+
+# data
+DATA_DIR="${XDG_DATA_HOME:-${HOME}/.local/share}" && ${PRETEND} mkdir -p "${DATA_DIR}"
+clean_dst "${DATA_DIR}/emacs"
+${PRETEND} ln -sv "${SRC_DIR}/share" "${DATA_DIR}/emacs"
+
+# MacOS 'emacsclient' wrapper
 if [[ "${SYSTEM}" == "Darwin" ]]; then
-    APP_DIR="${HOME}/Applications"
-    DST_APP="${APP_DIR}/EmacsClient.app"
-    SRC_APP="${EMACS_D}/share/apple/EmacsClient.app"
-    [[ -h "${DST_APP}" ]] && ${PRETEND} rm -f "${DST_APP}"
-    ${PRETEND} mkdir -p "${APP_DIR}" && ${PRETEND} ln -sv "${SRC_APP}" "${DST_APP}"
+    APP_DIR="${HOME}/Applications" && ${PRETEND} mkdir -p "${APP_DIR}"
+    clean_dst "${APP_DIR}/EmacsClient.app"
+    ${PRETEND} ln -sv "${SRC_DIR}/share/apple/EmacsClient.app" "${APP_DIR}/EmacsClient.app"
 fi
 
 # Set environment vars
-cat << EOF > "${HOME}/.profile.d/editor.sh"
+if [[ -z "${PRETEND}" ]]; then
+    PROFILE_DIR="${HOME}/.profile.d" && mkdir -p "${PROFILE_DIR}"
+    cat > "${PROFILE_DIR}/10-editor.sh.1" << EOF
 # Set 'emacsclient' as default editor
 EDITOR="emcl"
 GIT_EDITOR="\${EDITOR} --no-fork"
@@ -104,3 +118,9 @@ SUDO_EDITOR="\${EDITOR} --no-fork"
 
 export EDITOR GIT_EDITOR SUDO_EDITOR
 EOF
+
+    PATH_DIR="${PROFILE_DIR}/path.d" && mkdir -p "${PATH_DIR}"
+    cat > "${PROFILE_DIR}/emacs.conf" << EOF
+\${HOME}/.emacs.d/bin
+EOF
+fi

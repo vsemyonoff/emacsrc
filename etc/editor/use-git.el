@@ -50,7 +50,11 @@
 
 (use-package magit
   :commands (magit-status magit-blame magit-git-success)
-  :config (setq magit-ediff-dwim-show-on-hunks t)
+  :config (setq magit-ediff-dwim-show-on-hunks t
+                magit-git-global-arguments
+                (nconc magit-git-global-arguments
+                       '("-c" "color.ui=false"
+                         "-c" "color.diff=false")))
   :general ("C-x g" 'magit-status))
 
 

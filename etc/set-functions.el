@@ -30,7 +30,7 @@
 (defun vs|emacs/byte-compile-init ()
   "Byte-compile all your dotfiles again."
   (interactive)
-  (byte-recompile-directory vs-emacs-home-dir 0))
+  (byte-recompile-directory vs-emacs-config-dir 0))
 
 
 (defun vs|emacs/scale-color-limit (rgb value)

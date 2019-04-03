@@ -12,17 +12,18 @@
 (setq-default buffer-file-coding-system 'utf-8  )
 
 ;; Constants
+(defconst vs-xdg-dir (expand-file-name (or (getenv "XDG_HOME") "~/.local"))
+  "`freedesktop.org' folder.")
+
 (defconst vs-xdg-cache-dir (expand-file-name (or (getenv "XDG_CACHE_HOME") "~/.cache"))
   "`freedesktop.org' cache folder.")
 
 (defconst vs-xdg-config-dir (expand-file-name (or (getenv "XDG_CONFIG_HOME") "~/.config"))
   "`freedesktop.org' config folder.")
 
-(defconst vs-xdg-data-dir (expand-file-name (or (getenv "XDG_DATA_HOME") "~/.local/share"))
+(defconst vs-xdg-data-dir (expand-file-name (or (getenv "XDG_DATA_HOME")
+                                                (expand-file-name "share" vs-xdg-dir)))
   "`freedesktop.org' data folder.")
-
-(defconst vs-xdg-local-dir (directory-file-name (file-name-directory vs-xdg-data-dir))
-  "`freedesktop.org' local folder.")
 
 (defconst vs-emacs-home-dir (file-name-directory (or load-file-name (buffer-file-name)))
   "Top-level Emacs folder.")
@@ -33,11 +34,8 @@
 (defconst vs-emacs-config-dir (expand-file-name "etc" vs-emacs-home-dir)
   "Emacs configs folder.")
 
-(defconst vs-emacs-data-dir (expand-file-name "emacs" vs-xdg-data-dir)
+(defconst vs-emacs-data-dir (expand-file-name "share" vs-emacs-home-dir)
   "Emacs data folder.")
-
-(defconst vs-user-config-dir (expand-file-name "emacs" vs-xdg-config-dir)
-  "User configs folder.")
 
 (defconst vs-user-home-dir (expand-file-name "~")
   "User's home folder.")
@@ -96,9 +94,7 @@
     (unless noninteractive
       (require 'set-editor)    ; editor behavior
       (require 'set-interface) ; interface settings
-      (require 'set-tools)     ; browser/email/messengers settings
-      (vs|emacs/require-dir
-       vs-user-config-dir))))  ; private settings (passwords, accounts etc)
+      (require 'set-tools))))  ; browser/email/messengers settings
 
 ;; Editor config
 (add-hook 'emacs-startup-hook (lambda () (run-hooks 'vs-emacs-config-hook)))

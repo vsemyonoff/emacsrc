@@ -35,21 +35,23 @@
                     mode-line-misc-info mode-line-end-spaces)))
 
   (defun vs|theme/enable ()
+    "Enable Zerodark theme."
     ;; Load theme
     (load-theme 'zerodark t t)
     (enable-theme 'zerodark)
 
     ;; Set font
-    (set-face-attribute 'default nil :font "Source Code Pro-12" :foreground "#f8f8f2")
+    (set-face-attribute 'default nil :font "Roboto Mono" :height 100 :foreground "#f8f8f2")
 
     ;; Increase faces background
     (let ((faces '(error hl-line region success warning)))
       (vs|emacs/scale-face-color faces 10 t))
 
     ;; Increase faces foreground
-    (let ((faces '(font-lock-builtin-face font-lock-comment-face font-lock-constant-face
-                   font-lock-doc-face font-lock-function-name-face font-lock-keyword-face
-                   font-lock-string-face font-lock-type-face font-lock-variable-name-face)))
+    (let ((faces '(font-lock-builtin-face
+                   font-lock-comment-face font-lock-constant-face font-lock-doc-face
+                   font-lock-function-name-face font-lock-keyword-face font-lock-string-face
+                   font-lock-type-face font-lock-variable-name-face)))
       (vs|emacs/scale-face-color faces 20))
 
     ;; Change colors

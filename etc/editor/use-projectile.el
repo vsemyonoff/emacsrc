@@ -33,10 +33,9 @@
                      return t)
       (apply orig-fun args)))
   (advice-add 'projectile-cache-current-file :around 'vs|projectile/cache-filter)
+  (projectile-mode)
 
-  :general ("M-p" 'projectile-command-map)
-
-  :hook (vs-emacs-config . projectile-global-mode))
+  :general ("M-p" 'projectile-command-map))
 
 
 (provide 'use-projectile)

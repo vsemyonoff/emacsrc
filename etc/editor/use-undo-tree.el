@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 (use-package undo-tree :delight :ensure quelpa
-  :hook (vs-emacs-config  . global-undo-tree-mode)
+  :config (global-undo-tree-mode)
   :quelpa (undo-tree :fetcher git :url "http://www.dr-qubit.org/git/undo-tree.git"))
 
 
