@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 
+# No wait for client exit by default
+NO_WAIT="--no-wait"
+
 # Check for visible frame
-if [[ "$(uname)" == "Linux" && -z "${DISPLAY}" ]]; then
+if [[ -z "${DISPLAY}" ]]; then
     CREATE_FRAME="--tty"
+    unset NO_WAIT
 else
     FRAME_EXISTS=$(emacsclient -e '(<= 1 (vs|emacs/gui-frames-count))' 2>/dev/null)
     [[ "${FRAME_EXISTS}" != "t" ]] && CREATE_FRAME="--create-frame"
 fi
-
-# No wait for client exit by default
-NO_WAIT="--no-wait"
 
 # Parse arguments
 args=()

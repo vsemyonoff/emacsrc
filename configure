@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# Packages
+PACKAGES=(
+    cmake
+    emacs
+    hunspell
+    llvm
+    npm
+    python-pip
+    the_silver_searcher
+)
+
+# Pretend run: just print all commands without execution
+[[ ${1} == "-p" ]] && PRETEND="echo"
+
+[[ -z "$(which pacman)" ]] && echo "'pacman' not instaled, exiting..." && exit 1
+[[ ${PACKAGES} ]] && ${PRETEND} sudo pacman -Sy --needed --noconfirm ${PACKAGES[@]}
+
+# C/C++ 'compile_commands.json' generator:
+#     make -j9 | compiledb
+${PRETEND} sudo pip install compiledb
+
+# Python language server
+${PRETEND} sudo pip install 'python-language-server[all]'
+
+# HTML language server
+${PRETEND} sudo npm i -g vscode-html-languageserver-bin
+
+# Set environment vars
+if [[ -z "${PRETEND}" ]]; then
+    PROFILE_DIR="${HOME}/.profile.d" && mkdir -p "${PROFILE_DIR}"
+    cat > "${PROFILE_DIR}/10-editor.sh" << EOF
+# Set 'emacsclient' as default editor
+EDITOR="emcl"
+GIT_EDITOR="\${EDITOR} --no-fork"
+SUDO_EDITOR="\${EDITOR} --no-fork"
+export EDITOR GIT_EDITOR SUDO_EDITOR
+EOF
+
+    PATH_DIR="${PROFILE_DIR}/path.d" && mkdir -p "${PATH_DIR}"
+    cat > "${PATH_DIR}/emacs.conf" << EOF
+\${HOME}/.emacs.d/bin
+EOF
+fi

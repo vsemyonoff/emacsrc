@@ -16,9 +16,6 @@
 
   (add-to-list 'treemacs-pre-file-insert-predicates 'treemacs-is-file-git-ignored?)
 
-  (when running-on-macos
-    (setq treemacs-python-executable      "/usr/local/bin/python3"))
-
   (treemacs-git-mode                     'extended)
   (treemacs-filewatch-mode                t       )
   (treemacs-follow-mode                  -1       )
