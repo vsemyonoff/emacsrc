@@ -1,45 +1,100 @@
 #!/usr/bin/env bash
 
+# Script details
+SCRIPT_NAME="$(basename ${0})"
+SRC_DIR="$(cd $(dirname ${0}) && pwd)"
+
+# Symlink (while debugging) or copy method
+INSTALL="ln -fns"
+#INSTALL="cp -rf"
+
 # Packages
 PACKAGES=(
+    clang
     cmake
     emacs
     hunspell
-    llvm
     npm
     python-pip
     the_silver_searcher
 )
+PIP_PACKAGES=(
+    compiledb                      # C/C++ 'compile_commands.json' generator
+    'python-language-server[all]'
+)
+NPM_PACKAGES=(
+    bash-language-server
+    vscode-css-languageserver-bin
+    vscode-html-languageserver-bin
+)
 
-# Pretend run: just print all commands without execution
-[[ ${1} == "-p" ]] && PRETEND="echo"
-
-[[ -z "$(which pacman)" ]] && echo "'pacman' not instaled, exiting..." && exit 1
-[[ ${PACKAGES} ]] && ${PRETEND} sudo pacman -Sy --needed --noconfirm ${PACKAGES[@]}
-
-# C/C++ 'compile_commands.json' generator:
-#     make -j9 | compiledb
-${PRETEND} sudo pip install compiledb
-
-# Python language server
-${PRETEND} sudo pip install 'python-language-server[all]'
-
-# HTML language server
-${PRETEND} sudo npm i -g vscode-html-languageserver-bin
-
-# Set environment vars
-if [[ -z "${PRETEND}" ]]; then
-    PROFILE_DIR="${HOME}/.profile.d" && mkdir -p "${PROFILE_DIR}"
-    cat > "${PROFILE_DIR}/10-editor.sh" << EOF
-# Set 'emacsclient' as default editor
-EDITOR="emcl"
-GIT_EDITOR="\${EDITOR} --no-fork"
-SUDO_EDITOR="\${EDITOR} --no-fork"
-export EDITOR GIT_EDITOR SUDO_EDITOR
+# Show usage
+function show_help() {
+    cat << EOF
+usage: ${SCRIPT_NAME} [ARGS]
+    -h, --help    -- show this help and exit
+    -i, --install -- install system/python/node packages
+    -p, --pretend -- print commands without execution
 EOF
+}
 
-    PATH_DIR="${PROFILE_DIR}/path.d" && mkdir -p "${PATH_DIR}"
-    cat > "${PATH_DIR}/emacs.conf" << EOF
-\${HOME}/.emacs.d/bin
-EOF
-fi
+# Install system/python/node packages
+function install_packages () {
+    if [[ ${EUID} != 0 ]]; then
+        echo "root privileges required, executing sudo..."
+        sudo "${0}" "${@}"
+    else
+        # Install system packages:
+        [[ ${PACKAGES} ]] && ${PRETEND} pacman -S --needed --noconfirm ${PACKAGES[@]}
+        #     ...python:
+        [[ ${PIP_PACKAGES} ]] && ${PRETEND} pip install ${PIP_PACKAGES[@]}
+        #     ...node.js:
+        [[ ${NPM_PACKAGES} ]] && ${PRETEND} npm install -g --unsafe-perm ${NPM_PACKAGES[@]}
+        # Install startup scripts
+        ${PRETEND} cp -fr "${SRC_DIR}/share/site-lisp/"*.el "/usr/share/emacs/site-lisp/"
+        # Exit script if running in 'sudo'
+        [[ "${SUDO_USER}" ]] && exit 0
+    fi
+}
+
+# Copy or symlink config files to ${HOME}
+function install_configs() {
+    # Install scripts
+    ${PRETEND} mkdir -p "${XDG_HOME}/bin"
+    for script in "${SRC_DIR}/bin/"* ; do
+        ${PRETEND} ${INSTALL} "${script}" "${XDG_HOME}/bin/"
+    done
+    # Install configs
+    ${PRETEND} ${INSTALL} "${SRC_DIR}/etc" "${XDG_CONFIG_HOME}/emacs"
+    # Install dictionaries
+    ${PRETEND} mkdir -p "${XDG_DATA_HOME}/emacs"
+    ${PRETEND} ${INSTALL} "${SRC_DIR}/share/dict" "${XDG_DATA_HOME}/emacs/"
+}
+
+# Parse arguments
+args=()
+for arg in "${@}"; do
+    case "${arg}" in
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        -i|--install)
+            INSTALL_PACKAGES="yes"
+            args+=("${arg}")
+            ;;
+        -p|--pretend)
+            PRETEND="echo"
+            args+=("${arg}")
+            ;;
+        *)
+            echo "error: unsupported parameter '${arg}'"
+            show_help
+            exit 1
+            ;;
+    esac
+done
+set -- "${args[@]}"
+
+[[ "${INSTALL_PACKAGES}" ]] && install_packages "${@}"
+install_configs

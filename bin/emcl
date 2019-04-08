@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Server socket file name
+SOCKET_NAME="${XDG_RUNTIME_DIR}/emacs/server"
+
 # No wait for client exit by default
 NO_WAIT="--no-wait"
 
@@ -8,7 +11,7 @@ if [[ -z "${DISPLAY}" ]]; then
     CREATE_FRAME="--tty"
     unset NO_WAIT
 else
-    FRAME_EXISTS=$(emacsclient -e '(<= 1 (vs|emacs/gui-frames-count))' 2>/dev/null)
+    FRAME_EXISTS=$(emacsclient --socket-name="${SOCKET_NAME}" -e '(<= 1 (vs|emacs/gui-frames-count))' 2>/dev/null)
     [[ "${FRAME_EXISTS}" != "t" ]] && CREATE_FRAME="--create-frame"
 fi
 
@@ -47,4 +50,4 @@ if [[ "${CREATE_FRAME}" != "--tty" ]]; then
 fi
 
 # Start daemon, create frame and open file(s) in there
-exec emacsclient --alternate-editor= ${NO_WAIT} ${CREATE_FRAME} "${@}"
+exec emacsclient --socket-name="${SOCKET_NAME}" --alternate-editor= ${NO_WAIT} ${CREATE_FRAME} "${@}"
