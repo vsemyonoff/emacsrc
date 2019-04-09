@@ -26,10 +26,11 @@
 (unless (package-installed-p 'quelpa-use-package)
   (package-install 'quelpa-use-package))
 
-(setq-default quelpa-dir (expand-file-name "archives/quelpa" package-user-dir)
-              quelpa-checkout-melpa-p nil
-              quelpa-update-melpa-p nil
-              use-package-always-ensure t)
+(setq-default quelpa-dir                (expand-file-name "archives/quelpa" package-user-dir)
+              quelpa-checkout-melpa-p   nil
+              quelpa-update-melpa-p     nil
+              use-package-always-ensure t
+              use-package-debug         t)
 
 (eval-when-compile
   (require 'quelpa-use-package))

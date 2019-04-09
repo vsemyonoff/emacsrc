@@ -1,7 +1,7 @@
 ;;; use-undo-tree.el ---  more natural `undo' behavior. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(use-package undo-tree :delight :ensure quelpa
+(use-package undo-tree :ensure quelpa :delight
   :config (global-undo-tree-mode)
   :quelpa (undo-tree :fetcher git :url "http://www.dr-qubit.org/git/undo-tree.git"))
 

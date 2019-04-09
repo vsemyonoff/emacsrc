@@ -15,7 +15,7 @@
   :quelpa (dired+ :fetcher wiki))
 
 
-(use-package dired-x :ensure nil)
+;;(use-package dired-x :ensure nil)
 
 
 (provide 'use-dired)

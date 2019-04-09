@@ -31,10 +31,10 @@
 (defconst vs-emacs-cache-dir (expand-file-name "emacs" vs-xdg-cache-dir)
   "Emacs cache folder.")
 
-(defconst vs-emacs-config-dir (expand-file-name "etc" vs-emacs-home-dir)
+(defconst vs-emacs-config-dir (expand-file-name "emacs" vs-xdg-config-dir)
   "Emacs configs folder.")
 
-(defconst vs-emacs-data-dir (expand-file-name "share" vs-emacs-home-dir)
+(defconst vs-emacs-data-dir (expand-file-name "emacs" vs-xdg-data-dir)
   "Emacs data folder.")
 
 (defconst vs-user-home-dir (expand-file-name "~")
