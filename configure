@@ -2,11 +2,6 @@
 
 # Script details
 SCRIPT_NAME="$(basename ${0})"
-SRC_DIR="$(cd $(dirname ${0}) && pwd)"
-
-# Symlink (while debugging) or copy method
-INSTALL="ln -fns"
-#INSTALL="cp -rf"
 
 # Packages
 PACKAGES=(
@@ -23,7 +18,6 @@ PIP_PACKAGES=(
     'python-language-server[all]'
 )
 NPM_PACKAGES=(
-    bash-language-server
     vscode-css-languageserver-bin
     vscode-html-languageserver-bin
 )
@@ -50,25 +44,25 @@ function install_packages () {
         [[ ${PIP_PACKAGES} ]] && ${PRETEND} pip install ${PIP_PACKAGES[@]}
         #     ...node.js:
         [[ ${NPM_PACKAGES} ]] && ${PRETEND} npm install -g --unsafe-perm ${NPM_PACKAGES[@]}
-        # Install startup scripts
-        ${PRETEND} cp -fr "${SRC_DIR}/share/site-lisp/"*.el "/usr/share/emacs/site-lisp/"
         # Exit script if running in 'sudo'
         [[ "${SUDO_USER}" ]] && exit 0
     fi
 }
 
-# Copy or symlink config files to ${HOME}
+# Set default editor and extend 'PATH' variable
 function install_configs() {
-    # Install scripts
-    ${PRETEND} mkdir -p "${XDG_HOME}/bin"
-    for script in "${SRC_DIR}/bin/"* ; do
-        ${PRETEND} ${INSTALL} "${script}" "${XDG_HOME}/bin/"
-    done
-    # Install configs
-    ${PRETEND} ${INSTALL} "${SRC_DIR}/etc" "${XDG_CONFIG_HOME}/emacs"
-    # Install dictionaries
-    ${PRETEND} mkdir -p "${XDG_DATA_HOME}/emacs"
-    ${PRETEND} ${INSTALL} "${SRC_DIR}/share/dict" "${XDG_DATA_HOME}/emacs/"
+    mkdir -p "${HOME}/.profile.d"
+    cat > "${HOME}/.profile.d/10-editor.sh" << EOF
+# Set 'emacsclient' as default editor
+EDITOR="emcl"
+GIT_EDITOR="\${EDITOR} --no-fork"
+SUDO_EDITOR="\${EDITOR} --no-fork"
+export EDITOR GIT_EDITOR SUDO_EDITOR
+EOF
+    mkdir -p "${HOME}/.profile.d/path.d"
+    cat > "${HOME}/.profile.d/path.d/emacs.conf" << EOF
+\${HOME}/.emacs.d/bin
+EOF
 }
 
 # Parse arguments
@@ -96,5 +90,6 @@ for arg in "${@}"; do
 done
 set -- "${args[@]}"
 
+# Exec tasks
 [[ "${INSTALL_PACKAGES}" ]] && install_packages "${@}"
 install_configs
