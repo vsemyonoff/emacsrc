@@ -1,23 +1,6 @@
 ;;; set-pkgmgr.el --- package manager settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'package)
-
-;; Package manager settings
-(setq package-archives
-      '(;("melpa-stable" . "https://stable.melpa.org/packages/")
-        ("melpa"        . "https://melpa.org/packages/")
-        ("elpa"         . "https://elpa.gnu.org/packages/")
-        ("org"          . "https://orgmode.org/elpa/"))
-      package-archive-priorities
-      '(;("melpa-stable" . 50)
-        ("melpa"        . 30)
-        ("org"          . 15)
-        ("elpa"         . 0)))
-
-(setq package-user-dir (expand-file-name "packages" vs-emacs-cache-dir)
-      package-gnupghome-dir (expand-file-name "gnupg" package-user-dir))
-
 (package-initialize)
 
 (unless package-archive-contents

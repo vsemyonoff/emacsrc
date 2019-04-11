@@ -1,17 +1,13 @@
 #!/usr/bin/env bash
 
-# Server socket file name
-SOCKET_NAME="${XDG_RUNTIME_DIR}/emacs/server"
-
 # No wait for client exit by default
 NO_WAIT="--no-wait"
 
 # Check for visible frame
 if [[ -z "${DISPLAY}" ]]; then
     CREATE_FRAME="--tty"
-    unset NO_WAIT
 else
-    FRAME_EXISTS=$(emacsclient --socket-name="${SOCKET_NAME}" -e '(<= 1 (vs|emacs/gui-frames-count))' 2>/dev/null)
+    FRAME_EXISTS=$(emacsclient -e '(<= 1 (vs|emacs/gui-frames-count))' 2>/dev/null)
     [[ "${FRAME_EXISTS}" != "t" ]] && CREATE_FRAME="--create-frame"
 fi
 
@@ -22,15 +18,15 @@ for arg in "${@}"; do
         -c|--create-frame)
             ;;
         --no-fork)
-            # Use separate frame with --no-fork
+            # Use separate frame with --no-fork option
             CREATE_FRAME="${CREATE_FRAME:---create-frame}"
+            # Explycitly disable client detach
             unset NO_WAIT
             ;;
         -n|--no-wait)
             ;;
         -t|-nw|--tty)
             CREATE_FRAME="--tty"
-            unset NO_WAIT
             ;;
         *)
             args+=("${arg}")
@@ -39,15 +35,16 @@ for arg in "${@}"; do
 done
 set -- "${args[@]}"
 
-# Client log
-LOG_DIR="${XDG_CACHE_HOME:-${HOME}/.cache}/emacs"
-LOG_FILE="${LOG_DIR}/client.log"
-
 # Redirect all output to file if not in terminal mode
 if [[ "${CREATE_FRAME}" != "--tty" ]]; then
+    LOG_DIR="${XDG_CACHE_HOME:-${HOME}/.cache}/emacs"
+    LOG_FILE="${LOG_DIR}/client.log"
     mkdir -p "${LOG_DIR}"
     exec >> "${LOG_FILE}" 2>&1
+else
+    # Wait till terminal client exit
+    unset NO_WAIT
 fi
 
 # Start daemon, create frame and open file(s) in there
-exec emacsclient --socket-name="${SOCKET_NAME}" --alternate-editor= ${NO_WAIT} ${CREATE_FRAME} "${@}"
+exec emacsclient --alternate-editor= ${NO_WAIT} ${CREATE_FRAME} "${@}"
