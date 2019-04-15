@@ -1,6 +1,31 @@
 ;;; set-functions.el --- useful functions and macros. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
+(require 'set-config)
+
+(defun vs|emacs/gui-frames-count ()
+  "Return count of visible non-terminal frames.
+Used by `emacsclient' wrapper only."
+  (let ((count 0))
+    (dolist (frame (visible-frame-list))
+      (unless (string= (framep frame) "t")
+        (setq count (1+ count))))
+    count))
+
+
+(defun vs|emacs/enable-startup-optimizations ()
+  "Temporarily disable gc and `file-name-handler-alist' handlers."
+  (setq gc-cons-threshold          most-positive-fixnum
+        vs-file-name-handler-alist file-name-handler-alist
+        file-name-handler-alist    nil))
+
+
+(defun vs|emacs/disable-startup-optimizations ()
+  "Reset gc and `file-name-handler-alist' to reasonable defaults."
+  (setq file-name-handler-alist    vs-file-name-handler-alist
+        gc-cons-threshold          vs-gc-cons-threshold))
+
+
 (defun vs|emacs/add-subdirs-to-load-path (dir)
   "Recursively add DIR's subdirs to `load-path'."
   (let ((default-directory dir))
@@ -27,10 +52,10 @@
                                      "\\.el$")))
 
 
-(defun vs|emacs/byte-compile-init ()
-  "Byte-compile all your dotfiles again."
+(defun vs|emacs|byte-compile-init ()
+  "Byte-compile all your dotfiles."
   (interactive)
-  (byte-recompile-directory vs-emacs-config-dir 0))
+  (byte-recompile-directory user-emacs-directory 0))
 
 
 (defun vs|emacs/scale-color-limit (rgb value)
@@ -88,12 +113,6 @@ When BACKGROUND is t then scale background colors."
      face-list)
     ;; Return actula scale value
     value))
-
-
-;; (defadvice vs|emacs/exchange-point-and-mark (before deactivate-mark activate compile)
-;;   "When called with no active region, do not activate mark."
-;;   (interactive
-;;    (list (not (region-active-p)))))
 
 
 (defun vs|emacs|apply-dir-locals ()
@@ -161,15 +180,6 @@ With ARG, do this that many times."
 With ARG, do this that many times."
   (interactive "p")
   (vs|emacs|delete-word (- arg)))
-
-
-(defun vs|emacs/gui-frames-count ()
-  "Return count of visible non-terminal frames."
-  (let ((count 0))
-    (dolist (frame (visible-frame-list))
-      (unless (string= (framep frame) "t")
-        (setq count (1+ count))))
-    count))
 
 
 (provide 'set-functions)

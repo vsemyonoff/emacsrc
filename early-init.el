@@ -1,7 +1,9 @@
-;;; early-init.el --- new place to set up `package.el'. -*- lexical-binding: t; -*-
+;;; early-init.el --- Emacs configuration entry point (since Emacs v27). -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'xdg)
+(setq user-emacs-directory (file-name-directory (or load-file-name (buffer-file-name))))
+(add-to-list 'load-path
+             (expand-file-name "etc" user-emacs-directory))
 
 ;; Package repos
 (setq package-archives
@@ -16,7 +18,8 @@
         ("elpa"         . 0)))
 
 ;; Packages location
-(setq package-user-dir (expand-file-name "emacs/packages" (xdg-cache-home))
+(require 'set-config)
+(setq package-user-dir (expand-file-name "packages" vs-emacs-cache-dir)
       package-gnupghome-dir (expand-file-name "gnupg" package-user-dir))
 
 ;; Don't init  `package.el', will use `straight.el' instead

@@ -9,3 +9,9 @@
 
 # Undo-tree save-files
 *.~undo-tree
+
+# Customized settings
+/etc/set-custom.el
+
+# 'straight.el' stuff
+/straight
