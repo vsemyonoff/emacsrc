@@ -18,6 +18,7 @@ PIP_PACKAGES=(
     'python-language-server[all]'
 )
 NPM_PACKAGES=(
+    typescript-language-server
     vscode-css-languageserver-bin
     vscode-html-languageserver-bin
 )
