@@ -3,9 +3,10 @@
 ;;; Code:
 
 ;; Triggers
-(add-hook 'conf-mode-hook #'hl-line-mode)
-(add-hook 'prog-mode-hook #'hl-line-mode)
-(add-hook 'text-mode-hook #'hl-line-mode)
+(add-hook 'conf-mode-hook  #'hl-line-mode)
+(add-hook 'dired-mode-hook #'hl-line-mode)
+(add-hook 'prog-mode-hook  #'hl-line-mode)
+(add-hook 'text-mode-hook  #'hl-line-mode)
 
 ;; Config
 (with-eval-after-load 'hl-line
