@@ -3,7 +3,7 @@
 ;;; Code:
 (require 'straight)
 
-(straight-use-package 'async)
+;; (straight-use-package 'async)
 
 ;; (defun vs|package-utils|upgrade-async ()
 ;;   (interactive)

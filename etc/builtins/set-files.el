@@ -3,13 +3,13 @@
 ;;; Code:
 (require 'set-config)
 
-
+;; Bookmarks
 (with-eval-after-load 'bookmark
   (setq bookmark-default-file (expand-file-name "bookmarks.el"
                                                 vs-emacs-cache-dir)
         bookmark-save-flag    1))
 
-
+;; Auto-save/backup
 (with-eval-after-load 'files
   (setq confirm-nonexistent-file-or-buffer t    ; ask for new buffers
         make-backup-files                  nil) ; disable backup files
@@ -35,7 +35,7 @@
           (make-directory dir t)))))
   (advice-add 'find-file :before 'vs|emacs/find-file-create-parents))
 
-
+;; Recently visited files list
 (add-hook 'vs-emacs-config-hook #'recentf-mode)
 (with-eval-after-load 'recentf
   (setq recentf-auto-cleanup      300
@@ -48,7 +48,7 @@
         recentf-max-saved-items   300
         recentf-save-file         (expand-file-name "recent.el" vs-emacs-cache-dir)))
 
-
+;; Svae history
 (add-hook 'vs-emacs-config-hook #'savehist-mode)
 (with-eval-after-load 'savehist
   (setq savehist-additional-variables '(search-ring regexp-search-ring)
@@ -56,19 +56,19 @@
         savehist-file (expand-file-name "history.el"
                                         vs-emacs-cache-dir)))
 
-
+;; Save last visited place in files
 (add-hook 'vs-emacs-config-hook #'save-place-mode)
 (with-eval-after-load 'saveplace
   (setq save-place-file (expand-file-name "places.el"
                                           vs-emacs-cache-dir)))
 
-
+;; Revert files if changed outside
 (add-hook 'vs-emacs-config-hook #'global-auto-revert-mode)
 
-
+;; Cleanup unused buffers
 (add-hook 'vs-emacs-config-hook #'midnight-mode)
 
-
+;; Make shell scripts executable afte save
 (add-hook 'after-save-hook
           #'executable-make-buffer-file-executable-if-script-p)
 
