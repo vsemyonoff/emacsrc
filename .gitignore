@@ -1,6 +1,9 @@
 # Compiled
 *.elc
 
+# LSP server session
+.lsp-session-v1
+
 # Packaging
 .cask
 
