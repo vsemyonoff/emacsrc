@@ -14,6 +14,9 @@
   ;; Config
   (with-eval-after-load 'treemacs
     (define-key (current-global-map) (kbd "C-x 1"  )  #'treemacs-delete-other-windows)
+    (define-key treemacs-mode-map    (kbd "<left>" )  #'treemacs-toggle-node)
+    (define-key treemacs-mode-map    (kbd "<right>")  #'treemacs-toggle-node)
+
     (add-to-list 'treemacs-pre-file-insert-predicates #'treemacs-is-file-git-ignored?)
     (setq treemacs-collapse-dirs            3
           treemacs-indentation-string       "  "
@@ -47,9 +50,14 @@
   (defun vs|treemacs/add-project (&optional path)
     "Add project from PATH or `default-directory' to `treemacs' buffer.
 When PATH is nil then use `projectile-project-root' or `default-directory'."
-    (let* ((path (expand-file-name (or path
-                                       (or (projectile-project-root)
-                                           default-directory))))
+    (let* ((path (expand-file-name (or (projectile-project-root
+                                        (cond (path
+                                               (if (not (directory-name-p path))
+                                                   (file-name-directory path)
+                                                 path))
+                                              (buffer-file-name
+                                               (file-name-directory buffer-file-name))))
+                                       default-directory)))
            (name (file-name-nondirectory
                   (directory-file-name (if (file-remote-p path)
                                            (car (last (split-string path ":")))
@@ -63,7 +71,9 @@ When PATH is nil then use `projectile-project-root' or `default-directory'."
     "Open `treemacs' buffer."
     (interactive)
     (vs|treemacs/add-project)
-    (treemacs-select-window))
+    (if buffer-file-name
+        (treemacs-find-file)
+      (treemacs-select-window)))
 
   ;; (with-eval-after-load 'dired
   ;;   (when (straight-use-package 'treemacs-icons-dired)
