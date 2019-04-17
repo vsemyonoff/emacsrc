@@ -53,6 +53,7 @@ Should be populated using `.dir-locals.el' like that:
   (when (straight-use-package 'cquery)
     ;; Triggers
     (defun vs|cquery/enable ()
+      (require 'cquery)
       (condition-case nil
           (lsp)
         (user-error nil)))
