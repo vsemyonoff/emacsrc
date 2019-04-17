@@ -43,6 +43,7 @@
                                                face minibuffer-prompt
                                                point-entered minibuffer-avoid-prompt
                                                read-only t)
+      scroll-preserve-screen-position        1
       tab-always-indent                      t)
 
 ;; Look and feel

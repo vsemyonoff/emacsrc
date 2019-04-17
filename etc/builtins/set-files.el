@@ -12,6 +12,7 @@
 ;; Auto-save/backup
 (with-eval-after-load 'files
   (setq confirm-nonexistent-file-or-buffer t    ; ask for new buffers
+        find-file-visit-truename           t    ; follow symlinks while opening files
         make-backup-files                  nil) ; disable backup files
 
   (let ((auto-save-dir
