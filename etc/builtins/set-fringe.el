@@ -12,7 +12,7 @@
               indicate-empty-lines       t)
 
 ;; Triggers
-(autoload 'fringe-mode "fringe")
+(autoload 'fringe-mode "fringe" "Fringe mode toggle." t)
 (add-hook 'vs-emacs-config-gui-hook
           (lambda ()
             "Enable fringe, set sizes."

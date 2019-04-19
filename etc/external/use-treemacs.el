@@ -8,8 +8,8 @@
     (warn "===> Can't install 'treemacs'")
 
   ;; Triggers
-  (autoload 'treemacs-current-workspace    "treemacs")
-  (autoload 'treemacs-delete-other-windows "treemacs")
+  (autoload 'treemacs-current-workspace    "treemacs" "Get current `treemacs' workspace object.")
+  (autoload 'treemacs-delete-other-windows "treemacs" "`delete-other-windows' replacement."    t)
 
   ;; Keybindings
   (define-key (current-global-map) (kbd "C-<tab>") #'vs|treemacs|open             )

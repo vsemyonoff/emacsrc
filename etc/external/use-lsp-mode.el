@@ -25,51 +25,51 @@ Should be populated using `.dir-locals.el' like that:
   (with-eval-after-load 'lsp
     (setq lsp-eldoc-render-all nil
           lsp-inhibit-message  nil)
-    )
 
-  (if (not (straight-use-package 'lsp-ui))
-      (warn "===> Can't install 'lsp-ui'")
-
-    ;; Triggers
-    (with-eval-after-load 'lsp
-      (require 'lsp-ui)
-      )
-
-    ;; Config
-    (with-eval-after-load 'lsp-ui
-      ;; Keybindings
-      (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-      (define-key lsp-ui-mode-map [remap xref-find-references ] #'lsp-ui-peek-find-references )
-
-      ;; Some settings
-      (setq lsp-ui-doc-use-childframe         t
-            lsp-ui-sideline-ignore-duplicate  t
-            lsp-ui-sideline-show-code-actions nil
-            lsp-ui-sideline-show-flycheck     t
-            lsp-ui-sideline-show-hover        nil
-            lsp-ui-sideline-show-symbol       t
-            lsp-ui-sideline-update-mode       'point)
-      )
-    )
-
-  (with-eval-after-load 'company
-    (if (not (straight-use-package 'company-lsp))
-        (warn "===> Can't install 'company-lsp'")
+    (if (not (straight-use-package 'lsp-ui))
+        (warn "===> Can't install 'lsp-ui'")
 
       ;; Triggers
-      (with-eval-after-load 'lsp
-        (require 'company-lsp)
-        )
+      (add-hook 'lsp-mode-hook #'lsp-ui-mode)
 
       ;; Config
-      (with-eval-after-load 'company-lsp
-        (setq company-lsp-async            t
-              company-lsp-enable-snippet   t
-              company-lsp-cache-candidates t)
+      (with-eval-after-load 'lsp-ui
+        ;; Keybindings
+        (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+        (define-key lsp-ui-mode-map [remap xref-find-references ] #'lsp-ui-peek-find-references )
 
-        ;; ;; From cquery wiki page
-        ;; (setq company-lsp-cache-candidates nil
-        ;;       company-transformers         nil)
+        ;; Some settings
+        (setq lsp-ui-doc-use-childframe         t
+              lsp-ui-sideline-ignore-duplicate  t
+              lsp-ui-sideline-show-code-actions nil
+              lsp-ui-sideline-show-flycheck     t
+              lsp-ui-sideline-show-hover        nil
+              lsp-ui-sideline-show-symbol       t
+              lsp-ui-sideline-update-mode       'point)
+        )
+      )
+
+    (with-eval-after-load 'company
+      (if (not (straight-use-package 'company-lsp))
+          (warn "===> Can't install 'company-lsp'")
+
+        ;; Triggers
+        (defun vs|company-lsp/enable()
+          (make-local-variable 'company-backends)
+          (push 'company-lsp company-backends)
+          )
+        (add-hook 'lsp-mode-hook #'vs|company-lsp/enable)
+
+        ;; Config
+        (with-eval-after-load 'company-lsp
+          (setq company-lsp-async            t
+                company-lsp-enable-snippet   t
+                company-lsp-cache-candidates t)
+
+          ;; ;; From cquery wiki page
+          ;; (setq company-lsp-cache-candidates nil
+          ;;       company-transformers         nil)
+          )
         )
       )
     )
@@ -127,23 +127,13 @@ Should be populated using `.dir-locals.el' like that:
                  )
                )
              )
-           vs-java-projects)
-          (message "===> LSP Java: workspace projects:%s" projects))
+           vs-java-projects
+           )
+          (message "===> LSP Java: workspace projects:%s" projects)
+          )
         )
       (advice-add 'lsp-java-enable :before 'vs|lsp-java/before-enable)
       )
-    )
-  )
-
-(if (not (straight-use-package 'modern-cpp-font-lock))
-    (warn "===> Can't install 'modern-cpp-font-lock'")
-
-  ;; Triggers
-  (add-hook 'c++-mode-hook #'modern-c++-font-lock-mode)
-
-  ;; Config
-  (with-eval-after-load 'modern-c++-font-lock
-    (delight 'modern-c++-font-lock-mode nil 'modern-cpp-font-lock)
     )
   )
 
