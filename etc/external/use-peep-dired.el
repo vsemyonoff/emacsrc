@@ -4,11 +4,12 @@
 (require 'straight)
 
 (with-eval-after-load 'dired
-  (when (straight-use-package 'peep-dired)
+  (if (not (straight-use-package 'peep-dired))
+      (warn "===> Can't install 'peep-dired'")
     ;; Keybindings
     (define-key dired-mode-map (kbd "P") #'peep-dired)
-    ;; Config
-    (with-eval-after-load 'peep-dired)))
+    )
+  )
 
 (provide 'use-peep-dired)
 ;;; use-peep-dired.el ends here

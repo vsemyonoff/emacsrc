@@ -9,10 +9,11 @@
 ;; Conofig
 (with-eval-after-load 'paren
   (setq blink-matching-paren               t
-        show-paren-delay                   0.1
+        show-paren-delay                   0.05
         show-paren-highlight-openparen     t
         show-paren-when-point-in-periphery t
-        show-paren-when-point-inside-paren t))
+        show-paren-when-point-inside-paren t)
+  )
 
 (provide 'set-paren)
 ;;; set-paren.el ends here

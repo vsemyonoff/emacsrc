@@ -3,8 +3,8 @@
 ;;; Code:
 (require 'set-functions)
 
-(warn "===> TODO: mail setup")
-(warn "===> TODO: org-mode setup")
+(warn "===> [TODO]: mail setup")
+(warn "===> [TODO]: org-mode setup")
 
 (vs|emacs/require-dir (expand-file-name "utilities"
                                         vs-emacs-config-dir))

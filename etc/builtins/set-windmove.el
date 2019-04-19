@@ -6,8 +6,11 @@
   (list (if (delq (or window (selected-window))
                   (get-buffer-window-list nil nil t))
             nil
-          t)
-        window))
+          t
+          )
+        window
+        )
+  )
 (advice-add 'quit-window :filter-args 'vs|emacs/quit-window-kills-buffer)
 
 (add-hook 'vs-emacs-config-hook

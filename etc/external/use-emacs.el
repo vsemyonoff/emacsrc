@@ -3,20 +3,24 @@
 ;;; Code:
 (defun vs|emacs/c-mode-setup ()
   "Common settings for C -based modes."
-  (setq c-basic-offset 4))
+  (setq c-basic-offset 4)
+  )
 
 (defun vs|emacs/conf-mode-setup ()
   "Common settings for ALL programming modes."
-  (display-line-numbers-mode t))
+  (display-line-numbers-mode t)
+  )
 
 (defun vs|emacs/prog-mode-setup ()
   "Common settings for ALL programming modes."
   (setq truncate-lines       t)
-  (display-line-numbers-mode t))
+  (display-line-numbers-mode t)
+  )
 
 (defun vs|emacs/text-mode-setup ()
   "Common settings for ALL programming modes."
-  (display-line-numbers-mode t))
+  (display-line-numbers-mode t)
+  )
 
 (define-key (current-global-map) [remap move-beginning-of-line] #'vs|emacs|smart-move-beginning-of-line)
 (define-key (current-global-map) (kbd "A-<backspace>")          #'vs|emacs|backward-delete-word)

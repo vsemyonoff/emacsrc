@@ -7,7 +7,8 @@
 (add-hook 'text-mode-hook #'abbrev-mode)
 ;; Config
 (with-eval-after-load 'abbrev
-  (setq abbrev-file-name (expand-file-name "abbrev.el" vs-emacs-cache-dir)))
+  (setq abbrev-file-name (expand-file-name "abbrev.el" vs-emacs-cache-dir))
+  )
 
 (provide 'set-abbrev)
 ;;; set-abbrev.el ends here

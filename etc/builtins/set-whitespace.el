@@ -11,7 +11,8 @@
 (with-eval-after-load 'whitespace
   (add-hook 'before-save-hook #'delete-trailing-whitespace)
   (setq whitespace-line-column 120
-        whitespace-style       '(face tabs empty trailing lines-tail)))
+        whitespace-style       '(face tabs empty trailing lines-tail))
+  )
 
 (provide 'set-whitespace)
 ;;; set-whitespace.el ends here

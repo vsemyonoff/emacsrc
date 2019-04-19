@@ -9,7 +9,8 @@
 
 ;; Create cache folder
 (unless (file-exists-p vs-emacs-cache-dir)
-  (make-directory vs-emacs-cache-dir t))
+  (make-directory vs-emacs-cache-dir t)
+  )
 
 ;; Buffer local variables
 (setq-default bidi-display-reordering        nil
@@ -18,7 +19,7 @@
               display-line-numbers-width     4
               fill-column                    120
               indent-tabs-mode               nil
-              mode-line-format               nil
+              ;;mode-line-format               nil
               require-final-newline          t
               tab-width                      4)
 
@@ -28,7 +29,7 @@
       create-lockfiles                       nil
       custom-file                            (expand-file-name "set-custom.el"
                                                                vs-emacs-config-dir)
-      ;;debug-on-error                         t
+      debug-on-error                         t
       echo-keystrokes                        0.02
       enable-dir-local-variables             nil
       ;;enable-local-variables                 nil
@@ -43,7 +44,7 @@
                                                face minibuffer-prompt
                                                point-entered minibuffer-avoid-prompt
                                                read-only t)
-      scroll-preserve-screen-position        1
+      scroll-preserve-screen-position        t
       tab-always-indent                      t)
 
 ;; Look and feel

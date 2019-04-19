@@ -3,7 +3,10 @@
 ;;; Code:
 (require 'straight)
 
-;;(straight-use-package 'slack)
+(if (not (straight-use-package 'slack))
+    (warn "===> Can't install 'slack'")
+  (ignore "Config will go here")
+  )
 
 (provide 'use-slack)
 ;;; use-slack.el ends here

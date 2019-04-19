@@ -17,15 +17,21 @@
           (lambda ()
             "Enable fringe, set sizes."
             (when (display-graphic-p)
-              (fringe-mode '(nil . 0)))))
+              (fringe-mode '(nil . 0))
+              )
+            )
+          )
 
 ;; Config
 (with-eval-after-load 'fringe
-  (warn "===> TODO: show unsaved changes in fringe")
+  (warn "===> [TODO]: show unsaved changes in fringe")
+
   (defun vs|emacs/fringe-minibuffer-disable ()
     "Disable fringes in `minibuffer' windows."
-    (set-window-fringes (minibuffer-window) 0 0 nil))
-  (add-hook 'minibuffer-setup-hook #'vs|emacs/fringe-minibuffer-disable))
+    (set-window-fringes (minibuffer-window) 0 0 nil)
+    )
+  (add-hook 'minibuffer-setup-hook #'vs|emacs/fringe-minibuffer-disable)
+  )
 
 (provide 'set-fringe)
 ;;; set-fringe.el ends here

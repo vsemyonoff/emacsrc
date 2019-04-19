@@ -3,14 +3,16 @@
 ;;; Code:
 (require 'set-config)
 
-(setq browse-url-browser-function 'eww-browse-url)
+(setq browse-url-browser-function 'xwidget-webkit-browse-url)
 
 ;; Config
 (with-eval-after-load 'url
   (setq url-configuration-directory (expand-file-name "url/"
                                                       vs-emacs-cache-dir))
   (unless (file-exists-p url-configuration-directory)
-    (make-directory url-configuration-directory t)))
+    (make-directory url-configuration-directory t)
+    )
+  )
 
 (provide 'set-url)
 ;;; set-url.el ends here

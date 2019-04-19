@@ -9,7 +9,9 @@
 
   ;; Add extra keywords to `password-word-equivalents'
   (mapc (lambda (word) (add-to-list 'password-word-equivalents word))
-        '("code" "key" "token")))
+        '("code" "key" "token")
+        )
+  )
 
 (provide 'set-mule)
 ;;; set-mule.el ends here

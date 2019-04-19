@@ -18,7 +18,8 @@
   (size-indication-mode         -1) ; size indicator in mode line
 
   (electric-pair-mode           t ) ; auto close parens
-  (global-prettify-symbols-mode t )); replace some symbols with shortcuts
+  (global-prettify-symbols-mode t ) ; replace some symbols with shortcuts
+  )
 
 (add-hook 'vs-emacs-config-hook #'vs|emacs/simple-settings)
 

@@ -11,9 +11,12 @@
     (when (eq major-mode 'compilation-mode)
       (let ((inhibit-read-only t))
         (require 'ansi-color)
-        (ansi-color-apply-on-region (point-min) (point-max)))))
-
-  (add-hook 'compilation-filter-hook #'vs|compile/colorize))
+        (ansi-color-apply-on-region (point-min) (point-max))
+        )
+      )
+    )
+  (add-hook 'compilation-filter-hook #'vs|compile/colorize)
+  )
 
 (provide 'set-compile)
 ;;; set-compile.el ends here

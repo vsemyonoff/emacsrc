@@ -2,63 +2,91 @@
 ;;; Commentary:
 ;;; Code:
 (require 'set-config)
-
 (require 'straight)
 (require 'delight)
 
-(when (straight-use-package 'magit)
+(with-eval-after-load 'transient
+  (setq transient-history-file (expand-file-name "transient.el"
+                                                 vs-emacs-cache-dir))
+  )
+
+(if (not (straight-use-package 'magit))
+    (warn "===> Can't install 'magit'")
+
   ;;Triggers
   (require 'magit)
+
   ;; Keybindings
   (define-key (current-global-map) (kbd "C-x g") #'magit-status)
+
   ;; Config
   (setq vc-follow-symlinks t
         magit-git-global-arguments
         (nconc magit-git-global-arguments '("-c" "color.ui=false"
                                             "-c" "color.diff=false")))
-  (with-eval-after-load 'transient
-    (setq transient-history-file (expand-file-name "transient.el" vs-emacs-cache-dir))))
+  )
 
-(when (straight-use-package 'git-gutter)
+(if (not (straight-use-package 'git-gutter))
+    (warn "===> Can't install 'git-gutter'")
+
   ;; Triggers
   (defun vs|git-gutter/enable ()
     "Enable `git-gutter-mode' in non-remote buffers."
     (when (and (buffer-file-name)
                (not (file-remote-p (buffer-file-name))))
-      (git-gutter-mode)))
+      (git-gutter-mode)
+      )
+    )
   (add-hook 'conf-mode-hook  #'vs|git-gutter/enable         )
   (add-hook 'prog-mode-hook  #'vs|git-gutter/enable         )
   (add-hook 'text-mode-hook  #'vs|git-gutter/enable         )
+
   ;; Delight
   (delight 'git-gutter-mode nil 'git-gutter)
+
   ;; Config
   (with-eval-after-load 'git-gutter
-    (add-hook 'focus-in-hook   #'git-gutter:update-all-windows))
+    (add-hook 'focus-in-hook   #'git-gutter:update-all-windows)
+    )
 
-  (when (straight-use-package 'git-gutter-fringe)
+  (if (not (straight-use-package 'git-gutter-fringe))
+      (warn "===> Can't install 'git-gutter-fringe'")
+
     ;; Triggers
     (defun vs|git-gutter-fringe/enable ()
       "Enable git info in fringe only in GUI frames."
       (when (display-graphic-p)
-        (require 'git-gutter-fringe)))
+        (require 'git-gutter-fringe)
+        )
+      )
     (add-hook 'vs-emacs-config-gui-hook #'vs|git-gutter-fringe/enable)
+
     ;; Config
     (with-eval-after-load 'git-gutter-fringe
       (fringe-helper-define 'git-gutter-fr:added '(center repeated) "....XXXX")
       (fringe-helper-define 'git-gutter-fr:modified '(center repeated) "....XXXX")
-      (fringe-helper-define 'git-gutter-fr:deleted '(center repeated) "....XXXX"))))
+      (fringe-helper-define 'git-gutter-fr:deleted '(center repeated) "....XXXX")
+      )
+    )
+  )
 
-(when (straight-use-package 'gitconfig-mode)
-  ;; Triggers
-  (require 'gitconfig-mode))
+(if (not (straight-use-package 'gitconfig-mode))
+    (warn "===> Can't install 'gitconfig-mode'")
+  (require 'gitconfig-mode)
+  )
 
-(when (straight-use-package 'gitignore-mode)
-  ;; Triggers
-  (require 'gitignore-mode))
+(if (not (straight-use-package 'gitignore-mode))
+    (warn "===> Can't install 'gitignore-mode'")
+  (require 'gitignore-mode)
+  )
 
-(straight-use-package 'git-timemachine)
+(if (not (straight-use-package 'git-timemachine))
+    (warn "===> Can't install 'git-timemachine'")
+  )
 
-(straight-use-package 'git-link)
+(if (not (straight-use-package 'git-link))
+    (warn "===> Can't install 'git-link'")
+  )
 
 (provide 'use-git)
 ;;; use-git.el ends here
