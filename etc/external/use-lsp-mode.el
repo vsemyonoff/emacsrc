@@ -23,13 +23,17 @@ Should be populated using `.dir-locals.el' like that:
 
   ;; Config
   (with-eval-after-load 'lsp
-    (setq lsp-auto-configure   nil
-          lsp-eldoc-render-all nil
+    (setq lsp-eldoc-render-all nil
           lsp-inhibit-message  nil)
     )
 
   (if (not (straight-use-package 'lsp-ui))
       (warn "===> Can't install 'lsp-ui'")
+
+    ;; Triggers
+    (with-eval-after-load 'lsp
+      (require 'lsp-ui)
+      )
 
     ;; Config
     (with-eval-after-load 'lsp-ui
@@ -38,9 +42,9 @@ Should be populated using `.dir-locals.el' like that:
       (define-key lsp-ui-mode-map [remap xref-find-references ] #'lsp-ui-peek-find-references )
 
       ;; Some settings
-      (setq lsp-ui-doc-use-childframe         nil
+      (setq lsp-ui-doc-use-childframe         t
             lsp-ui-sideline-ignore-duplicate  t
-            lsp-ui-sideline-show-code-actions t
+            lsp-ui-sideline-show-code-actions nil
             lsp-ui-sideline-show-flycheck     t
             lsp-ui-sideline-show-hover        nil
             lsp-ui-sideline-show-symbol       t
@@ -51,6 +55,11 @@ Should be populated using `.dir-locals.el' like that:
   (with-eval-after-load 'company
     (if (not (straight-use-package 'company-lsp))
         (warn "===> Can't install 'company-lsp'")
+
+      ;; Triggers
+      (with-eval-after-load 'lsp
+        (require 'company-lsp)
+        )
 
       ;; Config
       (with-eval-after-load 'company-lsp
@@ -93,6 +102,11 @@ Should be populated using `.dir-locals.el' like that:
 
   (if (not (straight-use-package 'lsp-java))
       (warn "===> Can't install 'lsp-java'")
+
+    ;; Triggers
+    (with-eval-after-load 'lsp
+      (require 'lsp-java)
+      )
 
     ;; Config
     (with-eval-after-load 'lsp-java
