@@ -4,8 +4,9 @@
 (require 'set-functions)
 
 (if (or after-init-time noninteractive)
-    (vs|emacs/disable-startup-optimizations)
-  (vs|emacs/enable-startup-optimizations)
+    (vs|emacs/disable-optimizations)
+  (vs|emacs/enable-optimizations)
+  (add-hook 'emacs-startup-hook #'vs|emacs/disable-optimizations t)
   )
 
 (eval-and-compile
@@ -16,8 +17,9 @@
     (require 'set-utilities) ; browser/email/messengers settings
     )
   )
-(add-hook 'emacs-startup-hook (lambda () (run-hooks 'vs-emacs-config-hook)))
-(add-hook 'emacs-startup-hook #'vs|emacs/disable-startup-optimizations t)
+
+(add-hook 'emacs-startup-hook
+          (lambda () (run-hooks 'vs-emacs-config-hook)))
 
 (add-hook (if (daemonp) 'server-after-make-frame-hook 'window-setup-hook)
           (lambda () (run-hooks 'vs-emacs-config-gui-hook)))

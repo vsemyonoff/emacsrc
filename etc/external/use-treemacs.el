@@ -129,7 +129,7 @@ When PATH is nil then use `projectile-project-root' or `default-directory'."
   (with-eval-after-load 'dired
     (if (not (straight-use-package 'treemacs-icons-dired))
         (warn "===> Can't install 'treemacs-icons-dired'")
-      (add-hook 'dired-mode-hook 'treemacs-icons-dired-mode)
+      (add-hook 'dired-mode-hook #'treemacs-icons-dired-mode)
       )
     )
 

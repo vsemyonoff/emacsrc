@@ -35,8 +35,8 @@
 
 (add-hook 'c-mode-common-hook    #'vs|emacs/c-mode-setup)
 (add-hook 'conf-mode-hook        #'vs|emacs/conf-mode-setup)
-(add-hook 'minibuffer-exit-hook  #'vs|emacs/disable-startup-optimizations)
-(add-hook 'minibuffer-setup-hook #'vs|emacs/enable-startup-optimizations)
+(add-hook 'minibuffer-exit-hook  #'vs|emacs/disable-optimizations)
+(add-hook 'minibuffer-setup-hook #'vs|emacs/enable-optimizations)
 (add-hook 'prog-mode-hook        #'vs|emacs/prog-mode-setup)
 (add-hook 'text-mode             #'vs|emacs/text-mode-setup)
 

@@ -16,14 +16,14 @@ Used by `emacsclient' wrapper only."
     )
   )
 
-(defun vs|emacs/enable-startup-optimizations ()
+(defun vs|emacs/enable-optimizations ()
   "Temporarily disable gc and `file-name-handler-alist' handlers."
   (setq gc-cons-threshold          most-positive-fixnum
         vs-file-name-handler-alist file-name-handler-alist
         file-name-handler-alist    nil)
   )
 
-(defun vs|emacs/disable-startup-optimizations ()
+(defun vs|emacs/disable-optimizations ()
   "Reset gc and `file-name-handler-alist' to reasonable defaults."
   (setq file-name-handler-alist    vs-file-name-handler-alist
         gc-cons-threshold          vs-gc-cons-threshold)

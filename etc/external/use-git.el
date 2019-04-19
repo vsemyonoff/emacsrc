@@ -30,16 +30,17 @@
     (warn "===> Can't install 'git-gutter'")
 
   ;; Triggers
-  (defun vs|git-gutter/enable ()
-    "Enable `git-gutter-mode' in non-remote buffers."
-    (when (and (buffer-file-name)
-               (not (file-remote-p (buffer-file-name))))
-      (git-gutter-mode)
-      )
-    )
-  (add-hook 'conf-mode-hook  #'vs|git-gutter/enable         )
-  (add-hook 'prog-mode-hook  #'vs|git-gutter/enable         )
-  (add-hook 'text-mode-hook  #'vs|git-gutter/enable         )
+  ;; (defun vs|git-gutter/enable ()
+  ;;   "Enable `git-gutter-mode' in non-remote buffers."
+  ;;   (when (and (buffer-file-name)
+  ;;              (not (file-remote-p (buffer-file-name))))
+  ;;     (git-gutter-mode)
+  ;;     )
+  ;;   )
+  ;; (add-hook 'conf-mode-hook  #'vs|git-gutter/enable          )
+  ;; (add-hook 'prog-mode-hook  #'vs|git-gutter/enable          )
+  ;; (add-hook 'text-mode-hook  #'vs|git-gutter/enable          )
+  (add-hook 'vs-emacs-config-hook #'global-git-gutter-mode)
 
   ;; Delight
   (delight 'git-gutter-mode nil 'git-gutter)
@@ -63,9 +64,9 @@
 
     ;; Config
     (with-eval-after-load 'git-gutter-fringe
-      (fringe-helper-define 'git-gutter-fr:added '(center repeated) "....XXXX")
+      (fringe-helper-define 'git-gutter-fr:added    '(center repeated) "....XXXX")
       (fringe-helper-define 'git-gutter-fr:modified '(center repeated) "....XXXX")
-      (fringe-helper-define 'git-gutter-fr:deleted '(center repeated) "....XXXX")
+      (fringe-helper-define 'git-gutter-fr:deleted  '(center repeated) "....XXXX")
       )
     )
   )
