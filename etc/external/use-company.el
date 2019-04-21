@@ -26,6 +26,11 @@
           company-tooltip-minimum-width       50
           company-tooltip-align-annotations   t
           company-tooltip-margin              2  )
+
+    (if (not (straight-use-package 'company-quickhelp))
+        (warn "===> Can't install 'company-quickhelp'")
+      (company-quickhelp-mode)
+      )
     )
   )
 
