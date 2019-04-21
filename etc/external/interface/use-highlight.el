@@ -24,7 +24,7 @@
     (warn "===> Can't install 'rainbow-delimiters'")
 
   ;; Triggers
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+  ;;(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
   )
 
 (if (not (straight-use-package 'rainbow-mode))

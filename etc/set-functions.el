@@ -19,13 +19,13 @@ Used by `emacsclient' wrapper only."
 (defun vs|emacs/enable-optimizations ()
   "Temporarily disable gc and `file-name-handler-alist' handlers."
   (setq gc-cons-threshold          most-positive-fixnum
-        vs-file-name-handler-alist file-name-handler-alist
+        vs--file-name-handler-alist file-name-handler-alist
         file-name-handler-alist    nil)
   )
 
 (defun vs|emacs/disable-optimizations ()
   "Reset gc and `file-name-handler-alist' to reasonable defaults."
-  (setq file-name-handler-alist    vs-file-name-handler-alist
+  (setq file-name-handler-alist    vs--file-name-handler-alist
         gc-cons-threshold          vs-gc-cons-threshold)
   )
 
@@ -100,6 +100,24 @@ Used by `emacsclient' wrapper only."
     )
   )
 
+;; ;; Increase faces background
+;; (let ((faces '(error hl-line region success warning)))
+;;   (vs|emacs/scale-face-color faces 10 t)
+;;   )
+
+;; ;; Increase faces foreground
+;; (let ((faces '(font-lock-builtin-face
+;;                font-lock-comment-face font-lock-constant-face font-lock-doc-face
+;;                font-lock-function-name-face font-lock-keyword-face font-lock-string-face
+;;                font-lock-type-face font-lock-variable-name-face)))
+;;   (vs|emacs/scale-face-color faces 20)
+;;   )
+
+;; ;; Change colors
+;; (set-face-attribute 'company-preview-common (selected-frame) :inherit 'font-lock-string-face :foreground nil)
+;; (set-face-attribute 'company-tooltip-common (selected-frame) :inherit 'font-lock-string-face :foreground nil)
+;; (set-face-attribute 'company-tooltip-common-selection (selected-frame) :inherit 'font-lock-string-face :foreground nil)
+
 (defun vs|emacs/scale-face-color (face-list factor &optional background)
   "Proportionally increase FACE-LIST foreground colors to FACTOR percents.
 When BACKGROUND is t then scale background colors."
@@ -134,7 +152,7 @@ When BACKGROUND is t then scale background colors."
      (lambda (face)
        (let ((color (face-attribute face property)))
          (unless (string= color "unspecified")
-           (set-face-attribute face nil property (vs|emacs/scale-color color value))
+           (set-face-attribute face (selected-frame) property (vs|emacs/scale-color color value))
            )
          )
        )
@@ -219,7 +237,7 @@ With ARG, do this that many times."
   (vs|emacs|delete-word (- arg))
   )
 
-(defun vs|emacs/get-my-ip ()
+(defun vs|emacs|get-my-ip ()
   "Obtain own external IP address."
   (interactive)
   (message "IP: %s"
@@ -227,6 +245,59 @@ With ARG, do this that many times."
              (buffer-substring (+ 1 url-http-end-of-headers) (point-max))
              )
            )
+  )
+
+(defmacro cached-for (secs &rest body)
+  "Cache for SECS the result of the evaluation of BODY."
+  (declare (debug t))
+  (let ((cache    (make-symbol "cache"))
+        (last-run (make-symbol "last-run"))
+        )
+    `(let (,cache ,last-run)
+       (lambda ()
+         (when (or (null ,last-run)
+                   (> (- (time-to-seconds (current-time)) ,last-run)
+                      ,secs)
+                   )
+           (setf ,cache (progn ,@body))
+           (setf ,last-run (time-to-seconds (current-time)))
+           )
+         ,cache
+         )
+       )
+    )
+  )
+
+(with-eval-after-load 'magit
+  ;; Magit helpers
+  (defvar vs-git-face-cached
+    (cached-for 1 (vs|git/face-impl))
+    )
+
+  (defun vs|git/face-impl ()
+    "Return face accordingly to current git status."
+    (if (magit-git-success "diff" "--quiet")
+        ;; nothing to commit because nothing changed
+        (if (zerop (length (magit-git-string
+                            "rev-list" (concat "origin/"
+                                               (magit-get-current-branch)
+                                               ".."
+                                               (magit-get-current-branch)
+                                               )
+                            )
+                           )
+                   )
+            'success
+          'warning
+          )
+      'error
+      )
+    )
+
+  (defun vs|git/face ()
+    "Return cached git face."
+    (funcall vs-git-face-cached)
+    )
   )
 
 (provide 'set-functions)

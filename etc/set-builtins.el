@@ -19,7 +19,7 @@
               display-line-numbers-width     4
               fill-column                    120
               indent-tabs-mode               nil
-              ;;mode-line-format               nil
+              mode-line-format               nil
               require-final-newline          t
               tab-width                      4)
 
@@ -33,7 +33,6 @@
       debug-on-error                         t
       echo-keystrokes                        0.02
       enable-dir-local-variables             nil
-      ;;enable-local-variables                 nil
       enable-recursive-minibuffers           nil
       help-window-select                     t
       history-length                         500
@@ -53,10 +52,11 @@
       inhibit-default-init                   t     ; do not load default faces library
       mode-line-default-help-echo            nil   ; disable mode-line mouseovers
       mouse-yank-at-point                    t     ; middle-click paste at point, not at click
+      ;;next-line-add-newlines                 t
       ring-bell-function                     'ignore
       scroll-conservatively                  10000
+      scroll-margin                          0
       scroll-preserve-screen-position        t
-      scroll-margin                          1
       scroll-step                            1
       show-help-function                     nil   ; hide :help-echo text
       split-width-threshold                  160   ; favor horizontal splits

@@ -21,19 +21,19 @@
     (dired-previous-line arg)
     )
 
-  (defun vs|dired/mark-up ()
+  (defun vs|dired|mark-up ()
     (interactive)
     (vs|dired/toggle 1)
     )
 
-  (defun vs|dired/mark-down ()
+  (defun vs|dired|mark-down ()
     (interactive)
     (vs|dired/toggle -1)
     )
 
   (define-key dired-mode-map (kbd "<right>")  #'dired-find-file)
-  (define-key dired-mode-map (kbd "<S-up>")   #'vs|dired/mark-up)
-  (define-key dired-mode-map (kbd "<S-down>") #'vs|dired/mark-down)
+  (define-key dired-mode-map (kbd "<S-up>")   #'vs|dired|mark-up)
+  (define-key dired-mode-map (kbd "<S-down>") #'vs|dired|mark-down)
   )
 
 (provide 'set-dired)

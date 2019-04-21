@@ -33,7 +33,7 @@
 (defconst vs-gc-cons-threshold (* 1024 1024 8)
   "Default garbage collector threshold value.")
 
-(defvar vs-file-name-handler-alist nil
+(defvar vs--file-name-handler-alist nil
   "Restore `file-name-handler-alist' value.")
 
 ;; Hook variables
@@ -42,6 +42,17 @@
 
 (defvar vs-emacs-config-gui-hook nil
   "Hook called after frame creation is done.")
+
+;; Theme
+;;(defvar vs-emacs-theme-package 'color-theme-sanityinc-tomorrow
+(defvar vs-emacs-theme-package 'kaolin-themes
+  "Package name containing `vs-emacs-theme'.
+Used as fallback package for `vs-emacs-alt-theme'.
+If not set then it means that selected theme is builtin.")
+
+;;(defvar vs-emacs-theme 'sanityinc-tomorrow-night
+(defvar vs-emacs-theme 'kaolin-galaxy
+  "Theme name inside `vs-emacs-theme-package'.")
 
 (provide 'set-config)
 ;;; set-config.el ends here
