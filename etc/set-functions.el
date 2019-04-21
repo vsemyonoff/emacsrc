@@ -114,9 +114,9 @@ Used by `emacsclient' wrapper only."
 ;;   )
 
 ;; ;; Change colors
-;; (set-face-attribute 'company-preview-common (selected-frame) :inherit 'font-lock-string-face :foreground nil)
-;; (set-face-attribute 'company-tooltip-common (selected-frame) :inherit 'font-lock-string-face :foreground nil)
-;; (set-face-attribute 'company-tooltip-common-selection (selected-frame) :inherit 'font-lock-string-face :foreground nil)
+;; (set-face-attribute 'company-preview-common nil :inherit 'font-lock-string-face :foreground nil)
+;; (set-face-attribute 'company-tooltip-common nil :inherit 'font-lock-string-face :foreground nil)
+;; (set-face-attribute 'company-tooltip-common-selection nil :inherit 'font-lock-string-face :foreground nil)
 
 (defun vs|emacs/scale-face-color (face-list factor &optional background)
   "Proportionally increase FACE-LIST foreground colors to FACTOR percents.
@@ -152,7 +152,7 @@ When BACKGROUND is t then scale background colors."
      (lambda (face)
        (let ((color (face-attribute face property)))
          (unless (string= color "unspecified")
-           (set-face-attribute face (selected-frame) property (vs|emacs/scale-color color value))
+           (set-face-attribute face nil property (vs|emacs/scale-color color value))
            )
          )
        )
