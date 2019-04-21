@@ -30,16 +30,6 @@
     (warn "===> Can't install 'git-gutter'")
 
   ;; Triggers
-  ;; (defun vs|git-gutter/enable ()
-  ;;   "Enable `git-gutter-mode' in non-remote buffers."
-  ;;   (when (and (buffer-file-name)
-  ;;              (not (file-remote-p (buffer-file-name))))
-  ;;     (git-gutter-mode)
-  ;;     )
-  ;;   )
-  ;; (add-hook 'conf-mode-hook  #'vs|git-gutter/enable          )
-  ;; (add-hook 'prog-mode-hook  #'vs|git-gutter/enable          )
-  ;; (add-hook 'text-mode-hook  #'vs|git-gutter/enable          )
   (add-hook 'vs-emacs-config-hook #'global-git-gutter-mode)
 
   ;; Delight
@@ -83,6 +73,10 @@
 
 (if (not (straight-use-package 'git-timemachine))
     (warn "===> Can't install 'git-timemachine'")
+  (defun vs|git-timemachine/header ()
+    (setq header-line-format ">>> Back to the future...")
+    )
+  (add-hook 'git-timemachine-mode-hook #'vs|git-timemachine/header)
   )
 
 (if (not (straight-use-package 'git-link))
