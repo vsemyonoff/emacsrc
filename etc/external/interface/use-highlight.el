@@ -39,5 +39,19 @@
   (delight 'rainbow-mode nil 'rainbow-mode)
   )
 
+(if (not (straight-use-package 'highlight-defined))
+    (warn "===> Can't install 'highlight-defined'")
+
+  ;; Triggers
+  (add-hook 'emacs-lisp-mode-hook #'highlight-defined-mode)
+  )
+
+(if (not (straight-use-package 'highlight-quoted))
+    (warn "===> Can't install 'highlight-quoted'")
+
+  ;; Triggers
+  (add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
+  )
+
 (provide 'use-highlight)
 ;;; use-highlight.el ends here
