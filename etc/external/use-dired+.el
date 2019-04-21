@@ -6,11 +6,12 @@
 (with-eval-after-load 'dired-x
   (if (not (straight-use-package 'dired+))
       (warn "===> Can't install 'dired+'")
-    (require 'dired+)
+
+    ;; Reuse buffer by default
+    (diredp-toggle-find-file-reuse-dir 1)
 
     ;; Keybindings
-    (define-key dired-mode-map (kbd "<left>")   #'diredp-up-directory)
-    ;; (define-key dired-mode-map (kbd "<right>")  #'dired-find-file    )
+    (define-key dired-mode-map (kbd "<left>")   #'diredp-up-directory-reuse-dir-buffer)
 
     ;; Unbind keys
     (define-key dired-mode-map (kbd "C-<down>") nil)
