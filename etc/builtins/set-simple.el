@@ -17,7 +17,6 @@
   (line-number-mode             -1) ; line numbers in mode line
   (size-indication-mode         -1) ; size indicator in mode line
 
-  (electric-pair-mode           t ) ; auto close parens
   (global-prettify-symbols-mode t ) ; replace some symbols with shortcuts
   )
 
