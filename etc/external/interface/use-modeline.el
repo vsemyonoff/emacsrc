@@ -51,7 +51,7 @@
                                              (face (if .error 'error 'warning)))
                                          (all-the-icons-faicon icon :face face :v-adjust 0 :height 1)))
                                    (all-the-icons-faicon "check-circle" :face 'success :v-adjust 0 :height 1)))
-                      ('running     (all-the-icons-faicon "recycle" :v-adjust 0 :height 1))
+                      ('running     (all-the-icons-faicon "history" :v-adjust 0 :height 1))
                       ('no-checker  (all-the-icons-faicon "minus-circle" :v-adjust 0 :height 1))
                       ('not-checked (all-the-icons-faicon "times-circle" :v-adjust 0 :height 1))
                       ('errored     (all-the-icons-faicon "times-circle" :v-adjust 0 :height 1 :face 'error))
@@ -117,12 +117,6 @@
             (nil    . (vs|modeline/buffer-segment))
             )
           )
-
-    ;; ;; Center segments
-    ;; (setq telephone-line-center-lhs
-    ;;       '(
-    ;;         )
-    ;;       )
 
     ;; Right segments
     (setq telephone-line-rhs
