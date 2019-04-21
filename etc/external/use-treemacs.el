@@ -55,7 +55,7 @@
       )
 
     (add-hook 'treemacs-mode-hook   #'vs|treemacs/buffer-setup)
-    (add-hook 'treemacs-select-hook #'vs|treemacs/resize-icons)
+    ;; (add-hook 'treemacs-select-hook #'vs|treemacs/resize-icons)
 
     (defun vs|treemacs|collapse-or-go-up ()
       "`treemacs' collapse selected or go to parent node."

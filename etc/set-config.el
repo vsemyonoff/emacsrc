@@ -45,14 +45,23 @@
 
 ;; Theme
 ;;(defvar vs-emacs-theme-package 'color-theme-sanityinc-tomorrow
+;; (defvar vs-emacs-theme-package 'doom-themes
 (defvar vs-emacs-theme-package 'kaolin-themes
   "Package name containing `vs-emacs-theme'.
 Used as fallback package for `vs-emacs-alt-theme'.
 If not set then it means that selected theme is builtin.")
 
 ;;(defvar vs-emacs-theme 'sanityinc-tomorrow-night
+;; (defvar vs-emacs-theme 'doom-vibrant
 (defvar vs-emacs-theme 'kaolin-galaxy
   "Theme name inside `vs-emacs-theme-package'.")
+
+;; Custom treemacs tweak
+(with-eval-after-load 'kaolin-themes
+  (with-eval-after-load 'treemacs
+    (kaolin-treemacs-theme)
+    )
+  )
 
 (provide 'set-config)
 ;;; set-config.el ends here
