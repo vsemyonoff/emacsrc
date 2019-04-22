@@ -3,7 +3,6 @@
 ;;; Code:
 (require 'set-config)
 (require 'straight)
-(require 'delight)
 
 (if (not (straight-use-package 'lsp-mode))
     (warn "===> Can't install 'lsp-mode'")
@@ -13,15 +12,14 @@
   (add-hook 'c-mode-hook      #'lsp)
   (add-hook 'css-mode-hook    #'lsp)
   (add-hook 'html-mode-hook   #'lsp)
-  (add-hook 'java-mode-hook   #'lsp)
   (add-hook 'python-mode-hook #'lsp)
 
   ;; Config
   (with-eval-after-load 'lsp
-    (setq lsp-eldoc-enable-hover nil
+    (setq lsp-auto-configure     nil
+          lsp-eldoc-enable-hover nil
           lsp-eldoc-render-all   nil
           lsp-inhibit-message    nil)
-
     )
 
   (if (not (straight-use-package 'lsp-ui))
@@ -34,8 +32,12 @@
 
     ;; Config
     (with-eval-after-load 'lsp-ui
-      ;; Disable `eldoc-mode' when `lsp-ui-mode' enabled
-      (add-hook 'lsp-ui-mode-hook (lambda () (eldoc-mode -1)))
+      (defun vs|lsp-ui/setup ()
+        (eldoc-mode            -1)
+        (lsp-ui-flycheck-enable 1)
+        )
+      (add-hook 'lsp-ui-mode-hook #'vs|lsp-ui/setup)
+
 
       ;; Keybindings
       (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
@@ -45,7 +47,7 @@
       (setq lsp-ui-doc-use-childframe         t
             lsp-ui-flycheck-enable            t
             lsp-ui-sideline-ignore-duplicate  t
-            lsp-ui-sideline-show-code-actions nil
+            lsp-ui-sideline-show-code-actions t
             lsp-ui-sideline-show-flycheck     t
             lsp-ui-sideline-show-hover        nil
             lsp-ui-sideline-show-symbol       t
@@ -60,7 +62,7 @@
 
       ;; Triggers
       (with-eval-after-load 'lsp
-        (defun vs|company-lsp/enable()
+        (defun vs|company-lsp/enable ()
           (make-local-variable 'company-backends)
           (push 'company-lsp company-backends)
           )
@@ -83,12 +85,19 @@
       (warn "===> Can't install 'lsp-java'")
 
     ;; Triggers
-    (with-eval-after-load 'lsp
+    (defun vs|lsp-java/enable ()
       (require 'lsp-java)
+      (lsp)
       )
+    (add-hook 'java-mode-hook #'vs|lsp-java/enable)
 
     ;; Config
     (with-eval-after-load 'lsp-java
+      (defun vs|lsp-java/lsp-ui-setup ()
+        (set (make-local-variable 'lsp-ui-sideline-show-code-actions) nil)
+        )
+      (add-hook 'lsp-ui-mode-hook #'vs|lsp-java/lsp-ui-setup)
+
       (setq lsp-java-server-install-dir  (expand-file-name "eclipse/" vs-xdg-data-dir  )
             lsp-java-workspace-cache-dir (expand-file-name "eclipse/" vs-xdg-cache-dir )
             lsp-java-workspace-dir       (expand-file-name "eclipse/" vs-xdg-config-dir))
