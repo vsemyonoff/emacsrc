@@ -46,13 +46,7 @@
        "\n")
       )
 
-    (defun vs|ivy/update-window-height ()
-      "Set `ivy' window height to 25% from current frame height."
-      (setq ivy-height `,(floor (frame-height) 4))
-      )
-
-    (add-hook 'window-configuration-change-hook  #'vs|ivy/update-window-height)
-    (add-hook 'ivy-mode-hook                     #'counsel-mode               )
+    (add-hook 'ivy-mode-hook #'counsel-mode)
     )
 
   (if (not (straight-use-package 'ivy-hydra))
