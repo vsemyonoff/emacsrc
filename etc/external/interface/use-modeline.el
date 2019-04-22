@@ -27,6 +27,22 @@
                                                             (interactive)
                                                             (projectile-switch-project)))))))
 
+    (telephone-line-defsegment vs|modeline/vc-segment ()
+      (when vc-mode
+        (list (all-the-icons-faicon "code-fork" :height 1 :v-adjust 0 :face (vs|git/face))
+              " "
+              (when (string-match "[-:@!?]\\(.+\\)$" vc-mode)
+                (let ((branch (match-string 1 vc-mode)))
+                  (if (> (length branch) 20)
+                      (format "%s..." (truncate-string-to-width branch 17))
+                    branch
+                    )
+                  )
+                )
+              )
+        )
+      )
+
     (telephone-line-defsegment* vs|modeline/buffer-segment ()
       (let ((face (if (buffer-modified-p) 'error 'success)))
         (list (if (buffer-file-name)
@@ -71,18 +87,6 @@
                                    ('suspicious "Suspicious?"))
                       'local-map (make-mode-line-mouse-map
                                   'mouse-1 #'flycheck-list-errors)))))
-
-    (telephone-line-defsegment vs|modeline/vc-segment ()
-      (when vc-mode
-        (list (all-the-icons-faicon "code-fork" :height 1 :v-adjust 0 :face (vs|git/face))
-              " "
-              (let ((vc-mode (truncate-string-to-width vc-mode 30 nil nil "...")))
-                (string-match "[-:@!?]\\(.+\\)$" vc-mode)
-                (substring vc-mode (match-beginning 1))
-                )
-              )
-        )
-      )
 
     (telephone-line-defsegment vs|modeline/encoding-segment ()
       (let ((sys (coding-system-plist buffer-file-coding-system)))
