@@ -19,7 +19,8 @@
     (setq lsp-auto-configure     nil
           lsp-eldoc-enable-hover nil
           lsp-eldoc-render-all   nil
-          lsp-inhibit-message    nil)
+          lsp-inhibit-message    nil
+          lsp-restart            'auto-restart)
     )
 
   (if (not (straight-use-package 'lsp-ui))
