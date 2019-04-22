@@ -18,11 +18,6 @@
 
   ;; Config
   (with-eval-after-load 'lsp
-    (with-eval-after-load 'projectile
-      (add-to-list 'projectile-project-root-files-top-down-recurring
-                   "compile_commands.json")
-      )
-
     (setq lsp-eldoc-enable-hover nil
           lsp-eldoc-render-all   nil
           lsp-inhibit-message    nil)
@@ -48,6 +43,7 @@
 
       ;; Some settings
       (setq lsp-ui-doc-use-childframe         t
+            lsp-ui-flycheck-enable            t
             lsp-ui-sideline-ignore-duplicate  t
             lsp-ui-sideline-show-code-actions nil
             lsp-ui-sideline-show-flycheck     t

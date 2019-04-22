@@ -136,9 +136,12 @@ When PATH is nil then use `projectile-project-root' or `default-directory'."
   (with-eval-after-load 'magit
     (if (not (straight-use-package 'treemacs-magit))
         (warn "===> Can't install 'treemacs-magit'")
-      (require 'treemacs-magit)
+      (with-eval-after-load 'projectile
+        (require 'treemacs-magit)
+        )
       )
     )
+
   )
 
 (provide 'use-treemacs)

@@ -37,6 +37,7 @@
         )
       )
 
+    (add-to-list 'projectile-project-root-files-top-down-recurring "compile_commands.json")
     (push ".project" projectile-project-root-files-bottom-up)
 
     (defun vs|projectile/cache-filter (orig-fun &rest args)
