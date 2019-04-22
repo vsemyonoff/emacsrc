@@ -39,7 +39,6 @@
         )
       (add-hook 'lsp-ui-mode-hook #'vs|lsp-ui/setup)
 
-
       ;; Keybindings
       (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
       (define-key lsp-ui-mode-map [remap xref-find-references ] #'lsp-ui-peek-find-references )
@@ -82,6 +81,36 @@
       )
     )
 
+  ;; (if (not (straight-use-package 'cquery))
+  ;;     (warn "===> Can't install 'cquery'")
+
+  ;;   ;; Triggers
+  ;;   (defun vs|cquery/enable ()
+  ;;     (require 'cquery)
+  ;;     (lsp)
+  ;;     )
+  ;;   (add-hook 'c++-mode-hook #'vs|cquery/enable)
+  ;;   (add-hook 'c-mode-hook   #'vs|cquery/enable)
+
+  ;;   ;; Config
+  ;;   (with-eval-after-load 'cquery
+  ;;     (with-eval-after-load 'projectile
+  ;;       (add-to-list 'projectile-project-root-files-top-down-recurring ".cquery")
+  ;;       )
+
+  ;;     (with-eval-after-load 'company-lsp
+  ;;       (defun vs|cquery/company-lsp-setup ()
+  ;;         (set (make-local-variable 'company-lsp-cache-candidates) nil)
+  ;;         )
+  ;;       (add-hook 'company-mode-hook #'vs|cquery/company-lsp-setup)
+  ;;       )
+
+  ;;     (setq cquery-extra-init-params '(:index (:comments 2)
+  ;;                                      :cacheFormat "msgpack"
+  ;;                                      :completion (:detailedLabel t)))
+  ;;     )
+  ;;   )
+
   (if (not (straight-use-package 'lsp-java))
       (warn "===> Can't install 'lsp-java'")
 
@@ -94,10 +123,12 @@
 
     ;; Config
     (with-eval-after-load 'lsp-java
-      (defun vs|lsp-java/lsp-ui-setup ()
-        (set (make-local-variable 'lsp-ui-sideline-show-code-actions) nil)
+      (with-eval-after-load 'lsp-ui
+        (defun vs|lsp-java/lsp-ui-setup ()
+          (set (make-local-variable 'lsp-ui-sideline-show-code-actions) nil)
+          )
+        (add-hook 'lsp-ui-mode-hook #'vs|lsp-java/lsp-ui-setup)
         )
-      (add-hook 'lsp-ui-mode-hook #'vs|lsp-java/lsp-ui-setup)
 
       (setq lsp-java-server-install-dir  (expand-file-name "eclipse/" vs-xdg-data-dir  )
             lsp-java-workspace-cache-dir (expand-file-name "eclipse/" vs-xdg-cache-dir )
