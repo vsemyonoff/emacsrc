@@ -5,11 +5,6 @@
 (require 'straight)
 (require 'delight)
 
-(defvar vs-java-projects (list)
-  "Java projects to add in workspace.
-Should be populated using `.dir-locals.el' like that:
-\t((java-mode . ((vs-java-projects . (\"project1\" \"project2\")))))")
-
 (if (not (straight-use-package 'lsp-mode))
     (warn "===> Can't install 'lsp-mode'")
 
@@ -23,80 +18,68 @@ Should be populated using `.dir-locals.el' like that:
 
   ;; Config
   (with-eval-after-load 'lsp
-    (setq lsp-eldoc-render-all nil
-          lsp-inhibit-message  nil)
-
-    (if (not (straight-use-package 'lsp-ui))
-        (warn "===> Can't install 'lsp-ui'")
-
-      ;; Triggers
-      (add-hook 'lsp-mode-hook #'lsp-ui-mode)
-
-      ;; Config
-      (with-eval-after-load 'lsp-ui
-        ;; Keybindings
-        (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-        (define-key lsp-ui-mode-map [remap xref-find-references ] #'lsp-ui-peek-find-references )
-
-        ;; Some settings
-        (setq lsp-ui-doc-use-childframe         t
-              lsp-ui-sideline-ignore-duplicate  t
-              lsp-ui-sideline-show-code-actions nil
-              lsp-ui-sideline-show-flycheck     t
-              lsp-ui-sideline-show-hover        nil
-              lsp-ui-sideline-show-symbol       t
-              lsp-ui-sideline-update-mode       'point)
-        )
+    (with-eval-after-load 'projectile
+      (add-to-list 'projectile-project-root-files-top-down-recurring
+                   "compile_commands.json")
       )
 
-    (with-eval-after-load 'company
-      (if (not (straight-use-package 'company-lsp))
-          (warn "===> Can't install 'company-lsp'")
+    (setq lsp-eldoc-enable-hover nil
+          lsp-eldoc-render-all   nil
+          lsp-inhibit-message    nil)
 
-        ;; Triggers
+    )
+
+  (if (not (straight-use-package 'lsp-ui))
+      (warn "===> Can't install 'lsp-ui'")
+
+    ;; Triggers
+    (with-eval-after-load 'lsp
+      (add-hook 'lsp-mode-hook #'lsp-ui-mode)
+      )
+
+    ;; Config
+    (with-eval-after-load 'lsp-ui
+      ;; Disable `eldoc-mode' when `lsp-ui-mode' enabled
+      (add-hook 'lsp-ui-mode-hook (lambda () (eldoc-mode -1)))
+
+      ;; Keybindings
+      (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+      (define-key lsp-ui-mode-map [remap xref-find-references ] #'lsp-ui-peek-find-references )
+
+      ;; Some settings
+      (setq lsp-ui-doc-use-childframe         t
+            lsp-ui-sideline-ignore-duplicate  t
+            lsp-ui-sideline-show-code-actions nil
+            lsp-ui-sideline-show-flycheck     t
+            lsp-ui-sideline-show-hover        nil
+            lsp-ui-sideline-show-symbol       t
+            lsp-ui-sideline-show-symbol       nil
+            lsp-ui-sideline-update-mode       'point)
+      )
+    )
+
+  (with-eval-after-load 'company
+    (if (not (straight-use-package 'company-lsp))
+        (warn "===> Can't install 'company-lsp'")
+
+      ;; Triggers
+      (with-eval-after-load 'lsp
         (defun vs|company-lsp/enable()
           (make-local-variable 'company-backends)
           (push 'company-lsp company-backends)
           )
         (add-hook 'lsp-mode-hook #'vs|company-lsp/enable)
-
-        ;; Config
-        (with-eval-after-load 'company-lsp
-          (setq company-lsp-async            t
-                company-lsp-enable-snippet   t
-                company-lsp-cache-candidates t)
-
-          ;; ;; From cquery wiki page
-          ;; (setq company-lsp-cache-candidates nil
-          ;;       company-transformers         nil)
-          )
-        )
-      )
-    )
-
-  (if (not (straight-use-package 'cquery))
-      (warn "===> Can't install 'cquery'")
-
-    ;; Triggers
-    (with-eval-after-load 'lsp
-      (require 'cquery)
-      )
-
-    ;; Config
-    (with-eval-after-load 'cquery
-      (with-eval-after-load 'projectile
-        (setq projectile-project-root-files-top-down-recurring
-              (append '("compile_commands.json"
-                        ".cquery")
-                      projectile-project-root-files-top-down-recurring))
         )
 
-      (setq cquery-extra-init-params    '(:index (:comments 2)
-                                                 :cacheFormat "msgpack"
-                                                 :completion (:detailedLabel t)))
-
-      ;; ;; From cquery wiki page
-      ;; (setq cquery-sem-highlight-method 'overlay)
+      ;; Config
+      (with-eval-after-load 'company-lsp
+        ;; ;; From cquery wiki page
+        ;; (setq company-lsp-cache-candidates nil
+        ;;       company-transformers         nil)
+        (setq company-lsp-async            t
+              company-lsp-enable-snippet   t
+              company-lsp-cache-candidates t)
+        )
       )
     )
 
@@ -110,29 +93,9 @@ Should be populated using `.dir-locals.el' like that:
 
     ;; Config
     (with-eval-after-load 'lsp-java
-      (setq lsp-java-server-install-dir (expand-file-name "eclipse/" vs-xdg-data-dir)
-            lsp-java-workspace-cache-dir (expand-file-name "eclipse/" vs-xdg-cache-dir)
-            lsp-java-workspace-dir (expand-file-name "eclipse/" vs-xdg-config-dir))
-
-      (defun vs|lsp-java/before-enable ()
-        "Populate `lsp-java' workspace with projects from `.dir-locals.el'."
-        (vs|emacs|apply-dir-locals)
-        (let ((projects ""))
-          (mapc
-           (lambda (element)
-             (let ((project (expand-file-name element (projectile-project-root))))
-               (when (file-exists-p project)
-                 (add-to-list 'lsp-java--workspace-folders project)
-                 (setq projects (concat projects " " project))
-                 )
-               )
-             )
-           vs-java-projects
-           )
-          (message "===> LSP Java: workspace projects:%s" projects)
-          )
-        )
-      (advice-add 'lsp-java-enable :before 'vs|lsp-java/before-enable)
+      (setq lsp-java-server-install-dir  (expand-file-name "eclipse/" vs-xdg-data-dir  )
+            lsp-java-workspace-cache-dir (expand-file-name "eclipse/" vs-xdg-cache-dir )
+            lsp-java-workspace-dir       (expand-file-name "eclipse/" vs-xdg-config-dir))
       )
     )
   )
