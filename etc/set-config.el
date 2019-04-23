@@ -30,6 +30,9 @@
 (defconst vs-user-home-dir (expand-file-name "~")
   "User's home folder.")
 
+(defvar vs-user-projects '((expand-file-name "Sources" vs-user-home-dir))
+  "User ptoject folders list.")
+
 (defconst vs-gc-cons-threshold (* 1024 1024 8)
   "Default garbage collector threshold value.")
 

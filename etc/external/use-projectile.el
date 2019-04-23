@@ -3,7 +3,6 @@
 ;;; Code:
 (require 'set-config)
 (require 'straight)
-(require 'delight)
 
 (if (not (straight-use-package 'projectile))
     (warn "===> Can't install 'projectile'")
@@ -16,8 +15,6 @@
 
   ;; Config
   (with-eval-after-load 'projectile
-    (delight 'projectile-mode (concat " [" (projectile-project-name) "]") 'projectile)
-
     (let ((projectile-cache-dir                       (expand-file-name "projectile" vs-emacs-cache-dir)))
       (setq projectile-cache-file                     (expand-file-name "cache.el" projectile-cache-dir)
             projectile-completion-system              'ivy
@@ -38,7 +35,12 @@
       )
 
     (add-to-list 'projectile-project-root-files-top-down-recurring "compile_commands.json")
-    (push ".project" projectile-project-root-files-bottom-up)
+    (add-to-list 'projectile-project-root-files-top-down-recurring ".project")
+
+    (add-to-list 'projectile-project-root-files-bottom-up "compile_commands.json")
+    (add-to-list 'projectile-project-root-files-bottom-up ".project")
+
+    (setq projectile-project-search-path vs-user-projects)
 
     (defun vs|projectile/cache-filter (orig-fun &rest args)
       "Don't cache ignored files."
