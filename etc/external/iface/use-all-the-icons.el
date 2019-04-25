@@ -1,8 +1,6 @@
 ;;; use-all-the-icons.el ---  pretty icons package. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'straight)
-
 (if (not (straight-use-package 'all-the-icons))
     (warn "===> Can't install 'all-the-icons'")
 

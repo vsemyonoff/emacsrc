@@ -1,9 +1,6 @@
 ;;; use-highlight.el ---  highlight minor modes. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'straight)
-(require 'delight)
-
 (if (not (straight-use-package 'highlight-escape-sequences))
     (warn "===> Can't install 'highlight-escape-sequences'")
 
@@ -20,12 +17,12 @@
   (add-hook 'prog-mode-hook #'highlight-numbers-mode)
   )
 
-(if (not (straight-use-package 'rainbow-delimiters))
-    (warn "===> Can't install 'rainbow-delimiters'")
+;; (if (not (straight-use-package 'rainbow-delimiters))
+;;     (warn "===> Can't install 'rainbow-delimiters'")
 
-  ;; Triggers
-  ;;(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-  )
+;;   ;; Triggers
+;;   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+;;   )
 
 (if (not (straight-use-package 'rainbow-mode))
     (warn "===> Can't install 'rainbow-mode'")
@@ -34,9 +31,6 @@
   (add-hook 'css-mode-hook        #'rainbow-mode)
   (add-hook 'conf-mode-hook       #'rainbow-mode)
   (add-hook 'emacs-lisp-mode-hook #'rainbow-mode)
-
-  ;; Delight
-  (delight 'rainbow-mode nil 'rainbow-mode)
   )
 
 (if (not (straight-use-package 'highlight-defined))

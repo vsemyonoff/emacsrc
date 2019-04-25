@@ -1,9 +1,6 @@
 ;;; use-smooth-scrolling.el ---  fix scrolling. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'set-config)
-(require 'straight)
-
 (if (not (straight-use-package 'smooth-scrolling))
     (warn "===> Can't install 'smooth-scrolling'")
 
@@ -14,7 +11,8 @@
   (with-eval-after-load 'smooth-scrolling
     (setq mouse-wheel-progressive-speed nil
           mouse-wheel-scroll-amount     '(1 ((shift) . 1) ((control) . nil))
-          smooth-scroll-margin          1  )
+          smooth-scroll-margin          1
+          )
     )
   )
 

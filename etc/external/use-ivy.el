@@ -1,14 +1,6 @@
 ;;; use-ivy.el ---  helper framework. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'set-config)
-(require 'straight)
-(require 'delight)
-
-(if (not (straight-use-package 'hydra))
-    (warn "===> Can't install 'hydra'")
-  )
-
 (if (not (straight-use-package 'counsel))
     (warn "==> Can't install 'counsel'")
   ;; Triggers
@@ -17,10 +9,6 @@
   ;; Keybindings
   (define-key (current-global-map) (kbd "C-r") #'swiper)
   (define-key (current-global-map) (kbd "C-s") #'swiper)
-
-  ;; Delight
-  (delight '((counsel-mode nil counsel)
-             (ivy-mode     nil ivy    )))
 
   ;; Config
   (with-eval-after-load 'ivy
@@ -33,7 +21,8 @@
           ivy-re-builders-alist       '((t . ivy--regex-ignore-order))
           ivy-use-selectable-prompt   t
           ivy-use-virtual-buffers     t
-          ivy-virtual-abbreviate      'full)
+          ivy-virtual-abbreviate      'full
+          )
 
     (defun vs|ivy/custom-format (cands)
       "Set custom `ivy' format."

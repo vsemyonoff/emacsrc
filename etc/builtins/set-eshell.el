@@ -1,10 +1,8 @@
 ;;; set-eshell.el ---  Emacs shell settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'set-config)
-
 (with-eval-after-load 'eshell
-  (setq eshell-directory-name (expand-file-name "eshell" vs-emacs-cache-dir))
+  (setq eshell-directory-name (vs|emacs/cache "eshell"))
   )
 
 (provide 'set-eshell)

@@ -1,30 +1,28 @@
 ;;; set-files.el ---  files settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'set-config)
 
 ;; Bookmarks
 (with-eval-after-load 'bookmark
-  (setq bookmark-default-file (expand-file-name "bookmarks.el"
-                                                vs-emacs-cache-dir)
-        bookmark-save-flag    1)
+  (setq bookmark-default-file (vs|emacs/cache "bookmarks.el")
+        bookmark-save-flag    1
+        )
   )
 
 ;; Auto-save/backup
 (with-eval-after-load 'files
-  (setq confirm-nonexistent-file-or-buffer t    ; ask for new buffers
-        find-file-visit-truename           t    ; follow symlinks while opening files
-        make-backup-files                  nil) ; disable backup files
-  (let ((auto-save-dir
-         (file-name-as-directory (expand-file-name "auto-save"
-                                                   vs-emacs-cache-dir)))
+  (setq confirm-nonexistent-file-or-buffer t   ; ask for new buffers
+        find-file-visit-truename           t   ; follow symlinks while opening files
+        make-backup-files                  nil ; disable backup files
         )
+
+  (let ((auto-save-dir (file-name-as-directory (vs|emacs/cache "auto-save"))))
     (setq auto-save-default              t
           auto-save-file-name-transforms `((".*" ,auto-save-dir t))
           auto-save-interval             300
-          auto-save-list-file-name       (expand-file-name "auto-save.el"
-                                                           vs-emacs-cache-dir)
-          auto-save-timeout              30)
+          auto-save-list-file-name       (vs|emacs/cache "auto-save.el")
+          auto-save-timeout              30
+          )
     (unless (file-exists-p auto-save-dir)
       (make-directory auto-save-dir t)
       )
@@ -41,7 +39,8 @@
         )
       )
     )
-  (advice-add 'find-file :before 'vs|emacs/find-file-create-parents))
+  (advice-add 'find-file :before 'vs|emacs/find-file-create-parents)
+  )
 
 ;; Recently visited files list
 (add-hook 'vs-emacs-config-hook #'recentf-mode)
@@ -50,27 +49,28 @@
         recentf-exclude           (list "^/sudo:" "^/tmp/" "^/ssh:"
                                         "\\.?ido\\.last$" "\\.revive$"
                                         "/TAGS$" "^/var/folders/.+$"
-                                        (concat "^" vs-emacs-cache-dir))
+                                        (concat "^" vs-emacs-cache-dir)
+                                        )
         recentf-filename-handlers '(file-truename)
         recentf-max-menu-items    0
         recentf-max-saved-items   300
-        recentf-save-file         (expand-file-name "recent.el" vs-emacs-cache-dir))
+        recentf-save-file         (vs|emacs/cache "recent.el")
+        )
   )
 
 ;; Svae history
 (add-hook 'vs-emacs-config-hook #'savehist-mode)
 (with-eval-after-load 'savehist
   (setq savehist-additional-variables '(search-ring regexp-search-ring)
-        savehist-autosave-interval 60
-        savehist-file (expand-file-name "history.el"
-                                        vs-emacs-cache-dir))
+        savehist-autosave-interval    60
+        savehist-file (vs|emacs/cache "history.el")
+        )
   )
 
 ;; Save last visited place in files
 (add-hook 'vs-emacs-config-hook #'save-place-mode)
 (with-eval-after-load 'saveplace
-  (setq save-place-file (expand-file-name "places.el"
-                                          vs-emacs-cache-dir))
+  (setq save-place-file (vs|emacs/cache "places.el"))
   )
 
 ;; Revert files if changed outside

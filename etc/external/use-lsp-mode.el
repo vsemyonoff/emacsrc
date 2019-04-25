@@ -1,9 +1,6 @@
 ;;; use-lsp-mode.el ---  C/C++/HTML/Java/Python modes settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'set-config)
-(require 'straight)
-
 (if (not (straight-use-package 'lsp-mode))
     (warn "===> Can't install 'lsp-mode'")
 
@@ -14,14 +11,16 @@
 
   ;; Config
   (with-eval-after-load 'lsp
-    (setq lsp-auto-guess-root    t
-          lsp-eldoc-enable-hover nil
-          lsp-eldoc-render-all   nil
-          lsp-inhibit-message    nil
-          lsp-prefer-flymake     nil
-          lsp-restart            'auto-restart
-          lsp-session-file       (expand-file-name "lsp.session"
-                                                   vs-emacs-cache-dir))
+    (setq lsp-auto-guess-root                  t
+          lsp-eldoc-enable-hover               t
+          lsp-eldoc-enable-signature-help      t
+          lsp-eldoc-prefer-signature-help      t
+          lsp-eldoc-render-all                 nil
+          lsp-prefer-flymake                   nil
+          lsp-restart                          'auto-restart
+          lsp-session-file                     (vs|emacs/cache "session.lsp")
+          lsp-symbol-highlighting-skip-current t
+          )
     )
 
   (if (not (straight-use-package 'lsp-ui))
@@ -31,7 +30,7 @@
     (with-eval-after-load 'lsp
       (require 'lsp-ui)
 
-      (add-hook 'lsp-ui-mode-hook (lambda () (eldoc-mode -1)))
+      ;; (add-hook 'lsp-ui-mode-hook (lambda () (eldoc-mode -1)))
 
       ;; Keybindings
       (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
@@ -42,6 +41,7 @@
             lsp-ui-flycheck-enable            t
             lsp-ui-sideline-ignore-duplicate  t
             lsp-ui-sideline-show-code-actions nil
+            lsp-ui-sideline-show-diagnostics  t
             lsp-ui-sideline-show-flycheck     t
             lsp-ui-sideline-show-hover        nil
             lsp-ui-sideline-show-symbol       nil
@@ -64,25 +64,27 @@
       )
     )
 
-  (if (not (straight-use-package 'ccls))
-      (warn "===> Can't install 'ccls'")
+  (with-eval-after-load 'use-projectile ; init after projectile setup
+    (if (not (straight-use-package 'ccls))
+        (warn "===> Can't install 'ccls'")
 
-    ;; Triggers
-    (defun vs|ccls/enable ()
-      (require 'ccls)
-      (lsp)
-      )
-    (add-hook 'c++-mode-hook    #'vs|ccls/enable)
-    (add-hook 'c-mode-hook      #'vs|ccls/enable)
-    (add-hook 'objc-mode-hook   #'vs|ccls/enable)
+      ;; Triggers
+      (defun vs|ccls/enable ()
+        (require 'ccls)
+        (lsp)
+        )
+      (add-hook 'c++-mode-hook    #'vs|ccls/enable)
+      (add-hook 'c-mode-hook      #'vs|ccls/enable)
+      (add-hook 'objc-mode-hook   #'vs|ccls/enable)
 
-    ;; Config
-    (with-eval-after-load 'ccls
-      (setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
+      ;; Config
+      (with-eval-after-load 'ccls
+        (setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
 
-      (with-eval-after-load 'projectile
-        (add-to-list 'projectile-project-root-files-top-down-recurring ".ccls")
-        (add-to-list 'projectile-project-root-files-bottom-up ".ccls")
+        (with-eval-after-load 'projectile
+          (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
+          (add-to-list 'projectile-project-root-files-bottom-up ".ccls")
+          )
         )
       )
     )
@@ -99,9 +101,10 @@
 
     ;; Config
     (with-eval-after-load 'lsp-java
-      (setq lsp-java-server-install-dir  (expand-file-name "eclipse/" vs-xdg-data-dir  )
-            lsp-java-workspace-cache-dir (expand-file-name "eclipse/" vs-xdg-cache-dir )
-            lsp-java-workspace-dir       (expand-file-name "eclipse/" vs-xdg-config-dir))
+      (setq lsp-java-server-install-dir  (vs|xdg/data   "eclipse/")
+            lsp-java-workspace-cache-dir (vs|xdg/cache  "eclipse/")
+            lsp-java-workspace-dir       (vs|xdg/config "eclipse/")
+            )
       )
     )
   )

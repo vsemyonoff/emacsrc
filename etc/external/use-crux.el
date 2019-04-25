@@ -1,8 +1,6 @@
 ;;; use-crux.el ---  various utils. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'straight)
-
 (if (not (straight-use-package 'crux))
     (warn "===> Can't install 'crux'")
 

@@ -30,7 +30,7 @@
 (defconst vs-user-home-dir (expand-file-name "~")
   "User's home folder.")
 
-(defvar vs-user-projects '((expand-file-name "Sources" vs-user-home-dir))
+(defvar vs-user-projects (list "~/Sources")
   "User ptoject folders list.")
 
 (defconst vs-gc-cons-threshold (* 1024 1024 8)
@@ -47,24 +47,13 @@
   "Hook called after frame creation is done.")
 
 ;; Theme
-;;(defvar vs-emacs-theme-package 'color-theme-sanityinc-tomorrow
-;; (defvar vs-emacs-theme-package 'doom-themes
-(defvar vs-emacs-theme-package 'kaolin-themes
+(defvar vs-emacs-theme-package 'color-theme-sanityinc-tomorrow
   "Package name containing `vs-emacs-theme'.
 Used as fallback package for `vs-emacs-alt-theme'.
 If not set then it means that selected theme is builtin.")
 
-;;(defvar vs-emacs-theme 'sanityinc-tomorrow-night
-;; (defvar vs-emacs-theme 'doom-vibrant
-(defvar vs-emacs-theme 'kaolin-galaxy
+(defvar vs-emacs-theme 'sanityinc-tomorrow-eighties
   "Theme name inside `vs-emacs-theme-package'.")
-
-;; Custom treemacs tweak
-(with-eval-after-load 'kaolin-themes
-  (with-eval-after-load 'treemacs
-    (kaolin-treemacs-theme)
-    )
-  )
 
 (provide 'set-config)
 ;;; set-config.el ends here

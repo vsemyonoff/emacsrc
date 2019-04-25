@@ -1,10 +1,6 @@
 ;;; use-yasnippet.el ---  YASnippet mode. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'set-config)
-(require 'straight)
-;; (require 'delight)
-
 (if (not (straight-use-package 'yasnippet))
     (warn "===> Can't install 'yasnippet'")
 
@@ -13,9 +9,7 @@
 
   ;; Config
   (with-eval-after-load 'yasnippet
-    (setq yas-snippet-dirs nil)         ; cleanup defaults first
-    (push (expand-file-name "snippets" vs-emacs-data-dir)
-          yas-snippet-dirs)
+    (setq yas-snippet-dirs (list (vs|emacs/data "snippets")))
 
     (if (not (straight-use-package 'yasnippet-snippets))
         (warn "===> Can't install 'yasnippet-snippets'")

@@ -10,11 +10,10 @@
   )
 
 (eval-and-compile
-  (require 'set-builtins)      ; built-in packages settings
+  (require 'set-builtins)   ; built-in packages
   (unless noninteractive
-    (require 'set-pkgmgr)      ; package manager settings
-    (require 'set-external)    ; editor behavior
-    (require 'set-utilities) ; browser/email/messengers settings
+    (require 'set-pkgmgr)   ; package manager
+    (require 'set-external) ; external packages
     )
   )
 

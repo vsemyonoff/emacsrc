@@ -1,8 +1,6 @@
 ;;; set-frame.el ---  various frame settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'set-functions)
-
 (with-eval-after-load 'frame
   (setq window-divider-default-bottom-width 0
         window-divider-default-places       t

@@ -1,8 +1,6 @@
 ;;; set-builtins.el --- Emacs built-in packages settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'set-config)
-(require 'set-functions)
 
 ;; Unicode
 (set-charset-priority 'unicode)
@@ -21,30 +19,26 @@
               indent-tabs-mode               nil
               mode-line-format               nil
               require-final-newline          t
-              tab-width                      4)
+              tab-width                      4
+              )
 
 ;; Global variables
 (setq ad-redefinition-action                 'accept
       apropos-do-all                         t
       auto-window-vscroll                    nil
       create-lockfiles                       nil
-      custom-file                            (expand-file-name "set-custom.el"
-                                                               vs-emacs-config-dir)
+      custom-file                            (vs|emacs/config "set-custom.el")
       debug-on-error                         t
       echo-keystrokes                        0.02
       enable-dir-local-variables             nil
-      enable-recursive-minibuffers           nil
       help-window-select                     t
       history-length                         500
       inhibit-startup-echo-area-message      user-login-name
       inhibit-startup-message                t
       initial-scratch-message                nil
       load-prefer-newer                      noninteractive
-      minibuffer-prompt-properties           '(cursor-intangible t
-                                               face minibuffer-prompt
-                                               point-entered minibuffer-avoid-prompt
-                                               read-only t)
-      tab-always-indent                      t)
+      tab-always-indent                      t
+      )
 
 ;; Look and feel
 (setq frame-inhibit-implied-resize           t
@@ -64,13 +58,14 @@
       visible-bell                           nil
       visible-cursor                         nil
       x-gtk-use-system-tooltips              nil
-      x-stretch-cursor                       nil)
+      x-stretch-cursor                       nil
+      )
 
 ;; Load settings customized with UI
 (load custom-file 'noerror)
 
 ;; Other packages
-(vs|emacs/require-dir (expand-file-name "builtins" vs-emacs-config-dir))
+(vs|emacs/require-dir (vs|emacs/config "builtins"))
 
 (provide 'set-builtins)
 ;;; set-builtins.el ends here

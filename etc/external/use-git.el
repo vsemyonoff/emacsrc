@@ -1,13 +1,8 @@
 ;;; use-git.el ---  git mode settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'set-config)
-(require 'straight)
-(require 'delight)
-
 (with-eval-after-load 'transient
-  (setq transient-history-file (expand-file-name "transient.el"
-                                                 vs-emacs-cache-dir))
+  (setq transient-history-file (vs|emacs/cache "transient.el"))
   )
 
 (if (not (straight-use-package 'magit))
@@ -23,7 +18,8 @@
   (setq vc-follow-symlinks t
         magit-git-global-arguments
         (nconc magit-git-global-arguments '("-c" "color.ui=false"
-                                            "-c" "color.diff=false")))
+                                            "-c" "color.diff=false"))
+        )
   )
 
 (if (not (straight-use-package 'git-gutter))
@@ -31,9 +27,6 @@
 
   ;; Triggers
   (add-hook 'vs-emacs-config-hook #'global-git-gutter-mode)
-
-  ;; Delight
-  (delight 'git-gutter-mode nil 'git-gutter)
 
   ;; Config
   (with-eval-after-load 'git-gutter
@@ -63,16 +56,19 @@
 
 (if (not (straight-use-package 'gitconfig-mode))
     (warn "===> Can't install 'gitconfig-mode'")
+
   (require 'gitconfig-mode)
   )
 
 (if (not (straight-use-package 'gitignore-mode))
     (warn "===> Can't install 'gitignore-mode'")
+
   (require 'gitignore-mode)
   )
 
 (if (not (straight-use-package 'git-timemachine))
     (warn "===> Can't install 'git-timemachine'")
+
   (defun vs|git-timemachine/header ()
     (setq header-line-format ">>> Back to the future...")
     )

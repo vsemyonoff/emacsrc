@@ -19,14 +19,5 @@
   (load bootstrap-file nil 'nomessage)
   )
 
-(if (not (straight-use-package 'delight))
-    (warn "===> Can't install 'delight'")
-  (delight '((abbrev-mode           nil     abbrev    )
-             (eldoc-mode            nil     eldoc     )
-             (emacs-lisp-mode       "ELisp" :major    )
-             (lisp-interaction-mode "IELisp":major    )
-             (whitespace-mode       nil     whitespace)))
-  )
-
 (provide 'set-pkgmgr)
 ;;; set-pkgmgr.el ends here

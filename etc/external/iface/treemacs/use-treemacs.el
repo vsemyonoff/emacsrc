@@ -1,15 +1,14 @@
 ;;; use-treemacs.el ---  treemacs mode. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'set-config)
-(require 'straight)
-
 (if (not (straight-use-package 'treemacs))
     (warn "===> Can't install 'treemacs'")
 
   ;; Triggers
-  (autoload 'treemacs-current-workspace    "treemacs" "Get current `treemacs' workspace object.")
-  (autoload 'treemacs-delete-other-windows "treemacs" "`delete-other-windows' replacement."    t)
+  (autoload 'treemacs-current-workspace "treemacs"
+    "Get current `treemacs' workspace object.")
+  (autoload 'treemacs-delete-other-windows "treemacs"
+    "`delete-other-windows' replacement."    t)
 
   ;; Keybindings
   (define-key (current-global-map) (kbd "C-<tab>") #'vs|treemacs|open             )
@@ -23,15 +22,12 @@
           treemacs-indentation-string       "  "
           treemacs-indentation              1
           treemacs-is-never-other-window    nil
-          treemacs-persist-file             (expand-file-name "treemacs.el" vs-emacs-cache-dir)
+          treemacs-persist-file             (vs|emacs/cache "treemacs.ws")
           treemacs-show-hidden-files        nil
           treemacs-silent-refresh           t
           treemacs-space-between-root-nodes nil
           treemacs-width                    40
           )
-
-    ;; (setq treemacs-icon-open-png   (propertize "⊖ " 'face 'treemacs-directory-face)
-    ;;       treemacs-icon-closed-png (propertize "⊕ " 'face 'treemacs-directory-face))
 
     (treemacs-git-mode                     'extended)
     (treemacs-filewatch-mode                t       )
@@ -43,18 +39,17 @@
       "Set `treemacs' buffer local variables."
       (setq indicate-buffer-boundaries nil
             indicate-empty-lines       nil
-            line-spacing               1
-            ;;mode-line-format           t
             require-final-newline      nil
-            tab-width                  1)
+            line-spacing               1
+            tab-width                  1
+            )
       )
-
-    (defun vs|treemacs/resize-icons ()
-      "Make `treemacs' icons smaller."
-      (treemacs-resize-icons 18)
-      )
-
     (add-hook 'treemacs-mode-hook   #'vs|treemacs/buffer-setup)
+
+    ;; (defun vs|treemacs/resize-icons ()
+    ;;   "Make `treemacs' icons smaller."
+    ;;   (treemacs-resize-icons 18)
+    ;;   )
     ;; (add-hook 'treemacs-select-hook #'vs|treemacs/resize-icons)
 
     (defun vs|treemacs|collapse-or-go-up ()

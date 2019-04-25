@@ -1,8 +1,6 @@
 ;;; use-flycheck.el ---  flycheck mode settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'straight)
-
 (if (not (straight-use-package 'flycheck))
     (warn "===> Can't install 'flycheck'")
 
@@ -34,7 +32,9 @@
               #b00000000
               #b00000000
               #b00000000
-              #b00000000))
+              #b00000000
+              )
+      )
 
     (flycheck-define-error-level 'info
       :severity 0
@@ -42,7 +42,8 @@
       :overlay-category 'flycheck-info-overlay
       :fringe-bitmap 'flycheck-fringe-bitmap-ball
       :fringe-face 'flycheck-fringe-info
-      :error-list-face 'flycheck-error-list-info)
+      :error-list-face 'flycheck-error-list-info
+      )
 
     (flycheck-define-error-level 'warning
       :severity 1
@@ -50,7 +51,8 @@
       :overlay-category 'flycheck-warning-overlay
       :fringe-bitmap 'flycheck-fringe-bitmap-ball
       :fringe-face 'flycheck-fringe-warning
-      :error-list-face 'flycheck-error-list-warning)
+      :error-list-face 'flycheck-error-list-warning
+      )
 
     (flycheck-define-error-level 'error
       :severity 2
@@ -58,7 +60,8 @@
       :overlay-category 'flycheck-error-overlay
       :fringe-bitmap 'flycheck-fringe-bitmap-ball
       :fringe-face 'flycheck-fringe-error
-      :error-list-face 'flycheck-error-list-error)
+      :error-list-face 'flycheck-error-list-error
+      )
     )
 
   (if (not (straight-use-package 'flycheck-pos-tip))
@@ -70,14 +73,16 @@
     ;; Config
     (with-eval-after-load 'flycheck-pos-tip
       (setq flycheck-display-errors-delay 0.5
-            flycheck-pos-tip-timeout      10 )
+            flycheck-pos-tip-timeout      10
+            )
       )
     )
   )
 
 (with-eval-after-load 'pos-tip
   (setq pos-tip-internal-border-width 6
-        pos-tip-border-width          1)
+        pos-tip-border-width          1
+        )
   )
 
 (provide 'use-flycheck)

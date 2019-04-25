@@ -1,9 +1,6 @@
 ;;; use-writegood.el ---  writer mode tweak. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'straight)
-(require 'delight)
-
 (if (not (straight-use-package 'writegood-mode))
     (warn "===> Can't install 'writegood-mode'")
 

@@ -1,8 +1,6 @@
 ;;; use-dired+.el ---  dired+ settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'straight)
-
 (with-eval-after-load 'dired-x
   (if (not (straight-use-package 'dired+))
       (warn "===> Can't install 'dired+'")

@@ -1,8 +1,6 @@
 ;;; use-wcheck.el ---  wcheck mode. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'straight)
-
 (if (not (straight-use-package 'wcheck-mode))
     (warn "===> Can't install 'wcheck-mode'")
 

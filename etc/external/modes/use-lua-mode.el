@@ -1,8 +1,6 @@
 ;;; use-lua-mode.el ---  Lua editing mode. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'straight)
-
 (if (not (straight-use-package 'lua-mode))
     (warn "===> Can't install 'lua-mode'")
 
@@ -14,6 +12,7 @@
   (with-eval-after-load 'company
     (if (not (straight-use-package 'company-lua))
         (warn "===> Can't install 'company-lsp'")
+
       ;; Triggers
       (defun vs|company-lua/enable ()
         (make-local-variable 'company-backends)

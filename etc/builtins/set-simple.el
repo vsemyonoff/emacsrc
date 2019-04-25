@@ -1,8 +1,6 @@
 ;;; set-simple.el --- basic settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(require 'set-config)
-
 (defun vs|emacs/simple-settings ()
   "Basic editing settings."
   (fset 'yes-or-no-p     'y-or-n-p) ; y/n (or SPS/DEL) against yes/no

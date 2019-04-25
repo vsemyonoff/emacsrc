@@ -3,6 +3,36 @@
 ;;; Code:
 (require 'set-config)
 
+(defun vs|xdg/cache (file)
+  "Return FILE expanded with `vs-xdg-cache-dir'."
+  (expand-file-name file vs-xdg-cache-dir)
+  )
+
+(defun vs|xdg/config (file)
+  "Return FILE expanded with `vs-xdg-config-dir'."
+  (expand-file-name file vs-xdg-config-dir)
+  )
+
+(defun vs|xdg/data (file)
+  "Return FILE expanded with `vs-xdg-data-dir'."
+  (expand-file-name file vs-xdg-data-dir)
+  )
+
+(defun vs|emacs/cache (file)
+  "Return FILE expanded with `vs-emacs-cache-dir'."
+  (expand-file-name file vs-emacs-cache-dir)
+  )
+
+(defun vs|emacs/config (file)
+  "Return FILE expanded with `vs-emacs-config-dir'."
+  (expand-file-name file vs-emacs-config-dir)
+  )
+
+(defun vs|emacs/data (file)
+  "Return FILE expanded with `vs-emacs-data-dir'."
+  (expand-file-name file vs-emacs-data-dir)
+  )
+
 (defun vs|emacs/gui-frames-count ()
   "Return count of visible non-terminal frames.
 Used by `emacsclient' wrapper only."
