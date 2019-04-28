@@ -1,13 +1,9 @@
 ;;; set-minibuffer.el ---  minibuffer settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(setq enable-recursive-minibuffers nil
-      minibuffer-prompt-properties '(cursor-intangible t
-                                     face minibuffer-prompt
-                                     point-entered minibuffer-avoid-prompt
-                                     read-only t
-                                     )
-      )
+(setq enable-recursive-minibuffers nil)
+(setq minibuffer-prompt-properties
+      '(read-only t intangible t cursor-intangible t face minibuffer-prompt))
 
 (add-hook 'minibuffer-exit-hook  #'vs|emacs/disable-optimizations)
 (add-hook 'minibuffer-setup-hook #'vs|emacs/enable-optimizations)

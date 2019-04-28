@@ -10,6 +10,9 @@ PACKAGES=(
     editorconfig-core-c
     emacs
     hunspell
+    isync
+    msmtp-mta
+    notmuch
     npm
     python-pip
     the_silver_searcher
