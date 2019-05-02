@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+easymail remove Fastmail
+easymail remove Google
+easymail remove Smartling

@@ -11,7 +11,7 @@ PACKAGES=(
     emacs
     hunspell
     isync
-    msmtp-mta
+    msmtp
     notmuch
     npm
     python-pip

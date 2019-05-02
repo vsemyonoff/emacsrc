@@ -6,6 +6,10 @@
         window-divider-default-places       t
         window-divider-default-right-width  1)
 
+  ;; Unbind `suspend-frame'
+  (define-key global-map (kbd "C-x C-z") nil)
+  (define-key global-map (kbd "C-z"    ) nil)
+
   (defun vs|emacs/make-frame-filter (&optional parameters)
     "Apply `initial-frame-alist' to `make-frame' function in `daemon' mode
 while creating first visible GUI frame."

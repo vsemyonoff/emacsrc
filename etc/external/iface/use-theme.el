@@ -33,7 +33,7 @@
         )
       )
     )
-  (set-face-attribute 'default nil :family "Roboto Mono" :height 100)
+  (set-face-attribute 'default nil :family "Roboto Mono" :height 110)
   (set-face-attribute 'fixed-pitch nil :family "Roboto Mono")
   (set-face-attribute 'variable-pitch nil :family "Roboto")
   ;; (set-face-attribute 'ivy-current-match nil :inherit 'hl-line :background nil :foreground nil)
