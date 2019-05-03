@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-easymail setup --enable --full-name="Vladislav Semyonov" --server=imap.gmail.com Smartling vsemyonov@smartling.com work/google.com
-easymail setup --enable Fastmail vsemyonoff@fastmail.com fastmail.com
-easymail setup --enable Google vsemyonoff@gmail.com google.com
+easymail setup --full-name="Vladislav Semyonov" --server=imap.gmail.com Smartling vsemyonov@smartling.com work/google.com
+easymail setup Fastmail vsemyonoff@fastmail.com fastmail.com
+easymail setup Google vsemyonoff@gmail.com google.com
