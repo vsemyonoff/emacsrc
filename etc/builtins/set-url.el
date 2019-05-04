@@ -1,7 +1,12 @@
 ;;; set-url.el ---  eww mode settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(setq browse-url-browser-function 'eww-browse-url)
+(setq browse-url-browser-function 'browse-url-default-browser
+      ;; '(
+      ;;   ("." . browse-url-default-browser)
+      ;;   )
+      ;; browse-url-chrome-program ""
+      )
 
 ;; Config
 (with-eval-after-load 'url
