@@ -26,14 +26,25 @@
         )
       )
 
-(defun vs|notmuch/async-push-changes ()
-  "Call `notmuch-poll' async version to give a chance to `pre-new' hook."
-  (make-thread (lambda () (start-process "easymail" nil "notmuch" "new")))
+(defun vs|easymail/refresh-complete (&rest _)
+  "Refresh all biffers when 'easymail index' completed."
+   (notmuch-refresh-all-buffers)
   )
-(advice-add 'notmuch-bury-or-kill-this-buffer :after #'vs|notmuch/async-push-changes)
+
+(defun vs|easymail/refresh ()
+ "Call 'easymail index' to give a chance for `pre-new' hook."
+ (let ((process-connection-type nil))
+   (set-process-sentinel
+    (start-process "easymail" nil "easymail" "index")
+    #'vs|easymail/refresh-complete
+    )
+   )
+ )
+
+(advice-add 'notmuch-bury-or-kill-this-buffer :after #'vs|easymail/refresh)
 
 ;; Tree mode
-(defun vs|notmuch|tree-toggle-trashed ()
+(defun vs|easymail|tree-toggle-trashed ()
   "Toggle 'trashed' tag for message."
   (interactive)
   (notmuch-tree-tag
@@ -43,22 +54,24 @@
      )
    )
   )
-(define-key notmuch-tree-mode-map   "d" #'vs|notmuch|tree-toggle-trashed)
 
-(defun vs|notmuch|tree-toggle-unread ()
+(define-key notmuch-tree-mode-map   "d" #'vs|easymail|tree-toggle-trashed)
+
+(defun vs|easymail|tree-toggle-unread ()
   "Toggle 'unread' tag for message."
   (interactive)
   (notmuch-tree-tag
    (if (member "unread" (notmuch-tree-get-tags))
-       (list "-unread")
-     (list "+unread")
+       (list "-unread" "+readed")
+     (list "+unread" "-readed")
      )
    )
   )
-(define-key notmuch-search-mode-map (kbd "<tab>") #'vs|notmuch|tree-toggle-unread)
+
+(define-key notmuch-search-mode-map (kbd "<tab>") #'vs|easymail|tree-toggle-unread)
 
 ;; Search mode
-(defun vs|notmuch|search-toggle-trashed ()
+(defun vs|easymail|search-toggle-trashed ()
   "Toggle 'trashed' tag for message."
   (interactive)
   (notmuch-search-tag
@@ -68,19 +81,21 @@
      )
    )
   )
-(define-key notmuch-search-mode-map "d" #'vs|notmuch|search-toggle-trashed)
 
-(defun vs|notmuch|search-toggle-unread ()
+(define-key notmuch-search-mode-map "d" #'vs|easymail|search-toggle-trashed)
+
+(defun vs|easymail|search-toggle-unread ()
   "Toggle 'unread' tag for message."
   (interactive)
   (notmuch-search-tag
    (if (member "unread" (notmuch-search-get-tags))
-       (list "-unread")
-     (list "+unread")
+       (list "-unread" "+readed")
+     (list "+unread" "-readed")
      )
    )
   )
-(define-key notmuch-search-mode-map (kbd "<tab>") #'vs|notmuch|search-toggle-unread)
+
+(define-key notmuch-search-mode-map (kbd "<tab>") #'vs|easymail|search-toggle-unread)
 
 (provide 'easymail-init)
 ;;; easymail-init.el ends here
