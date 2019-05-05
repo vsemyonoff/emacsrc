@@ -3,8 +3,7 @@
 ;;; Code:
 (require 'notmuch)
 
-(setq mm-text-html-renderer 'lynx
-      notmuch-hello-hide-tags '("Archive" "attachment" "Drafts" "Inbox" "replied" "Sent" "Spam" "Trash" "unread")
+(setq notmuch-hello-hide-tags '("Archive" "attachment" "Drafts" "Inbox" "replied" "Sent" "Spam" "Trash" "unread")
       notmuch-hello-sections '(notmuch-hello-insert-header
                                notmuch-hello-insert-saved-searches
                                notmuch-hello-insert-search

@@ -11,11 +11,12 @@ PACKAGES=(
     emacs
     hunspell
     isync
-    msmtp
+    msmtp-mua
     notmuch
     npm
     python-pip
     the_silver_searcher
+    w3m
 )
 PIP_PACKAGES=(
     compiledb                      # C/C++ 'compile_commands.json' generator
