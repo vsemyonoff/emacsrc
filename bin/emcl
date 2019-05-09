@@ -46,5 +46,5 @@ else
     unset NO_WAIT
 fi
 
-# Start daemon, create frame and open file(s) in there
-exec emacsclient --alternate-editor= ${NO_WAIT} ${CREATE_FRAME} "${@}"
+# Create frame and open file(s) in there
+exec emacsclient ${NO_WAIT} ${CREATE_FRAME} "${@}"

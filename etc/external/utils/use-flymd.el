@@ -10,8 +10,8 @@
     (defun vs|flymd/browser-function (url)
       (let ((process-environment (browse-url-process-environment)))
         (apply 'start-process
-               (concat "google-chrome " url) nil
-               "google-chrome"
+               (concat "browser " url) nil
+               "browser"
                (list "--new-window" "--allow-file-access-from-files" url)
                )
         )
