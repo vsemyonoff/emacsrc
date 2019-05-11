@@ -118,7 +118,6 @@
          (default-account (car accounts))
          (identity-rules  (list))
          (alias-alist     (list))
-         (fcc-dirs        (list))
          )
     (dolist (account accounts)
       (let ((name      (substring (shell-command-to-string (format "easymail get %s name" account)) 0 -1))
@@ -128,25 +127,24 @@
             (fcc-dir   (format "%s/Sent +newsent" account))
             )
         (when (equal email user-mail-address) (setq default-account account))
-        (push (list account (list "any" email 'both) account) identity-rules)
-        (push (list account ; account name
-                    nil     ; refer to other identity
-                    (format "%s <%s>" name email)
-                    nil     ; organization
-                    nil     ; extra headers (fcc will init later)
-                    (if (file-exists-p template) template nil)
-                    (if (file-exists-p signature) signature nil)
-                    )
+        (push `(,account ("any" ,email both) ,account) identity-rules)
+        (push `(,account ; account name
+                 nil     ; refer to other identity
+                 ,(format "%s <%s>" name email)
+                 nil     ; organization
+                 (("Fcc" . ,fcc-dir))
+                 ,(if (file-exists-p template) template nil)
+                 ,(if (file-exists-p signature) signature nil)
+                 )
               alias-alist
               )
-        (push `(,email . ,fcc-dir) fcc-dirs)
         )
       )
     (setq gnus-alias-default-identity default-account
           gnus-alias-identity-alist   alias-alist
           gnus-alias-identity-rules   identity-rules
           notmuch-draft-folder        (format "%s/Drafts" default-account)
-          notmuch-fcc-dirs            fcc-dirs
+          notmuch-fcc-dirs            nil
           )
     )
   )

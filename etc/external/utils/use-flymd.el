@@ -12,7 +12,7 @@
         (apply 'start-process
                (concat "browser " url) nil
                "browser"
-               (list "--new-window" "--allow-file-access-from-files" url)
+               (list "--new-window" url)
                )
         )
       )
