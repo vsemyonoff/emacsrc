@@ -23,29 +23,9 @@
     (with-eval-after-load 'wcheck-mode
       (defun wcheck--choose-action-minibuffer (actions)
         "Redefined `wcheck--choose-action-minibuffer' from `wcheck-mode'."
-        (let* ((ivy-use-selectable-prompt nil)
-               (result nil)
-               (action (lambda (x)
-                         ;; (setq result (let ((val  (car (cdr x))))
-                         ;;                (if (functionp val)
-                         ;;                    (funcall val)
-                         ;;                  val)))
-                         (setq result x)
-                         )
-                       )
-               )
-          (ivy-read "Choose: "
-                    (append
-                     (mapcar #'car actions)
-                     ;; (mapcar (lambda (action) (if (consp action) action (cons action action))) actions)
-                     ;; (list (cons (format "Save \"%s\"" word) (cons 'save word))
-                     ;;       (cons (format "Accept (session) \"%s\"" word) (cons 'session word))
-                     ;;       (cons (format "Accept (buffer) \"%s\"" word) (cons 'buffer word))
-                     )
-                    :require-match t
-                    :action action
-                    )
-          result)
+        (let ((ivy-use-selectable-prompt nil))
+          (ivy-read "Choose: " actions)
+          )
         )
 
       ;; Path to Hunspell dictionaries
