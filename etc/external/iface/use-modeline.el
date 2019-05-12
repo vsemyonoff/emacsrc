@@ -128,9 +128,7 @@ mouse-3: Toggle minor modes"
       )
 
     (telephone-line-defsegment* vs|modeline/buffer-position-segment ()
-      (let ((l 4) (c 3))
-        (format "%%%dl:%%%dc " l c)
-        )
+      "%n %p %4l:%3C "
       )
 
     (telephone-line-defsegment* vs|modeline/empty ()
@@ -146,23 +144,12 @@ mouse-3: Toggle minor modes"
             (nil . (vs|modeline/buffer-segment    ))
             )
           )
-    (setq telephone-line-center-lhs
-          '(
-            (nil . (vs|modeline/empty))
-            )
-          )
-    (setq telephone-line-center-rhs
-          '(
-            (nil . (vs|modeline/empty))
-            )
-          )
     (setq telephone-line-rhs
           '(
             (nil . (vs|modeline/flycheck-segment       ))
             (nil . (vs|modeline/encoding-segment       ))
             (nil . (vs|modeline/eol-segment            ))
             (nil . (vs|modeline/buffer-position-segment))
-            (nil . (telephone-line-hud-segment         ))
             )
           )
 
