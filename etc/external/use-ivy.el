@@ -12,16 +12,14 @@
 
   ;; Config
   (with-eval-after-load 'ivy
-    (warn "===> [TODO]: ivy modes for gitlab, passwords")
-
     (setq ivy-count-format            "[%d/%d]: "
           ivy-extra-directories       nil
           ivy-format-function         'vs|ivy/custom-format
-          ivy-ignore-buffers          '("\\`\\( \\|\\*lsp\\|treemacs\\)")
+          ivy-ignore-buffers          '("\\`\\( \\|\\*\\)")
           ivy-re-builders-alist       '((t . ivy--regex-ignore-order))
           ivy-use-selectable-prompt   t
           ivy-use-virtual-buffers     t
-          ivy-virtual-abbreviate      'full
+          ivy-virtual-abbreviate      'abbreviate
           )
 
     (defun vs|ivy/custom-format (cands)
@@ -58,8 +56,8 @@
 
     ;; Config
     (with-eval-after-load 'ivy-rich
-      (warn "===> [TODO]: setup ivy-rich kill buffer")
-      (setq ivy-rich-path-style 'full)
+      (setq ivy-rich-path-style                         'abbreviate
+            ivy-rich-switch-buffer-align-virtual-buffer t)
       )
     )
   )
