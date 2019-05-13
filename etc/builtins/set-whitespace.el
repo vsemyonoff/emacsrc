@@ -10,7 +10,7 @@
 ;; Config
 (with-eval-after-load 'whitespace
   (add-hook 'before-save-hook #'delete-trailing-whitespace)
-  (setq whitespace-line-column 120
+  (setq whitespace-line-column fill-column
         whitespace-style       '(face tabs empty trailing lines-tail))
   )
 

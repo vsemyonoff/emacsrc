@@ -10,22 +10,44 @@
     (add-hook 'org-mode-hook #'org-bullets-mode)
 
     (with-eval-after-load 'org-bullets
-      (setq org-bullets-bullet-list `(,(all-the-icons-material "radio_button_checked")
-                                      ,(all-the-icons-material "adjust")
-                                      ,(all-the-icons-material "radio_button_unchecked")
-                                      ,(all-the-icons-material "stars")
-                                      ,(all-the-icons-material "star")
-                                      ,(all-the-icons-material "star_border")
-                                      "⚫" "⚪" "⚬"
-                                      )
-            )
+      (setq org-bullets-bullet-list '("☉" "⚫" "⚬" "•"))
       )
     )
 
-  (add-hook 'org-mode-hook #'visual-line-mode)
+  (defun vs|org/before-save ()
+    "Tags need to be left-adjusted when saving."
+    (org-align-all-tags)
+    )
+
+  (defun vs|org/after-save ()
+    "Revert left-adjusted tag position done by before-save hook."
+    (let ((org-tags-column (- (- (window-width) (length org-ellipsis) 3))))
+      (org-align-all-tags)
+      (set-buffer-modified-p nil)
+      )
+    )
+
+  (defun vs|org/setup ()
+    (add-hook 'after-save-hook                  #'vs|org/after-save  nil t)
+    (add-hook 'before-save-hook                 #'vs|org/before-save nil t)
+    (add-hook 'window-configuration-change-hook #'vs|org/after-save  nil t)
+    (progn
+      (vs|org/after-save)
+      (setq buffer-undo-list nil
+            buffer-undo-tree nil
+            )
+      )
+    (whitespace-mode -1)
+    (visual-line-mode)
+    )
+
+  (add-hook 'org-mode-hook #'vs|org/setup)
 
   (with-eval-after-load 'org
-    (setq org-ellipsis "▼")
+    (setq org-ellipsis              "▼"
+          org-hide-emphasis-markers t
+          org-tags-column           0
+          )
     )
   )
 
