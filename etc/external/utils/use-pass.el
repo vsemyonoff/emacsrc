@@ -14,6 +14,10 @@
       (warn "===> Can't install 'auth-password-store'")
 
     (add-hook 'vs-emacs-config-hook #'auth-source-pass-enable)
+
+    (with-eval-after-load 'auth-source-pass
+      (setq auth-source-pass-path (getenv "PASSWORD_STORE_DIR"))
+      )
     )
   )
 
