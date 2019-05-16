@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#
+#  Copyright © `(format-time-string "%Y")` `user-full-name` <`user-mail-address`>
+#
+#  `(file-name-nondirectory (buffer-file-name))`: $1
+#  Requires: $2
+#
+#  Creation date: `(format-time-string "%Y-%m-%d %H:%M:%S")`
+#  Last modified: `(format-time-string "%Y-%m-%d %H:%M:%S")`
+#
+
+$0

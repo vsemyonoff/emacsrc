@@ -13,8 +13,25 @@
 
     (if (not (straight-use-package 'yasnippet-snippets))
         (warn "===> Can't install 'yasnippet-snippets'")
-      ;; Trigger
-      (require 'yasnippet-snippets)
+      (yasnippet-snippets-initialize)
+      )
+
+    (with-eval-after-load 'autoinsert
+      (defun vs|autoinsert/yas-expand ()
+        "Replace text in yasnippet template."
+        (yas/expand-snippet (buffer-string) (point-min) (point-max))
+        )
+
+      (defun vs|autoinsert/find-file-template (filename &rest _)
+        "Add template in `auto-insert-alist' for FILENAME."
+        (let* ((base-name (file-name-nondirectory filename))
+               (template  (or (file-name-extension base-name) base-name)))
+          (add-to-list 'auto-insert-alist `(,(format "%s\\'" template) . [,template vs|autoinsert/yas-expand]))
+          )
+        )
+
+      (advice-add 'find-file :before 'vs|autoinsert/find-file-template)
+
       )
     )
   )
