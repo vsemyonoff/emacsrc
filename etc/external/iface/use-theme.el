@@ -21,7 +21,7 @@
 
 (defun vs|theme/tweaks ()
   "Theme customization."
-  (set-face-attribute 'default nil :family "Roboto Mono" :height 110)
+  (set-face-attribute 'default nil :family "Roboto Mono for Powerline" :height 110)
   (set-face-attribute 'fixed-pitch nil :inherit 'default)
   (set-face-attribute 'variable-pitch nil :family "Roboto")
   (set-face-attribute 'ivy-current-match nil :inherit 'hl-line :background nil :foreground nil)
