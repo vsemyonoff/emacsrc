@@ -16,7 +16,7 @@
   ;; Do not show hidden files
   (add-hook 'dired-mode-hook #'dired-omit-mode)
 
-  (defun vs|dired/toggle (arg)
+  (defun vs:dired/toggle (arg)
     (save-restriction
       (narrow-to-region (point-at-bol) (point-at-eol))
       (dired-toggle-marks)
@@ -24,19 +24,19 @@
     (dired-previous-line arg)
     )
 
-  (defun vs|dired|mark-up ()
+  (defun vs:dired|mark-up ()
     (interactive)
-    (vs|dired/toggle 1)
+    (vs:dired/toggle 1)
     )
 
-  (defun vs|dired|mark-down ()
+  (defun vs:dired|mark-down ()
     (interactive)
-    (vs|dired/toggle -1)
+    (vs:dired/toggle -1)
     )
 
   (define-key dired-mode-map (kbd "<right>")  #'dired-find-alternate-file)
-  (define-key dired-mode-map (kbd "<S-up>")   #'vs|dired|mark-up)
-  (define-key dired-mode-map (kbd "<S-down>") #'vs|dired|mark-down)
+  (define-key dired-mode-map (kbd "<S-up>")   #'vs:dired|mark-up)
+  (define-key dired-mode-map (kbd "<S-down>") #'vs:dired|mark-down)
   )
 
 (provide 'set-dired)

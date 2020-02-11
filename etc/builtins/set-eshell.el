@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 (with-eval-after-load 'eshell
-  (setq eshell-directory-name (vs|emacs/cache "eshell"))
+  (setq eshell-directory-name (vs:emacs/cache "eshell"))
   )
 
 (provide 'set-eshell)

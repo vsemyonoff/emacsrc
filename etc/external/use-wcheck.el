@@ -1,64 +1,68 @@
 ;;; use-wcheck.el ---  wcheck mode. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(defconst vs-emacs-spellchecker (executable-find "hunspell")
-  "Spellchecker program name.")
+(when vs-emacs-aspell-bin
+  (use-package wcheck-mode
+    :hook (prog-mode text-mode)
+    :bind (("C-c s" . wcheck-mode)
+           ("C-c c" . wcheck-actions)
+           ("C-c n" . wcheck-jump-forward)
+           ("C-c p" . wcheck-jump-backward))
+    :config
+    (defun vs:wcheck/args (lang &optional dict dict-dir)
+      "Produce Aspell arguments list for language LANG,
+dictionary DICT and extra dictonaries directory DICT-DIR."
+      (let ((args `(,(format "--home-dir=%s" (vs:xdg/config "aspell"))
+                    ,(format "--personal=%s.pws" dict)
+                    ,(format "--repl=%s.prepl" dict)
+                    "-l" ,lang)))
+        (when dict
+          (setq args (append args `("-d" ,dict)))
+          (when dict-dir
+            (add-to-list 'args (format "--dict-dir=%s" dict-dir) t)))
+        args))
 
-(when vs-emacs-spellchecker
-  (if (not (straight-use-package 'wcheck-mode))
-      (warn "===> Can't install 'wcheck-mode'")
+    (defun vs:wcheck/add-to-dictionary (marked-text)
+      "Add current word to personal word list dictionary"
+      (let ((word (downcase (aref marked-text 0))))
+        (message "===> [TODO] vs:wcheck/add-to-dictionary: %s" word)))
 
-    ;; Triggers
-    (add-hook 'prog-mode-hook #'wcheck-mode)
-    (add-hook 'text-mode-hook #'wcheck-mode)
+    (defun vs:wcheck/suggestions-menu (marked-text)
+      (cons (cons "[Add to dictionary]" (lambda () (vs:wcheck/add-to-dictionary marked-text)))
+            (wcheck-parser-ispell-suggestions)))
 
-    ;; Bindings
-    (global-set-key (kbd "C-c s") #'wcheck-mode)
-    ;;(global-set-key (kbd "C-c l") #'wcheck-change-language)
-    (global-set-key (kbd "C-c c") #'wcheck-actions)
-    (global-set-key (kbd "C-c n") #'wcheck-jump-forward)
-    (global-set-key (kbd "C-c p") #'wcheck-jump-backward)
+    (defun wcheck--choose-action-minibuffer (actions)
+      "Redefined `[Add to dictionary]--choose-action-[Add to dictionary]' with `ivy-read' [Add to dictionary]."
+      (let ((ivy-use-selectable-prompt nil))
+        (ivy-read "Choose: " actions
+                  :require-match t
+                  :action (lambda (cell)
+                            (let ((val (cdr cell)))
+                              (when (functionp val)
+                                (funcall val)))))))
 
-    ;; Config
-    (with-eval-after-load 'wcheck-mode
-      (defun wcheck--choose-action-minibuffer (actions)
-        "Redefined `wcheck--choose-action-minibuffer' from `wcheck-mode'."
-        (let ((ivy-use-selectable-prompt nil))
-          (ivy-read "Choose: " actions)
-          )
-        )
-
-      ;; Path to Hunspell dictionaries
-      (setenv "DICPATH" (vs|emacs/data "dict"))
-
-      ;; Define languages and set default
-      (setq-default
-       wcheck-language      "default"
-       wcheck-language-data `(("default"
-                               (connection     . pty                             )
-
-                               (program        . ,vs-emacs-spellchecker          )
-                               (args             "-i" "UTF-8" "-d" "en_RU" "-w"  )
-
-                               (action-program . ,vs-emacs-spellchecker          )
-                               (action-args      "-i" "UTF-8" "-d" "en_RU" "-a"  )
-                               (action-parser  . wcheck-parser-ispell-suggestions)
-
-                               (read-or-skip-faces
-                                ((emacs-lisp-mode c-mode c++-mode python-mode shell-script-mode)
-                                 read font-lock-comment-face font-lock-string-face
-                                 )
-                                (org-mode
-                                 skip org-block-begin-line org-block-end-line org-meta-line org-link
-                                 )
-                                (nil)
-                                )
-                               )
-                              )
-       )
-      )
-    )
-  )
+    (setq-default
+     wcheck-language      "Ru+En"
+     wcheck-language-data
+     `(("Ru+En"
+        (connection     . pty                       )
+        (program        . ,vs-emacs-aspell-bin      )
+        (action-program . ,vs-emacs-aspell-bin      )
+        (action-parser  . vs:wcheck/suggestions-menu)
+        ,(append '(args)
+                 (vs:wcheck/args "ru" "ru-en"
+                                 vs-aspell-dict-dir)
+                 '("list"))
+        ,(append '(action-args)
+                 (vs:wcheck/args "ru" "ru-en"
+                                 vs-aspell-dict-dir)
+                 '("pipe"))
+        (read-or-skip-faces
+         ((emacs-lisp-mode c-mode c++-mode python-mode shell-script-mode)
+          read font-lock-comment-face font-lock-string-face font-lock-doc-face)
+         (org-mode
+          skip org-block-begin-line org-block-end-line org-meta-line org-link)
+         (nil)))))))
 
 (provide 'use-wcheck)
 ;;; use-wcheck.el ends here

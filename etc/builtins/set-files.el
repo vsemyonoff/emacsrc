@@ -4,7 +4,7 @@
 
 ;; Bookmarks
 (with-eval-after-load 'bookmark
-  (setq bookmark-default-file (vs|emacs/cache "bookmarks.el")
+  (setq bookmark-default-file (vs:emacs/cache "bookmarks.el")
         bookmark-save-flag    1
         )
   )
@@ -16,11 +16,11 @@
         make-backup-files                  nil ; disable backup files
         )
 
-  (let ((auto-save-dir (file-name-as-directory (vs|emacs/cache "auto-save"))))
+  (let ((auto-save-dir (file-name-as-directory (vs:emacs/cache "auto-save"))))
     (setq auto-save-default              t
           auto-save-file-name-transforms `((".*" ,auto-save-dir t))
           auto-save-interval             300
-          auto-save-list-file-name       (vs|emacs/cache "auto-save.el")
+          auto-save-list-file-name       (vs:emacs/cache "auto-save.el")
           auto-save-timeout              30
           )
     (unless (file-exists-p auto-save-dir)
@@ -29,7 +29,7 @@
     )
   (add-hook 'focus-out-hook #'do-auto-save)
 
-  (defun vs|emacs/find-file-create-parents (filename &optional _)
+  (defun vs:emacs/find-file-create-parents (filename &optional _)
     "Create parent directory if not exists while visiting FILENAME."
     (unless (file-exists-p filename)
       (let ((dir (file-name-directory filename)))
@@ -39,7 +39,7 @@
         )
       )
     )
-  (advice-add 'find-file :before 'vs|emacs/find-file-create-parents)
+  (advice-add 'find-file :before 'vs:emacs/find-file-create-parents)
   )
 
 ;; Recently visited files list
@@ -54,7 +54,7 @@
         recentf-filename-handlers '(file-truename)
         recentf-max-menu-items    0
         recentf-max-saved-items   300
-        recentf-save-file         (vs|emacs/cache "recent.el")
+        recentf-save-file         (vs:emacs/cache "recent.el")
         )
   )
 
@@ -63,14 +63,14 @@
 (with-eval-after-load 'savehist
   (setq savehist-additional-variables '(search-ring regexp-search-ring)
         savehist-autosave-interval    60
-        savehist-file (vs|emacs/cache "history.el")
+        savehist-file (vs:emacs/cache "history.el")
         )
   )
 
 ;; Save last visited place in files
 (add-hook 'vs-emacs-config-hook #'save-place-mode)
 (with-eval-after-load 'saveplace
-  (setq save-place-file (vs|emacs/cache "places.el"))
+  (setq save-place-file (vs:emacs/cache "places.el"))
   )
 
 ;; Revert files if changed outside

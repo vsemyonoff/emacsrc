@@ -10,15 +10,15 @@
   (define-key global-map (kbd "C-x C-z") nil)
   (define-key global-map (kbd "C-z"    ) nil)
 
-  (defun vs|emacs/make-frame-filter (&optional parameters)
+  (defun vs:emacs/make-frame-filter (&optional parameters)
     "Apply `initial-frame-alist' to `make-frame' function in `daemon' mode
 while creating first visible GUI frame."
-    (if (and (daemonp) (= (vs|emacs/gui-frames-count) 0))
+    (if (and (daemonp) (= (vs:emacs/gui-frames-count) 0))
         (list (append initial-frame-alist (car parameters)))
       parameters
       )
     )
-  (advice-add 'make-frame :filter-args 'vs|emacs/make-frame-filter)
+  (advice-add 'make-frame :filter-args 'vs:emacs/make-frame-filter)
 
   (add-hook 'vs-emacs-config-gui-hook #'window-divider-mode)
   )

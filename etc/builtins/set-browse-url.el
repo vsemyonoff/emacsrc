@@ -2,7 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 (with-eval-after-load 'browse-url
-  (setq browse-url-browser-function 'eww-browse-url)
+  (setq browse-url-browser-function '((".*youtube.*" . browse-url-chromium)
+                                      ("."           . eww-browse-url     ))
+        browse-url-chromium-arguments '("--new-window")
+        )
   )
 
 (with-eval-after-load 'mm-decode
@@ -17,7 +20,7 @@
   )
 
 (with-eval-after-load 'url
-  (setq url-configuration-directory (vs|emacs/cache "url/"))
+  (setq url-configuration-directory (vs:emacs/cache "url/"))
   (unless (file-exists-p url-configuration-directory)
     (make-directory url-configuration-directory t)
     )

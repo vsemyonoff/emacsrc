@@ -1,55 +1,58 @@
 ;;; use-org.el --- Org mode. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(if (not (straight-use-package 'org))
-    (warn "===> Can't install 'org-mode'")
+(use-package org :straight org-plus-contrib
+  :mode ("\\.org$" . org-mode    )
+  :hook (org-mode  . vs:org/setup)
+  :init
+  (defun vs:org/setup ()
+    (setq-local cursor-type       'bar)
+    (setq-local show-paren-mode    nil)
+    (setq-local system-time-locale "C")
 
-  (defun vs|org/before-save ()
-    "Tags need to be left-adjusted when saving."
-    (setf org-tags-column 0)
-    (org-align-all-tags)
+    (variable-pitch-mode)
+    (visual-line-mode   )
+    (hl-line-mode     -1)
+    (whitespace-mode  -1)
     )
 
-  (defun vs|org/align-tags ()
-    "Revert left-adjusted tag position done by before-save hook."
-    (let* ((new-org-tags-column (- (- (window-width) (length org-ellipsis) 3)))
-           (tags-aligned    (= new-org-tags-column org-tags-column))
-           (modified        (buffer-modified-p))
-           (undo-list       buffer-undo-list)
-           (undo-tree       buffer-undo-tree))
-      (unless tags-aligned
-        (setf org-tags-column new-org-tags-column)
-        (org-align-all-tags)
-        (set-buffer-modified-p modified)
-        (setf buffer-undo-list undo-list
-              buffer-undo-tree undo-tree
-              )
+  (with-eval-after-load 'org-indent
+    (custom-theme-set-faces
+     'user
+     '(org-block                 ((t (:inherit (shadow fixed-pitch)))))
+     '(org-checkbox              ((t (:inherit (bold fixed-pitch)))))
+     '(org-code                  ((t (:inherit (shadow fixed-pitch)))))
+     '(org-date                  ((t (:inherit fixed-pitch))))
+     '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+     '(org-done                  ((t (:inherit fixed-pitch))))
+     '(org-formula               ((t (:inherit fixed-pitch))))
+     '(org-block-begin-line      ((t (:inherit org-meta-line))))
+     '(org-block-end-line        ((t (:inherit org-block-begin-line))))
+     '(org-indent                ((t (:inherit (org-hide fixed-pitch)))))
+     '(org-meta-line             ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+     '(org-property-value        ((t (:inherit fixed-pitch))))
+     '(org-special-keyword       ((t (:inherit (font-lock-keyword-face fixed-pitch)))))
+     '(org-table                 ((t (:inherit fixed-pitch))))
+     '(org-tag                   ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+     '(org-todo                  ((t (:inherit fixed-pitch))))
+     '(org-verbatim              ((t (:inherit (shadow fixed-pitch)))))
+     )
+    )
+
+  :config
+  (setq org-ellipsis              "▼"
+        org-cycle-separator-lines -1
+        org-hide-emphasis-markers  t
+        org-src-fontify-natively   t
+        org-src-tab-acts-natively  t
+        org-startup-indented       t
+        org-tags-column            0
+        outline-blank-line         t
         )
-      )
-    )
-
-  (defun vs|org/setup ()
-    (add-hook 'after-save-hook                  #'vs|org/align-tags  nil t)
-    (add-hook 'before-save-hook                 #'vs|org/before-save nil t)
-    (add-hook 'window-configuration-change-hook #'vs|org/align-tags  nil t)
-
-    (set (make-local-variable 'system-time-locale) "C")
-    (set (make-local-variable 'org-tags-column   )  0 )
-
-    (vs|org/align-tags)
-    (whitespace-mode -1)
-    (visual-line-mode)
-    )
-
-  (add-hook 'org-mode-hook #'vs|org/setup)
-
-  (with-eval-after-load 'org
-    (setq org-ellipsis              "▼"
-          org-hide-emphasis-markers t
-          org-src-fontify-natively  t
-          )
-    )
   )
+
+(use-feature org-compat
+  :after org)
 
 (provide 'use-org)
 ;;; use-org.el ends here

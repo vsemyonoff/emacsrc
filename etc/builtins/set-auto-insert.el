@@ -6,7 +6,7 @@
 (with-eval-after-load 'autoinsert
   (setq auto-insert           'other
         auto-insert-alist     nil
-        auto-insert-directory (vs|emacs/data "templates")
+        auto-insert-directory (vs:emacs/data "templates")
         auto-insert-query     nil
         )
   )

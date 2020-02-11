@@ -3,29 +3,22 @@
 # Script details
 SCRIPT_NAME="$(basename ${0})"
 
-# Packages
+# Repo packages
 PACKAGES=(
-    clang
-    cmake
+    aspell-en
+    bash-language-server
     editorconfig-core-c
-    emacs
-    hunspell
-    isync
-    msmtp
-    notmuch
-    npm
-    python-pip
+    python-language-server
     the_silver_searcher
-    w3m
 )
-PIP_PACKAGES=(
-    compiledb                      # C/C++ 'compile_commands.json' generator
-    'python-language-server[all]'
-)
-NPM_PACKAGES=(
-    typescript-language-server
+
+# AUR packages
+AUR_PACKAGES=(
+    emacs-git
+    cmake-language-server
     vscode-css-languageserver-bin
     vscode-html-languageserver-bin
+    vscode-json-languageserver-bin
 )
 
 # Show usage
@@ -33,12 +26,12 @@ function show_help() {
     cat << EOF
 usage: ${SCRIPT_NAME} [ARGS]
     -h, --help    -- show this help and exit
-    -i, --install -- install system/python/node packages
+    -i, --install -- install required packages
     -p, --pretend -- print commands without execution
 EOF
 }
 
-# Install system/python/node packages
+# Install packages
 function install_packages () {
     if [[ ${EUID} != 0 ]]; then
         echo "root privileges required, executing sudo..."
@@ -46,10 +39,8 @@ function install_packages () {
     else
         # Install system packages:
         [[ ${PACKAGES} ]] && ${PRETEND} pacman -S --needed --noconfirm ${PACKAGES[@]}
-        #     ...python:
-        [[ ${PIP_PACKAGES} ]] && ${PRETEND} pip install ${PIP_PACKAGES[@]}
-        #     ...node.js:
-        [[ ${NPM_PACKAGES} ]] && ${PRETEND} npm install -g --unsafe-perm ${NPM_PACKAGES[@]}
+        #     ...AUR packages:
+        [[ ${AUR_PACKAGES} ]] && ${PRETEND} pikaur -S --needed --noconfirm ${AUR_PACKAGES[@]}
         # Exit script if running in 'sudo'
         [[ "${SUDO_USER}" ]] && exit 0
     fi
@@ -63,11 +54,12 @@ function install_configs() {
 EDITOR="emcl"
 GIT_EDITOR="\${EDITOR} --no-fork"
 SUDO_EDITOR="\${EDITOR} --no-fork"
-export EDITOR GIT_EDITOR SUDO_EDITOR
+
+xexport EDITOR GIT_EDITOR SUDO_EDITOR
 EOF
     mkdir -p "${HOME}/.profile.d/path.d"
     cat > "${HOME}/.profile.d/path.d/emacs.conf" << EOF
-\${HOME}/.emacs.d/bin
+\${XDG_CONFIG_HOME}/emacs/bin
 EOF
 }
 

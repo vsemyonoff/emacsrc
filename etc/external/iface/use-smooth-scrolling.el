@@ -1,19 +1,14 @@
 ;;; use-smooth-scrolling.el ---  fix scrolling. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(if (not (straight-use-package 'smooth-scrolling))
-    (warn "===> Can't install 'smooth-scrolling'")
-
-  ;; Triggers
-  (add-hook 'vs-emacs-config-hook #'smooth-scrolling-mode)
-
-  ;; Config
-  (with-eval-after-load 'smooth-scrolling
-    (setq mouse-wheel-progressive-speed nil
-          mouse-wheel-scroll-amount     '(1 ((shift) . 1) ((control) . nil))
-          smooth-scroll-margin          1
-          )
-    )
+(use-package smooth-scrolling
+  :disabled
+  :hook (vs-emacs-config . smooth-scrolling-mode)
+  :config
+  (setq mouse-wheel-progressive-speed nil
+        mouse-wheel-scroll-amount     '(1 ((shift) . 1) ((control) . nil))
+        smooth-scroll-margin          1
+        )
   )
 
 (provide 'use-smooth-scrolling)

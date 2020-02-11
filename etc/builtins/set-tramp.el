@@ -5,7 +5,7 @@
   (warn "===> [TODO]: setup tramp to work with remote projects")
   (setq remote-file-name-inhibit-cache nil
         tramp-default-method           "sshx"
-        tramp-persistency-file-name    (vs|emacs/cache "tramp.el")
+        tramp-persistency-file-name    (vs:emacs/cache "tramp.el")
         tramp-verbose                  1
         vc-ignore-dir-regexp           (format "%s\\|%s"
                                                vc-ignore-dir-regexp

@@ -11,7 +11,7 @@
     "`delete-other-windows' replacement."    t)
 
   ;; Keybindings
-  (define-key (current-global-map) (kbd "C-<tab>") #'vs|treemacs|open             )
+  (define-key (current-global-map) (kbd "C-<tab>") #'vs:treemacs|open             )
   (define-key (current-global-map) (kbd "C-x 1"  ) #'treemacs-delete-other-windows)
 
   ;; Config
@@ -22,10 +22,10 @@
           treemacs-indentation-string       "  "
           treemacs-indentation              1
           treemacs-is-never-other-window    nil
-          treemacs-persist-file             (vs|emacs/cache "treemacs.ws")
+          treemacs-persist-file             (vs:emacs/cache "treemacs.ws")
           treemacs-show-hidden-files        nil
           treemacs-silent-refresh           t
-          treemacs-space-between-root-nodes nil
+          ;; treemacs-space-between-root-nodes nil
           treemacs-width                    40
           )
 
@@ -35,7 +35,7 @@
     (treemacs-fringe-indicator-mode         t       )
     (treemacs-tag-follow-mode              -1       )
 
-    (defun vs|treemacs/buffer-setup ()
+    (defun vs:treemacs/buffer-setup ()
       "Set `treemacs' buffer local variables."
       (setq indicate-buffer-boundaries nil
             indicate-empty-lines       nil
@@ -44,15 +44,15 @@
             tab-width                  1
             )
       )
-    (add-hook 'treemacs-mode-hook   #'vs|treemacs/buffer-setup)
+    (add-hook 'treemacs-mode-hook   #'vs:treemacs/buffer-setup)
 
-    ;; (defun vs|treemacs/resize-icons ()
-    ;;   "Make `treemacs' icons smaller."
-    ;;   (treemacs-resize-icons 18)
-    ;;   )
-    ;; (add-hook 'treemacs-select-hook #'vs|treemacs/resize-icons)
+    (defun vs:treemacs/resize-icons ()
+      "Make `treemacs' icons smaller."
+      (treemacs-resize-icons 18)
+      )
+    (add-hook 'treemacs-select-hook #'vs:treemacs/resize-icons)
 
-    (defun vs|treemacs|collapse-or-go-up ()
+    (defun vs:treemacs|collapse-or-go-up ()
       "`treemacs' collapse selected or go to parent node."
       (interactive)
       (treemacs-do-for-button-state
@@ -68,7 +68,7 @@
        :on-nil              (treemacs-pulse-on-failure "There is nothing to do here."))
       )
 
-    (defun vs|treemacs|expand-maybe ()
+    (defun vs:treemacs|expand-maybe ()
       "`treemacs' expand selected node."
       (interactive)
       (treemacs-do-for-button-state
@@ -84,11 +84,11 @@
        :on-nil              (treemacs-pulse-on-failure "There is nothing to do here."))
       )
 
-    (define-key treemacs-mode-map (kbd "<left>" ) #'vs|treemacs|collapse-or-go-up )
-    (define-key treemacs-mode-map (kbd "<right>") #'vs|treemacs|expand-maybe      )
+    (define-key treemacs-mode-map (kbd "<left>" ) #'vs:treemacs|collapse-or-go-up )
+    (define-key treemacs-mode-map (kbd "<right>") #'vs:treemacs|expand-maybe      )
     )
 
-  (defun vs|treemacs/add-project (&optional path)
+  (defun vs:treemacs/add-project (&optional path)
     "Add project from PATH or `default-directory' to `treemacs' buffer.
 When PATH is nil then use `projectile-project-root' or `default-directory'."
     (let* ((path (expand-file-name (or (projectile-project-root
@@ -112,10 +112,10 @@ When PATH is nil then use `projectile-project-root' or `default-directory'."
       )
     )
 
-  (defun vs|treemacs|open ()
+  (defun vs:treemacs|open ()
     "Open `treemacs' buffer."
     (interactive)
-    (vs|treemacs/add-project)
+    (vs:treemacs/add-project)
     (when buffer-file-name
       (treemacs-find-file))
     (treemacs-select-window)

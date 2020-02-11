@@ -10,14 +10,14 @@
               indicate-empty-lines       t
               )
 
-(defun vs|emacs/fringe-enable ()
+(defun vs:emacs/fringe-enable ()
   "Enable fringe, set sizes."
   (when (display-graphic-p)
     (fringe-mode '(nil . 0))
     )
   )
 
-(add-hook 'vs-emacs-config-gui-hook #'vs|emacs/fringe-enable)
+(add-hook 'vs-emacs-config-gui-hook #'vs:emacs/fringe-enable)
 
 (provide 'set-fringe)
 ;;; set-fringe.el ends here

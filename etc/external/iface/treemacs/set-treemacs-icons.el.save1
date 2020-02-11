@@ -1,0 +1,8 @@
+;;; set-treemacs-icons.el ---  treemacs icons settings. -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Code:
+(with-eval-after-load 'kaolin-themes
+  (kaolin-treemacs-theme))
+
+(provide 'set-treemacs-icons)
+;;; set-treemacs-icons.el ends here

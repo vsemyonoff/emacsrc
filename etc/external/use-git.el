@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 (with-eval-after-load 'transient
-  (setq transient-history-file (vs|emacs/cache "transient.el"))
+  (setq transient-history-file (vs:emacs/cache "transient.el"))
   )
 
 (if (not (straight-use-package 'magit))
@@ -37,13 +37,13 @@
       (warn "===> Can't install 'git-gutter-fringe'")
 
     ;; Triggers
-    (defun vs|git-gutter-fringe/enable ()
+    (defun vs:git-gutter-fringe/enable ()
       "Enable git info in fringe only in GUI frames."
       (when (display-graphic-p)
         (require 'git-gutter-fringe)
         )
       )
-    (add-hook 'vs-emacs-config-gui-hook #'vs|git-gutter-fringe/enable)
+    (add-hook 'vs-emacs-config-gui-hook #'vs:git-gutter-fringe/enable)
 
     ;; Config
     (with-eval-after-load 'git-gutter-fringe
@@ -69,10 +69,10 @@
 (if (not (straight-use-package 'git-timemachine))
     (warn "===> Can't install 'git-timemachine'")
 
-  (defun vs|git-timemachine/header ()
+  (defun vs:git-timemachine/header ()
     (setq header-line-format ">>> Back to the future...")
     )
-  (add-hook 'git-timemachine-mode-hook #'vs|git-timemachine/header)
+  (add-hook 'git-timemachine-mode-hook #'vs:git-timemachine/header)
   )
 
 (if (not (straight-use-package 'git-link))

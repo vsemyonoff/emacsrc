@@ -5,23 +5,23 @@
 (require 'message)
 (require 'notmuch)
 
-(defun vs|easymail/refresh-complete (&rest _)
+(defun vs:easymail/refresh-complete (&rest _)
   "Refresh all biffers when 'easymail index' completed."
   (notmuch-refresh-all-buffers)
   )
 
-(defun vs|easymail/refresh ()
+(defun vs:easymail/refresh ()
   "Call 'easymail index' to give a chance for `pre-new' hook."
   (let ((process-connection-type nil))
     (set-process-sentinel
      (start-process "easymail" nil "easymail" "index")
-     #'vs|easymail/refresh-complete
+     #'vs:easymail/refresh-complete
      )
     )
   )
-(advice-add 'notmuch-bury-or-kill-this-buffer :after #'vs|easymail/refresh)
+(advice-add 'notmuch-bury-or-kill-this-buffer :after #'vs:easymail/refresh)
 
-(defun vs|easymail/before-tag ()
+(defun vs:easymail/before-tag ()
   "Before message tags changed."
   (cond
    ((member "-unread" tag-changes)
@@ -32,10 +32,10 @@
     )
    )
   )
-(add-hook 'notmuch-before-tag-hook #'vs|easymail/before-tag)
+(add-hook 'notmuch-before-tag-hook #'vs:easymail/before-tag)
 
 ;; Tree mode
-(defun vs|easymail|tree-toggle-trashed ()
+(defun vs:easymail|tree-toggle-trashed ()
   "Toggle 'trashed' tag for message."
   (interactive)
   (notmuch-tree-tag
@@ -45,9 +45,9 @@
      )
    )
   )
-(define-key notmuch-tree-mode-map   "d" #'vs|easymail|tree-toggle-trashed)
+(define-key notmuch-tree-mode-map   "d" #'vs:easymail|tree-toggle-trashed)
 
-(defun vs|easymail|tree-toggle-unread ()
+(defun vs:easymail|tree-toggle-unread ()
   "Toggle 'unread' tag for message."
   (interactive)
   (notmuch-tree-tag
@@ -57,10 +57,10 @@
      )
    )
   )
-(define-key notmuch-search-mode-map (kbd "<tab>") #'vs|easymail|tree-toggle-unread)
+(define-key notmuch-search-mode-map (kbd "<tab>") #'vs:easymail|tree-toggle-unread)
 
 ;; Search mode
-(defun vs|easymail|search-toggle-trashed ()
+(defun vs:easymail|search-toggle-trashed ()
   "Toggle 'trashed' tag for message."
   (interactive)
   (notmuch-search-tag
@@ -70,9 +70,9 @@
      )
    )
   )
-(define-key notmuch-search-mode-map "d" #'vs|easymail|search-toggle-trashed)
+(define-key notmuch-search-mode-map "d" #'vs:easymail|search-toggle-trashed)
 
-(defun vs|easymail|search-toggle-unread ()
+(defun vs:easymail|search-toggle-unread ()
   "Toggle 'unread' tag for message."
   (interactive)
   (notmuch-search-tag
@@ -82,9 +82,10 @@
      )
    )
   )
-(define-key notmuch-search-mode-map (kbd "<tab>") #'vs|easymail|search-toggle-unread)
+(define-key notmuch-search-mode-map (kbd "<tab>") #'vs:easymail|search-toggle-unread)
 
-(setq notmuch-crypto-process-mime     t
+(setq notmuch-address-command         "goobook-query"
+      notmuch-crypto-process-mime     t
       notmuch-draft-tags              '("+newdraft")
       notmuch-fcc-dirs                nil
       notmuch-hello-hide-tags         '("Archive" "attachment" "Drafts" "draft" "Inbox"
@@ -114,7 +115,7 @@
       )
 
 ;; Multiple identities
-(defun vs|easymail|setup-aliases ()
+(defun vs:easymail|setup-aliases ()
   "Traverse through all accounts and fill `gnus-alias-identity-alist'."
   (interactive)
   (let* ((accounts        (split-string (shell-command-to-string "easymail list")))
@@ -125,8 +126,8 @@
     (dolist (account accounts)
       (let ((name      (substring (shell-command-to-string (format "easymail get %s name" account)) 0 -1))
             (email     (substring (shell-command-to-string (format "easymail get %s email" account)) 0 -1))
-            (template  (vs|xdg/config (format "easymail/%s/template.txt" account)))
-            (signature (vs|xdg/config (format "easymail/%s/signature.txt" account)))
+            (template  (vs:xdg/config (format "easymail/%s/template.txt" account)))
+            (signature (vs:xdg/config (format "easymail/%s/signature.txt" account)))
             (fcc-dir   (format "%s/Sent +newsent" account))
             )
         (when (equal email user-mail-address) (setq default-account account))
@@ -151,13 +152,13 @@
           )
     )
   )
-(add-hook 'message-mode-hook #'vs|easymail|setup-aliases)
+(add-hook 'message-mode-hook #'vs:easymail|setup-aliases)
 
-(setq message-citation-line-format    "On %e %B %Y %R, %f wrote:"
-      message-citation-line-function  'message-insert-formatted-citation-line
-      message-cite-function           'message-cite-original
-      message-cite-reply-position     'above
-      message-cite-style              nil
+(setq message-citation-line-format     "On %e %B %Y %R, %f wrote:"
+      message-citation-line-function   'message-insert-formatted-citation-line
+      message-cite-function            'message-cite-original
+      message-cite-reply-position      'above
+      message-cite-style               nil
       message-fill-column              fill-column
       message-interactive              nil
       message-kill-buffer-on-exit      t
@@ -165,9 +166,9 @@
       message-sendmail-extra-arguments '("--read-envelope-from" "--read-recipients")
       message-sendmail-f-is-evil       t
       ;;message-signature-separator      "^--$"
-      message-yank-cited-prefix       "    "
-      message-yank-empty-prefix       "    "
-      message-yank-prefix             "    "
+      message-yank-cited-prefix        "    "
+      message-yank-empty-prefix        "    "
+      message-yank-prefix              "    "
       mml2015-sign-with-sender         t
       )
 (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)

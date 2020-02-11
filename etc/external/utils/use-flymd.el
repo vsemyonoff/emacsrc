@@ -7,7 +7,7 @@
   (add-hook 'markdown-mode-hook #'flymd-flyit)
 
   (with-eval-after-load 'flymd
-    (defun vs|flymd/browser-function (url)
+    (defun vs:flymd/browser-function (url)
       (let ((process-environment (browse-url-process-environment)))
         (apply 'start-process
                (concat "browser " url) nil
@@ -17,8 +17,8 @@
         )
       )
 
-    (setq flymd-browser-open-function 'vs|flymd/browser-function
-          flymd-output-directory      (getenv "XDG_RUNTIME_DIR")
+    (setq flymd-browser-open-function 'vs:flymd/browser-function
+          flymd-output-directory      (vs:emacs/runtime "flymd")
           )
     )
   )

@@ -9,7 +9,7 @@
 
   ;; Config
   (with-eval-after-load 'yasnippet
-    (setq yas-snippet-dirs (list (vs|emacs/data "snippets")))
+    (setq yas-snippet-dirs (list (vs:emacs/data "snippets")))
 
     (if (not (straight-use-package 'yasnippet-snippets))
         (warn "===> Can't install 'yasnippet-snippets'")
@@ -17,20 +17,25 @@
       )
 
     (with-eval-after-load 'autoinsert
-      (defun vs|autoinsert/yas-expand ()
+      (defun vs:autoinsert/yas-expand ()
         "Replace text in yasnippet template."
         (yas/expand-snippet (buffer-string) (point-min) (point-max))
         )
 
-      (defun vs|autoinsert/find-file-template (filename &rest _)
+      (defun vs:autoinsert/find-file-template (filename &rest _)
         "Add template in `auto-insert-alist' for FILENAME."
         (let* ((base-name (file-name-nondirectory filename))
-               (template  (or (file-name-extension base-name) base-name)))
-          (add-to-list 'auto-insert-alist `(,(format "%s\\'" template) . [,template vs|autoinsert/yas-expand]))
+               (template  (pcase (downcase base-name)
+                            ("cmakelists.txt" "cmake")
+                            ("makefile"       "make" )
+                            ("sconstruct"     "scons")
+                            (_                (downcase (or (file-name-extension base-name)
+                                                            base-name))))))
+          (add-to-list 'auto-insert-alist `(,(format "%s\\'" template) . [,template vs:autoinsert/yas-expand]))
           )
         )
 
-      (advice-add 'find-file :before 'vs|autoinsert/find-file-template)
+      (advice-add 'find-file :before 'vs:autoinsert/find-file-template)
 
       )
     )

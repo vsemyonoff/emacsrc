@@ -8,9 +8,9 @@
   (set-terminal-coding-system  'utf-8)
 
   ;; Add extra keywords to `password-word-equivalents'
-  (mapc (lambda (word) (add-to-list 'password-word-equivalents word))
-        '("code" "key" "token")
-        )
+  (dolist (word '("code" "key" "token"))
+    (add-to-list 'password-word-equivalents word)
+    )
   )
 
 (provide 'set-mule)

@@ -1,36 +1,41 @@
 ;;; use-theme.el ---  theme settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(defvar vs-emacs-theme-enabled-hook nil
-  "Normal hook run after new theme was enabled.")
+(require 'set-config)
 
-(defun vs|theme/reset (&rest _)
+(defun vs:theme/reset (&rest _)
   "Disable already enabled themes before enabling new THEME."
-  (mapc
-   #'disable-theme
-   custom-enabled-themes
+  (dolist (theme custom-enabled-themes)
+    (disable-theme theme)
    )
   )
-(advice-add 'load-theme :before #'vs|theme/reset)
+(advice-add 'load-theme :before #'vs:theme/reset)
 
-(defun vs|theme/enabled (&rest _)
+(defun vs:theme/enabled (&rest _)
   "Run `vs-emacs-theme-enabled-hook' hook."
   (run-hooks 'vs-emacs-theme-enabled-hook)
   )
-(advice-add 'enable-theme :after #'vs|theme/enabled)
+(advice-add 'enable-theme :after #'vs:theme/enabled)
 
-(defun vs|theme/tweaks ()
+(defun vs:theme/set-fonts ()
+  "Apply `vs-emacs-variable-font-family' and `vs-emacs-fixed-font-family'."
+  (set-face-attribute 'default nil :family vs-emacs-fixed-font-family :height 110)
+  (set-face-attribute 'fixed-pitch nil :family vs-emacs-fixed-font-family)
+  (set-face-attribute 'variable-pitch nil :family vs-emacs-variable-font-family)
+  )
+(add-hook 'vs-emacs-theme-enabled-hook #'vs:theme/set-fonts)
+
+(defun vs:theme/tweaks ()
   "Theme customization."
-  (set-face-attribute 'default nil :family "Roboto Mono for Powerline" :height 110)
-  (set-face-attribute 'fixed-pitch nil :inherit 'default)
-  (set-face-attribute 'variable-pitch nil :family "Roboto")
   (set-face-attribute 'ivy-current-match nil :inherit 'hl-line :background nil :foreground nil)
   (set-face-attribute 'ivy-subdir nil :inherit 'font-lock-builtin-face :foreground nil)
-  (set-face-attribute 'show-paren-match nil :underline t)
+  (set-face-attribute 'show-paren-match nil :underline t :background "white")
+  (set-face-attribute 'show-paren-mismatch nil :background "red")
+  (set-face-attribute 'cursor nil :background "#ff777a")
   )
-(add-hook 'vs-emacs-theme-enabled-hook #'vs|theme/tweaks)
+(add-hook 'vs-emacs-theme-enabled-hook #'vs:theme/tweaks)
 
-(defun vs|theme|enable ()
+(defun vs:theme|enable ()
   "Enable color theme."
   (interactive)
   (when vs-emacs-theme
@@ -57,7 +62,7 @@
       )
     )
   )
-(add-hook 'vs-emacs-config-gui-hook #'vs|theme|enable)
+(add-hook 'vs-emacs-config-gui-hook #'vs:theme|enable)
 
 (provide 'use-theme)
 ;;; use-theme.el ends here

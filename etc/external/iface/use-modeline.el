@@ -8,7 +8,7 @@
   (with-eval-after-load 'telephone-line
 
     ;; Custon segments
-    (telephone-line-defsegment* vs|modeline/major-mode-segment ()
+    (telephone-line-defsegment* vs:modeline/major-mode-segment ()
       (let ((recursive-edit-help-echo "Recursive edit, type C-M-c to get out"))
         `(
           (:propertize "%[" help-echo ,recursive-edit-help-echo face ,face)
@@ -25,7 +25,7 @@ mouse-3: Toggle minor modes"
         )
       )
 
-    (telephone-line-defsegment vs|modeline/projectile-segment ()
+    (telephone-line-defsegment vs:modeline/projectile-segment ()
       (if (fboundp 'projectile-project-name)
           (format "[%s]" (propertize (projectile-project-name)
                                      'display '(raise 0.0)
@@ -41,9 +41,9 @@ mouse-3: Toggle minor modes"
         )
       )
 
-    (telephone-line-defsegment vs|modeline/vc-segment ()
+    (telephone-line-defsegment vs:modeline/vc-segment ()
       (when vc-mode
-        (list (all-the-icons-faicon "code-fork" :height 1 :v-adjust 0 :face (vs|git/face))
+        (list (all-the-icons-faicon "code-fork" :height 1 :v-adjust 0 :face (vs:git/face))
               " "
               (when (string-match "[-:@!?]\\(.+\\)$" vc-mode)
                 (let ((branch (match-string 1 vc-mode)))
@@ -57,7 +57,7 @@ mouse-3: Toggle minor modes"
         )
       )
 
-    (telephone-line-defsegment* vs|modeline/buffer-segment ()
+    (telephone-line-defsegment* vs:modeline/buffer-segment ()
       (let ((icon (if buffer-read-only "lock" "file"))
             (face (if (buffer-modified-p) 'error 'success)))
         (list
@@ -68,7 +68,7 @@ mouse-3: Toggle minor modes"
         )
       )
 
-    (telephone-line-defsegment vs|modeline/flycheck-segment ()
+    (telephone-line-defsegment vs:modeline/flycheck-segment ()
       (when (bound-and-true-p flycheck-mode)
         (let ((text (pcase flycheck-last-status-change
                       ('finished (if flycheck-current-errors
@@ -103,7 +103,7 @@ mouse-3: Toggle minor modes"
         )
       )
 
-    (telephone-line-defsegment vs|modeline/encoding-segment ()
+    (telephone-line-defsegment vs:modeline/encoding-segment ()
       (let ((sys (coding-system-plist buffer-file-coding-system)))
         (cond
          ((memq (plist-get sys :category) '(coding-category-undecided coding-category-utf-8)) nil)
@@ -112,7 +112,7 @@ mouse-3: Toggle minor modes"
         )
       )
 
-    (telephone-line-defsegment vs|modeline/eol-segment ()
+    (telephone-line-defsegment vs:modeline/eol-segment ()
       (let (
             (icon (pcase (coding-system-eol-type buffer-file-coding-system)
                     (0 nil      )
@@ -127,29 +127,29 @@ mouse-3: Toggle minor modes"
         )
       )
 
-    (telephone-line-defsegment* vs|modeline/buffer-position-segment ()
+    (telephone-line-defsegment* vs:modeline/buffer-position-segment ()
       "%n %p %4l:%3C "
       )
 
-    (telephone-line-defsegment* vs|modeline/empty ()
+    (telephone-line-defsegment* vs:modeline/empty ()
       (telephone-line-raw " ")
       )
 
     ;; Segments order
     (setq telephone-line-lhs
           '(
-            (nil . (vs|modeline/major-mode-segment))
-            (nil . (vs|modeline/projectile-segment))
-            (nil . (vs|modeline/vc-segment        ))
-            (nil . (vs|modeline/buffer-segment    ))
+            (nil . (vs:modeline/major-mode-segment))
+            (nil . (vs:modeline/projectile-segment))
+            (nil . (vs:modeline/vc-segment        ))
+            (nil . (vs:modeline/buffer-segment    ))
             )
           )
     (setq telephone-line-rhs
           '(
-            (nil . (vs|modeline/flycheck-segment       ))
-            (nil . (vs|modeline/encoding-segment       ))
-            (nil . (vs|modeline/eol-segment            ))
-            (nil . (vs|modeline/buffer-position-segment))
+            (nil . (vs:modeline/flycheck-segment       ))
+            (nil . (vs:modeline/encoding-segment       ))
+            (nil . (vs:modeline/eol-segment            ))
+            (nil . (vs:modeline/buffer-position-segment))
             )
           )
 
@@ -161,7 +161,7 @@ mouse-3: Toggle minor modes"
           )
 
     ;; Height
-    (setq telephone-line-height 24)
+    (setq telephone-line-height 22)
     )
 
   ;; Trigger

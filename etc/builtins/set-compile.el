@@ -6,7 +6,7 @@
         compilation-ask-about-save nil
         compilation-scroll-output 'first-error)
 
-  (defun vs|compile/colorize ()
+  (defun vs:compile/colorize ()
     "Colorize a compilation mode buffer."
     (when (eq major-mode 'compilation-mode)
       (let ((inhibit-read-only t))
@@ -15,7 +15,7 @@
         )
       )
     )
-  (add-hook 'compilation-filter-hook #'vs|compile/colorize)
+  (add-hook 'compilation-filter-hook #'vs:compile/colorize)
   )
 
 (provide 'set-compile)

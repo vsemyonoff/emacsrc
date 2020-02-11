@@ -1,23 +1,24 @@
 ;;; use-notmuch.el --- Notmuch mail user agent. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(if (not (straight-use-package 'notmuch))
-    (warn "===> Can't install 'notmuch'")
+(use-package notmuch
+  :bind (("C-c m" . notmuch))
+  :init
+  (setq notmuch-init-file
+        (expand-file-name "easymail-init" user-emacs-directory)))
 
-  (setq notmuch-init-file (expand-file-name "easymail-init" user-emacs-directory))
-  (global-set-key (kbd "C-c m") #'notmuch)
-
-  ;; Multiple identities
-  (if (not (straight-use-package 'gnus-alias))
-      (warn "===> Can't install 'gnus-alias'")
-
-    (add-hook 'message-setup-hook #'gnus-alias-determine-identity)
-
-    (with-eval-after-load 'message
-      (define-key message-mode-map (kbd "<f12>") #'gnus-alias-select-identity)
-      )
-    )
+(use-package gnus-alias
+  :bind (:map message-mode-map
+              ("<f12>" . gnus-alias-select-identity))
+  :hook (message-setup . gnus-alias-determine-identity)
   )
+
+;; (if (not (straight-use-package 'vdirel))
+;;     (warn "===> Can't install 'vdirel'")
+
+;;   (ignore "Config goes here")
+;;   (require 'vdirel)
+;;   )
 
 (provide 'use-notmuch)
 ;;; use-notmuch.el ends here

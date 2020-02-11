@@ -1,65 +1,57 @@
 ;;; use-ivy.el ---  helper framework. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(if (not (straight-use-package 'counsel))
-    (warn "==> Can't install 'counsel'")
-  ;; Triggers
-  (add-hook 'vs-emacs-config-hook #'ivy-mode)
+(use-package ivy
+  :hook (vs-emacs-config . ivy-mode)
+  ;; :bind
+  ;; (("C-j" . ivy-immediate-done)
+  ;; ("RET"  . ivy-alt-done))
+  :config
+  (setq ivy-count-format            "[%d/%d]: "
+        ivy-extra-directories       nil
+        ivy-ignore-buffers          '("\\`\\( \\|\\*\\)")
+        ivy-re-builders-alist       '((t . ivy--regex-ignore-order))
+        ivy-use-selectable-prompt   t
+        ivy-use-virtual-buffers     t
+        ivy-virtual-abbreviate      'abbreviate)
 
-  ;; Keybindings
-  (define-key (current-global-map) (kbd "C-r") #'swiper)
-  (define-key (current-global-map) (kbd "C-s") #'swiper)
+  (defun vs:ivy/custom-format (cands)
+    "Set custom `ivy' format."
+    (ivy--format-function-generic
+     (lambda (str)
+       (concat "=> " (ivy--add-face str 'ivy-current-match)))
+     (lambda (str)
+       (concat "   " str))
+     cands
+     "\n"))
 
-  ;; Config
-  (with-eval-after-load 'ivy
-    (setq ivy-count-format            "[%d/%d]: "
-          ivy-extra-directories       nil
-          ivy-format-function         'vs|ivy/custom-format
-          ivy-ignore-buffers          '("\\`\\( \\|\\*\\)")
-          ivy-re-builders-alist       '((t . ivy--regex-ignore-order))
-          ivy-use-selectable-prompt   t
-          ivy-use-virtual-buffers     t
-          ivy-virtual-abbreviate      'abbreviate
-          )
+  (setf (alist-get t ivy-format-functions-alist) #'vs:ivy/custom-format))
 
-    (defun vs|ivy/custom-format (cands)
-      "Set custom `ivy' format."
-      (ivy--format-function-generic
-       (lambda (str)
-         (concat " => " (ivy--add-face str 'ivy-current-match)))
-       (lambda (str)
-         (concat "    " str))
-       cands
-       "\n")
-      )
+(use-package counsel
+  :after ivy
+  :hook (ivy-mode . counsel-mode))
 
-    (add-hook 'ivy-mode-hook #'counsel-mode)
-    )
-
-  (if (not (straight-use-package 'ivy-hydra))
-      (warn "===> Can't install 'ivy-hydra'")
-    )
-
-  (with-eval-after-load 'projectile
-    (if (not (straight-use-package 'counsel-projectile))
-        (warn "===> Can't install 'counsel-projectile'")
-
-      (add-hook 'counsel-mode-hook #'counsel-projectile-mode)
-      )
-    )
-
-  (if (not (straight-use-package 'ivy-rich))
-      (warn "===> Can't install 'ivy-rich'")
-
-    ;; Triggers
-    (add-hook 'counsel-mode-hook #'ivy-rich-mode)
-
-    ;; Config
-    (with-eval-after-load 'ivy-rich
-      (setq ivy-rich-path-style                         'abbreviate
-            ivy-rich-switch-buffer-align-virtual-buffer t)
-      )
-    )
+(use-package counsel-projectile
+  :after (counsel projectile)
+  :hook (counsel-mode . counsel-projectile-mode)
   )
+
+(use-package swiper
+  :after ivy
+  :bind
+  (("C-r" . swiper)
+   ("C-s" . swiper)))
+
+(use-package ivy-hydra
+  :after ivy)
+
+(use-package ivy-rich
+  :after counsel
+  :hook (counsel-mode . ivy-rich-mode)
+  :config
+  (setq ivy-rich-path-style 'abbreviate
+        ivy-rich-switch-buffer-align-virtual-buffer t)
+  )
+
 (provide 'use-ivy)
 ;;; use-ivy.el ends here

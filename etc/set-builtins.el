@@ -8,6 +8,13 @@
 ;; Create cache folder
 (unless (file-exists-p vs-emacs-cache-dir)
   (make-directory vs-emacs-cache-dir t)
+  (set-file-modes vs-emacs-cache-dir #o700)
+  )
+
+;; Create runtime folder
+(unless (file-exists-p vs-emacs-runtime-dir)
+  (make-directory vs-emacs-runtime-dir t)
+  (set-file-modes vs-emacs-runtime-dir #o700)
   )
 
 ;; Buffer local variables
@@ -27,7 +34,7 @@
       apropos-do-all                         t
       auto-window-vscroll                    nil
       create-lockfiles                       nil
-      custom-file                            (vs|emacs/config "set-custom.el")
+      custom-file                            (vs:emacs/config "set-custom.el")
       debug-on-error                         t
       echo-keystrokes                        0.02
       enable-dir-local-variables             nil
@@ -65,7 +72,7 @@
 (load custom-file 'noerror)
 
 ;; Other packages
-(vs|emacs/require-dir (vs|emacs/config "builtins"))
+(vs:emacs/require-dir (vs:emacs/config "builtins"))
 
 (provide 'set-builtins)
 ;;; set-builtins.el ends here

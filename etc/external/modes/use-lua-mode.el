@@ -1,26 +1,13 @@
 ;;; use-lua-mode.el ---  Lua editing mode. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(if (not (straight-use-package 'lua-mode))
-    (warn "===> Can't install 'lua-mode'")
-
-  ;; Triggets
-  (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
-  (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
-  (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
-
-  (with-eval-after-load 'company
-    (if (not (straight-use-package 'company-lua))
-        (warn "===> Can't install 'company-lsp'")
-
-      ;; Triggers
-      (defun vs|company-lua/enable ()
-        (make-local-variable 'company-backends)
-        (push 'company-lua company-backends)
-        )
-      (add-hook 'lua-mode-hook #'vs|company-lua/enable)
-      )
-    )
+(use-package lua-mode
+  :mode "\\.lua\\'"
+  :interpreter "lua"
+  :config
+  (setq lua-prefix-key             nil
+        lua-indent-level           4
+        lua-indent-string-contents t)
   )
 
 (provide 'use-lua-mode)

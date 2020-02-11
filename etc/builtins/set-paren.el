@@ -11,7 +11,7 @@
         show-paren-when-point-inside-paren t
         )
 
-  (defun vs|paren|match-paren (arg)
+  (defun vs:paren|match-paren (arg)
     "Go to the matching paren if on a paren; otherwise insert %."
     (interactive "p")
     (cond ((looking-at "\\s(") (forward-list 1) (backward-char 1))
@@ -19,7 +19,7 @@
           (t (self-insert-command (or arg 1)))
           )
     )
-  (global-set-key "%" #'vs|paren|match-paren)
+  (global-set-key "%" #'vs:paren|match-paren)
   )
 
 (provide 'set-paren)

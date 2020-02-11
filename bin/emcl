@@ -7,8 +7,9 @@ NO_WAIT="--no-wait"
 if [[ -z "${DISPLAY}" ]]; then
     CREATE_FRAME="--tty"
 else
-    FRAME_EXISTS=$(emacsclient -e '(<= 1 (vs|emacs/gui-frames-count))' 2>/dev/null)
+    FRAME_EXISTS=$(emacsclient -e '(<= 1 (vs:emacs/gui-frames-count))' 2>/dev/null)
     [[ "${FRAME_EXISTS}" != "t" ]] && CREATE_FRAME="--create-frame"
+    #CREATE_FRAME="--create-frame"
 fi
 
 # Parse arguments
@@ -40,7 +41,7 @@ if [[ "${CREATE_FRAME}" != "--tty" ]]; then
     LOG_DIR="${XDG_CACHE_HOME:-${HOME}/.cache}/emacs"
     LOG_FILE="${LOG_DIR}/client.log"
     mkdir -p "${LOG_DIR}"
-    exec >> "${LOG_FILE}" 2>&1
+    exec > "${LOG_FILE}" 2>&1
 else
     # Wait till terminal client exit
     unset NO_WAIT

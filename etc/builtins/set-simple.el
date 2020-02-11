@@ -1,7 +1,7 @@
 ;;; set-simple.el --- basic settings. -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-(defun vs|emacs/simple-settings ()
+(defun vs:emacs/simple-settings ()
   "Basic editing settings."
   (fset 'yes-or-no-p     'y-or-n-p) ; y/n (or SPS/DEL) against yes/no
 
@@ -18,7 +18,7 @@
   (global-prettify-symbols-mode t ) ; replace some symbols with shortcuts
   )
 
-(add-hook 'vs-emacs-config-hook #'vs|emacs/simple-settings)
+(add-hook 'vs-emacs-config-hook #'vs:emacs/simple-settings)
 
 (provide 'set-simple)
 ;;; set-simple.el ends here
