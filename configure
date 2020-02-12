@@ -49,7 +49,7 @@ function install_packages () {
 # Set default editor and extend 'PATH' variable
 function install_configs() {
     mkdir -p "${HOME}/.profile.d"
-    cat > "${HOME}/.profile.d/10-editor.sh" << EOF
+    cat > "${HOME}/.profile.d/010-editor.sh" << EOF
 # Set 'emacsclient' as default editor
 EDITOR="emcl"
 GIT_EDITOR="\${EDITOR} --no-fork"
