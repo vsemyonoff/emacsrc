@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 (use-package notmuch
-  :bind (("C-c m" . notmuch))
+  :bind ("C-c m" . notmuch)
   :init
   (setq notmuch-init-file
         (expand-file-name "easymail-init" user-emacs-directory)))
