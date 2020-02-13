@@ -58,10 +58,14 @@ dictionary DICT and extra dictonaries directory DICT-DIR."
                                  vs-aspell-dict-dir)
                  '("pipe"))
         (read-or-skip-faces
-         ((emacs-lisp-mode c-mode c++-mode python-mode shell-script-mode)
+         ((emacs-lisp-mode c-mode c++-mode python-mode sh-mode shell-script-mode)
           read font-lock-comment-face font-lock-string-face font-lock-doc-face)
          (org-mode
           skip org-block-begin-line org-block-end-line org-meta-line org-link)
+         (message-mode
+          read nil message-header-subject message-cited-text)
+         (git-commit-mode
+          read nil git-commit-summary-face)
          (nil)))))))
 
 (provide 'use-wcheck)
