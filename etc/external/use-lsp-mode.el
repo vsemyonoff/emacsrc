@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 (use-package lsp-mode
-  :after projectile
+  :after use-projectile
   :init (setq lsp-keymap-prefix "C-c l")
   :hook ((c-mode c++-mode cmake-mode css-mode html-mode objc-mode python-mode sh-mode) . lsp)
   :config
@@ -15,7 +15,7 @@
         lsp-clients-clangd-args              `("-j=4" "--background-index"
                                               "--clang-tidy" "--suggest-missing-includes"
                                               "-log=error"
-                                              ,(format "--compile-commands-dir=%s/build/debug"
+                                              ,(format "--compile-commands-dir=%sbuild"
                                                        (projectile-project-root))))
   :commands lsp
   )
